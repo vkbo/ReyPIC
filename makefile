@@ -7,14 +7,14 @@ DEBUG   = -g -Wall
 CFLAGS  = $(DEBUG) -O2 -c
 LFLAGS  = $(DEBUG)
 
-SOURCE  = src
+SRC     = src
 BUILD   = build
 OUTPUT  = bin
 
 EXEC    = reypic.e
-MAIN    = $(SOURCE)/main.cpp
+MAIN    = $(SRC)/main.cpp
 
-CLASSES = 
+CLASSES = clsSpecies.o
 OBJECTS = $(addprefix $(BUILD)/,$(CLASSES))
 
 ##
@@ -36,8 +36,8 @@ $(BUILD)/main.o : $(MAIN)
 
 # Classes
 
-#$(BUILD)/classLog.o : $(LIBSYS)/classLog.cpp $(LIBSYS)/classLog.hpp
-#	$(CC) $(CFLAGS) $(LIBSYS)/classLog.cpp -o $@
+$(BUILD)/clsSpecies.o : $(SRC)/clsSpecies.cpp $(SRC)/clsSpecies.hpp
+	$(CC) $(CFLAGS) $(SRC)/clsSpecies.cpp -o $@
 
 # Make Clean
 
