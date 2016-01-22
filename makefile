@@ -15,7 +15,7 @@ EXEC    = reypic.e
 MAIN    = $(SRC)/main.cpp
 BNOFILE = $(SRC)/build.txt
 
-CLASSES = clsSpecies.o
+CLASSES = clsReyPIC.o clsInput.o clsSpecies.o clsGrid.o
 OBJECTS = $(addprefix $(BUILD)/,$(CLASSES))
 
 ##
@@ -30,15 +30,24 @@ $(shell [ -d "$(OUTPUT)" ] || mkdir -p $(OUTPUT))
 $(EXEC) : $(BUILD)/main.o $(OBJECTS) $(BNOFILE) $(SRC)/build.hpp
 	$(CC) $(LFLAGS) $(BUILD)/main.o $(OBJECTS) $(LIBFLAGS) -o $@
 
-# Main File
+# Core Files
 
 $(BUILD)/main.o : $(MAIN)
 	$(CC) $(CFLAGS) $(MAIN) -o $@
 
+$(BUILD)/clsReyPIC.o : $(SRC)/clsReyPIC.cpp $(SRC)/clsReyPIC.hpp
+	$(CC) $(CFLAGS) $(SRC)/clsReyPIC.cpp -o $@
+
 # Classes
+
+$(BUILD)/clsInput.o : $(SRC)/clsInput.cpp $(SRC)/clsInput.hpp
+	$(CC) $(CFLAGS) $(SRC)/clsInput.cpp -o $@
 
 $(BUILD)/clsSpecies.o : $(SRC)/clsSpecies.cpp $(SRC)/clsSpecies.hpp
 	$(CC) $(CFLAGS) $(SRC)/clsSpecies.cpp -o $@
+
+$(BUILD)/clsGrid.o : $(SRC)/clsGrid.cpp $(SRC)/clsGrid.hpp
+	$(CC) $(CFLAGS) $(SRC)/clsGrid.cpp -o $@
 
 # Make Clean
 
