@@ -25,9 +25,6 @@ class ReyPIC {
     int ParseArgs(int,char*);
     int AbortExec(int);
 
-    // Tools
-    bool FileExists(char*);
-
 };
 
 } // End NameSpace

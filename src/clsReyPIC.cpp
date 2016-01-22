@@ -20,12 +20,9 @@ ReyPIC::ReyPIC() {
 
 bool ReyPIC::SetInputFile(char* cFile) {
 
-    if(FileExists(cFile)) {
-        InputFile = cFile;
-        return true;
-    } else {
-        return false;
-    }
+    InputFile = cFile;
+
+    return true;
 }
 
 bool ReyPIC::SetRunMode(int iRunMode) {
@@ -42,12 +39,4 @@ bool ReyPIC::SetRunMode(int iRunMode) {
     }
 
     return false;
-}
-
-/**
- * Tools
- */
-
-bool FileExists(const char* cFile) {
-    return (access(cFile, F_OK) != -1);
 }

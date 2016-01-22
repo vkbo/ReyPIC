@@ -31,9 +31,7 @@ int main(int argc, char* argv[]) {
     ReyPIC* oRP = new ReyPIC();
 
     // Set Defaults
-    int   iRunMode = RUN_MODE_FULL;
-    int   iErr = 0;
-    char* cInputFile;
+    int iErr = 0;
 
     // Write Output Header
     printf("\n");
@@ -47,29 +45,27 @@ int main(int argc, char* argv[]) {
     for(int i=1; i<argc; i++) {
 
         // Running in Test Mode
-        if(strcmp(argv[i], "-t")) {
-            iRunMode = RUN_MODE_TEST;
+        if(strcmp(argv[i], "-t") == 0) {
+            printf("  Running in test mode.\n");
+            oRP->SetRunMode(RUN_MODE_TEST);
         }
 
         // Input File
-        if(strcmp(argv[i], "-i")) {
-            if(i < argc-1) {
-                cInputFile = argv[i+1];
-                i++;
+        if(strcmp(argv[i], "-i") == 0) {
+            if(i+1 < argc) {
+                printf("  Input file: %s\n", argv[i+1]);
+                oRP->SetInputFile(argv[i+1]);
             } else {
-                cout << "  ERROR: Input file must follow switch -i" << endl;
+                printf("  ERROR: Input file must follow switch -i\n");
                 iErr++;
             }
-        } else {
-            cout << "  ERROR: No input file specified" << endl;
-            iErr++;
         }
     }
+    printf("\n");
 
     if(iErr > 0) {
-        cout << endl;
-        cout << "  Errors encountered. Aborting ..." << endl;
-        cout << endl;
+        printf("  Errors encountered. Aborting ...\n");
+        printf("\n");
         return ERR_INIT;
     }
 
