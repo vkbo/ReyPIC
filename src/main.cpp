@@ -27,20 +27,21 @@ using namespace reypic;
     
 int main(int argc, char* argv[]) {
 
+    // Init
+    ReyPIC* oRP = new ReyPIC();
+
     // Set Defaults
     int   iRunMode = RUN_MODE_FULL;
     int   iErr = 0;
     char* cInputFile;
 
     // Write Output Header
-    cout << endl;
-    cout << "  ReyPIC  " << endl;
-    cout << " ********" << endl;
-    cout << endl;
-    cout << "  Version: " << VERSION << "-R" << REVISION << endl;
-    cout << "  Build:   " << BUILD_NO+1 << endl;
-    cout << "  Date:    " << BUILD_DATE << endl;
-    cout << endl;
+    printf("\n");
+    printf("  ReyPIC\n");
+    printf(" *********\n");
+    printf("\n");
+    printf("  Version: %s-R%03d Build %d\n", VERSION, REVISION, BUILD_NO+1);
+    printf("\n");
 
     // Parse Input Options
     for(int i=1; i<argc; i++) {

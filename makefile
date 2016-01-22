@@ -58,5 +58,4 @@ clean:
 $(BNOFILE): $(BUILD)/main.o $(OBJECTS)
 	@if ! test -f $(BNOFILE); then echo 0 > $(BNOFILE); fi
 	@echo $$(($$(cat $(BNOFILE)) + 1)) > $(BNOFILE)
-	@echo \#define BUILD_NO $$(($$(cat $(BNOFILE))))    > $(SRC)/build.hpp
-	@echo \#define BUILD_DATE $$(($$(date +'%Y%m%d'))) >> $(SRC)/build.hpp
+	@echo \#define BUILD_NO $$(($$(cat $(BNOFILE)))) > $(SRC)/build.hpp

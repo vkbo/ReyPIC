@@ -6,7 +6,7 @@
 #define RP_CONFIG
 
 // Version
-#define VERSION  0.1
+#define VERSION  "0.1"
 #define REVISION 1
 
 // Run Modes

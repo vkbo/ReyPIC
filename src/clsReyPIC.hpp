@@ -13,7 +13,20 @@ class ReyPIC {
     ReyPIC();
     ~ReyPIC() {};
 
-    int Abort(int);
+    // Properties
+    char* InputFile;
+    int   RunMode;
+
+    // Setters
+    bool SetInputFile(char*);
+    bool SetRunMode(int);
+    
+    // Methods
+    int ParseArgs(int,char*);
+    int AbortExec(int);
+
+    // Tools
+    bool FileExists(char*);
 
 };
 
