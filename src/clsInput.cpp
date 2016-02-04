@@ -82,7 +82,7 @@ bool Input::SplitSections() {
     int    iLev = 0;
     size_t nLen ;
     string sTemp;
-    int    iSection = 0;
+    int    iSection = INPUT_NONE;
     bool   hasSim = false;
     bool   hasEMF = false;
     bool   hasSpecies = false;
@@ -94,9 +94,9 @@ bool Input::SplitSections() {
         if(cChar == '{') {
             iLev++;
             if(iLev == 1) {
-                if(sTemp.compare("simulation{") == 0) iSection = 1;
-                if(sTemp.compare("emf{") == 0)        iSection = 2;
-                if(sTemp.compare("species{") == 0)    iSection = 3;
+                if(sTemp.compare("simulation{") == 0) iSection = INPUT_SIM;
+                if(sTemp.compare("emf{") == 0)        iSection = INPUT_EMF;
+                if(sTemp.compare("species{") == 0)    iSection = INPUT_SPECIES;
                 sTemp = "";
             }
         }
@@ -107,17 +107,17 @@ bool Input::SplitSections() {
                 nLen  = sTemp.length();
                 sTemp = sTemp.substr(0,nLen-1);
                 switch(iSection) {
-                    case 1:
+                    case INPUT_SIM:
                         m_Simulation = sTemp;
                         printf("  Found simulation section\n");
                         hasSim = true;
                         break;
-                    case 2:
+                    case INPUT_EMF:
                         m_EMF = sTemp;
                         printf("  Found emf section\n");
                         hasEMF = true;
                         break;
-                    case 3:
+                    case INPUT_SPECIES:
                         m_Species.push_back(sTemp);
                         printf("  Found species section (%d)\n", (int)m_Species.size());
                         hasSpecies = true;

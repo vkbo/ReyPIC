@@ -14,10 +14,6 @@
 #include <array>
 #include <vector>
 
-// Version
-#define VERSION  "0.1"
-#define REVISION 1
-
 // Run Modes
 #define RUN_MODE_TEST 1
 #define RUN_MODE_FULL 2
@@ -30,5 +26,11 @@
 #define ERR_SETUP    83
 #define ERR_EXEC     84
 #define ERR_DIAG     85
+
+// Input File Sections
+#define INPUT_NONE    0
+#define INPUT_SIM     1
+#define INPUT_EMF     2
+#define INPUT_SPECIES 3
 
 #endif
