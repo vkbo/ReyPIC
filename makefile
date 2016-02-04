@@ -13,8 +13,7 @@ OUTPUT  = bin
 
 EXEC    = reypic.e
 MAIN    = $(SRC)/main.cpp
-BNOFILE = $(SRC)/build.txt
-VERSION = $(shell git describe --always)
+VERSION = $(shell git describe)
 
 CLASSES = clsReyPIC.o clsInput.o clsSpecies.o clsGrid.o
 OBJECTS = $(addprefix $(BUILD)/,$(CLASSES))
@@ -34,7 +33,7 @@ $(EXEC) : $(BUILD)/main.o $(OBJECTS) $(BNOFILE) $(SRC)/build.hpp
 
 # Core Files
 
-$(BUILD)/main.o : $(MAIN)
+$(BUILD)/main.o : $(MAIN) $(SRC)/build.hpp
 	$(CC) $(CFLAGS) $(MAIN) -o $@
 
 $(BUILD)/clsReyPIC.o : $(SRC)/clsReyPIC.cpp $(SRC)/clsReyPIC.hpp
