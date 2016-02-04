@@ -14,6 +14,7 @@ OUTPUT  = bin
 EXEC    = reypic.e
 MAIN    = $(SRC)/main.cpp
 BNOFILE = $(SRC)/build.txt
+VERSION = $(shell git describe --always)
 
 CLASSES = clsReyPIC.o clsInput.o clsSpecies.o clsGrid.o
 OBJECTS = $(addprefix $(BUILD)/,$(CLASSES))
@@ -25,6 +26,7 @@ OBJECTS = $(addprefix $(BUILD)/,$(CLASSES))
 # Check if build and bin directories exists
 $(shell [ -d "$(BUILD)" ] || mkdir -p $(BUILD))
 $(shell [ -d "$(OUTPUT)" ] || mkdir -p $(OUTPUT))
+$(shell echo "#define BUILD \"$(VERSION)\"" > $(SRC)/build.hpp)
 
 # Executable
 $(EXEC) : $(BUILD)/main.o $(OBJECTS) $(BNOFILE) $(SRC)/build.hpp
@@ -55,7 +57,7 @@ clean:
 	rm $(BUILD)/* $(EXEC)
 
 # Build number file.  Increment if any object file changes.
-$(BNOFILE): $(BUILD)/main.o $(OBJECTS)
-	@if ! test -f $(BNOFILE); then echo 0 > $(BNOFILE); fi
-	@echo $$(($$(cat $(BNOFILE)) + 1)) > $(BNOFILE)
-	@echo \#define BUILD_NO $$(($$(cat $(BNOFILE)))) > $(SRC)/build.hpp
+#$(BNOFILE): $(BUILD)/main.o $(OBJECTS)
+#	@if ! test -f $(BNOFILE); then echo 0 > $(BNOFILE); fi
+#	@echo $$(($$(cat $(BNOFILE)) + 1)) > $(BNOFILE)
+#	@echo \#define BUILD_NO $$(($$(cat $(BNOFILE)))) > $(SRC)/build.hpp

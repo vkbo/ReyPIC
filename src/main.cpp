@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
     printf("  ReyPIC\n");
     printf(" *********\n");
     printf("\n");
-    printf("  Version: %s-R%03d Build %d\n", VERSION, REVISION, BUILD_NO+1);
+    printf("  Version: %s\n", BUILD);
     printf("\n");
 
     // Parse Input Options
