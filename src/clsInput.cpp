@@ -33,11 +33,18 @@ bool Input::ReadFile(char* cFile) {
     tmpFile.seekg(0);
     tmpFile.read(&tmpBuffer[0], iSize);
     
-    // Check buffer for obvious formatting errors
+    // Check for closed quotes
     size_t nQuotes = count(tmpBuffer.begin(),tmpBuffer.end(),'"');
-    
     if(nQuotes%2 == 1) {
         printf("  Input file malformed. Check that all strings have been closed.\n");
+        return false;
+    }
+
+    // Check for closed sections
+    size_t nSecStart = count(tmpBuffer.begin(),tmpBuffer.end(),'{');
+    size_t nSecEnd   = count(tmpBuffer.begin(),tmpBuffer.end(),'}');
+    if(nSecStart != nSecEnd) {
+        printf("  Input file malformed. Check that all ections have been closed.\n");
         return false;
     }
     
