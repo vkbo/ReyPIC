@@ -36,10 +36,10 @@ $(EXEC) : $(BUILD)/main.o $(OBJECTS) $(BNOFILE) $(SRC)/build.hpp
 $(BUILD)/main.o : $(MAIN) $(SRC)/build.hpp
 	$(CC) $(CFLAGS) $(MAIN) -o $@
 
+# Classes
+
 $(BUILD)/clsSimulation.o : $(SRC)/clsSimulation.cpp $(SRC)/clsSimulation.hpp
 	$(CC) $(CFLAGS) $(SRC)/clsSimulation.cpp -o $@
-
-# Classes
 
 $(BUILD)/clsInput.o : $(SRC)/clsInput.cpp $(SRC)/clsInput.hpp
 	$(CC) $(CFLAGS) $(SRC)/clsInput.cpp -o $@
