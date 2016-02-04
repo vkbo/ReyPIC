@@ -2,16 +2,10 @@
  * ReyPIC – Main File
  */
 
-#include <cstdlib>
-#include <iostream>
-#include <fstream>
-#include <cmath>
-#include <string.h>
-
 // Core Header Files
 #include "build.hpp"
 #include "config.hpp"
-#include "clsReyPIC.hpp"
+#include "clsSimulation.hpp"
 
 // Classes
 #include "clsInput.hpp"
@@ -28,7 +22,7 @@ using namespace reypic;
 int main(int argc, char* argv[]) {
 
     // Init
-    ReyPIC* oRP = new ReyPIC();
+    Simulation* oSim = new Simulation();
 
     // Set Defaults
     int iErr = 0;
@@ -47,14 +41,14 @@ int main(int argc, char* argv[]) {
         // Running in Test Mode
         if(strcmp(argv[i], "-t") == 0) {
             printf("  Running in test mode.\n");
-            oRP->SetRunMode(RUN_MODE_TEST);
+            oSim->setRunMode(RUN_MODE_TEST);
         }
 
         // Input File
         if(strcmp(argv[i], "-i") == 0) {
             if(i+1 < argc) {
                 printf("  Input file: %s\n", argv[i+1]);
-                oRP->SetInputFile(argv[i+1]);
+                oSim->setInputFile(argv[i+1]);
             } else {
                 printf("  ERROR: Input file must follow switch -i\n");
                 iErr++;
@@ -68,6 +62,12 @@ int main(int argc, char* argv[]) {
         printf("\n");
         return ERR_INIT;
     }
+
+    /**
+     *  Simulation Setup
+     */
+
+    //oSim->
 
     return ERR_NONE;
 }

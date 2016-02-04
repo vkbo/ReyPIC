@@ -5,6 +5,14 @@
 #ifndef RP_CONFIG
 #define RP_CONFIG
 
+// Includes
+#include <cstdlib>
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <string.h>
+#include <array>
+
 // Version
 #define VERSION  "0.1"
 #define REVISION 1

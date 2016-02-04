@@ -4,7 +4,7 @@
 
 CC      = g++
 DEBUG   = -g -Wall
-CFLAGS  = $(DEBUG) -O2 -c
+CFLAGS  = $(DEBUG) -std=c++11 -O2 -c
 LFLAGS  = $(DEBUG)
 
 SRC     = src
@@ -15,7 +15,7 @@ EXEC    = reypic.e
 MAIN    = $(SRC)/main.cpp
 VERSION = $(shell git describe)
 
-CLASSES = clsReyPIC.o clsInput.o clsSpecies.o clsGrid.o
+CLASSES = clsSimulation.o clsInput.o clsSpecies.o clsGrid.o
 OBJECTS = $(addprefix $(BUILD)/,$(CLASSES))
 
 ##
@@ -36,8 +36,8 @@ $(EXEC) : $(BUILD)/main.o $(OBJECTS) $(BNOFILE) $(SRC)/build.hpp
 $(BUILD)/main.o : $(MAIN) $(SRC)/build.hpp
 	$(CC) $(CFLAGS) $(MAIN) -o $@
 
-$(BUILD)/clsReyPIC.o : $(SRC)/clsReyPIC.cpp $(SRC)/clsReyPIC.hpp
-	$(CC) $(CFLAGS) $(SRC)/clsReyPIC.cpp -o $@
+$(BUILD)/clsSimulation.o : $(SRC)/clsSimulation.cpp $(SRC)/clsSimulation.hpp
+	$(CC) $(CFLAGS) $(SRC)/clsSimulation.cpp -o $@
 
 # Classes
 
@@ -54,9 +54,3 @@ $(BUILD)/clsGrid.o : $(SRC)/clsGrid.cpp $(SRC)/clsGrid.hpp
 
 clean:
 	rm $(BUILD)/* $(EXEC)
-
-# Build number file.  Increment if any object file changes.
-#$(BNOFILE): $(BUILD)/main.o $(OBJECTS)
-#	@if ! test -f $(BNOFILE); then echo 0 > $(BNOFILE); fi
-#	@echo $$(($$(cat $(BNOFILE)) + 1)) > $(BNOFILE)
-#	@echo \#define BUILD_NO $$(($$(cat $(BNOFILE)))) > $(SRC)/build.hpp
