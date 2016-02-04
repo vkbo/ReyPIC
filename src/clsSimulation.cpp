@@ -73,9 +73,10 @@ bool Simulation::setRunMode(int iRunMode) {
 
 int Simulation::ReadInput() {
     
-    bool isValid = SimConfig.ReadFile(m_InputFile);
+    bool isValid    = SimConfig.ReadFile(m_InputFile);
+    bool isComplete = SimConfig.SplitSections();
     
-    if(!isValid) {
+    if(!(isValid && isComplete)) {
         return ERR_INPUT;
     }
     

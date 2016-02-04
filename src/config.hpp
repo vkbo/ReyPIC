@@ -12,6 +12,7 @@
 #include <cmath>
 #include <string.h>
 #include <array>
+#include <vector>
 
 // Version
 #define VERSION  "0.1"

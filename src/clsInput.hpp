@@ -19,12 +19,15 @@ class Input {
     
     // Methods
     bool ReadFile(char*);
-
+    bool SplitSections();
 
     private:
 
     // Member Variables
-    std::string m_Buffer;
+    std::string              m_Buffer;
+    std::string              m_Simulation;
+    std::string              m_EMF;
+    std::vector<std::string> m_Species;
 
 };
 
