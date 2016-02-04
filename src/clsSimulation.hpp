@@ -38,6 +38,7 @@ class Simulation {
     // Member Variables
     char* m_InputFile;
     int   m_RunMode;
+    int   m_NumSpecies;
 
 };
 

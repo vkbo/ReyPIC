@@ -1,1 +1,1 @@
-#define BUILD "v0.0.0-7-g3af80d1"
+#define BUILD "v0.0.0-8-gfb1fd65"

@@ -17,6 +17,9 @@ class Input {
     Input();
     ~Input() {};
     
+    // Getters
+    int getNumSpecies();
+    
     // Methods
     bool ReadFile(char*);
     bool SplitSections();

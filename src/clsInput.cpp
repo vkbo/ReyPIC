@@ -22,6 +22,19 @@ Input::Input() {
 // ********************************************************************************************** //
 
 /**
+ *  Method :: getNumSpecies
+ * =========================
+ *  Returns number of species defined in input file
+ */
+
+int Input::getNumSpecies() {
+    
+    return (int)m_Species.size();
+}
+
+// ********************************************************************************************** //
+
+/**
  *  Method :: ReadFile
  * ====================
  *  Reads the input file into buffer and strips comments and line endings.

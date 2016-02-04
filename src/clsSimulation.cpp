@@ -80,6 +80,7 @@ int Simulation::ReadInput() {
         return ERR_INPUT;
     }
     
-    return ERR_NONE;
+    m_NumSpecies = SimConfig.getNumSpecies();
     
+    return ERR_NONE;
 }
