@@ -67,7 +67,13 @@ int main(int argc, char* argv[]) {
      *  Simulation Setup
      */
 
-    oSim->ReadInput();
+    iErr = oSim->ReadInput();
+
+    if(iErr > 0) {
+        printf("  Errors encountered. Aborting ...\n");
+        printf("\n");
+        return ERR_INIT;
+    }
 
     return ERR_NONE;
 }

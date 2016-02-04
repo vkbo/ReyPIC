@@ -13,6 +13,7 @@
 
 #include "clsSimulation.hpp"
 
+using namespace std;
 using namespace reypic;
 
 /**
@@ -62,4 +63,22 @@ bool Simulation::setRunMode(int iRunMode) {
     }
 
     return false;
+}
+
+/**
+ *  Read Input File
+ * =================
+ *  Creates SimConfig and loads the input file
+ */
+
+int Simulation::ReadInput() {
+    
+    bool isValid = SimConfig.ReadFile(m_InputFile);
+    
+    if(!isValid) {
+        return ERR_INPUT;
+    }
+    
+    return ERR_NONE;
+    
 }

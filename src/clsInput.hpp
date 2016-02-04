@@ -14,8 +14,11 @@ class Input {
 
     public:
 
-    Input(char*);
+    Input();
     ~Input() {};
+    
+    // Methods
+    bool ReadFile(char*);
 
 
     private:

@@ -24,19 +24,20 @@ class Simulation {
     bool setRunMode(int);
     
     // Methods
-    void ReadInput();
+    int  ReadInput();
     void Setup();
     void ReadRestart();
     void MainLoop();
     int  AbortExec(int);
+    
+    // Properties
+    Input SimConfig;
 
     private:
 
     // Member Variables
-    Input m_SimConfig;
     char* m_InputFile;
     int   m_RunMode;
-
 
 };
 

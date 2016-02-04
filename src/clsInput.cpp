@@ -4,16 +4,58 @@
 
 #include "clsInput.hpp"
 
+using namespace std;
 using namespace reypic;
 
 /**
  *  Input Class Constructor
  * =========================
- *  Reads input file into string buffer and strips comments and line endings.
  */
 
-Input::Input(char* cFile) {
+Input::Input() {
     
     
+}
+
+/**
+ *  Method :: ReadFile
+ * ====================
+ *  Reads the input file and strips comments and line endings.
+ */
+
+bool Input::ReadFile(char* cFile) {
     
+    // Read File into buffer
+    ifstream tmpFile(cFile);
+    tmpFile.seekg(0, ios::end);
+    size_t iSize = tmpFile.tellg();
+    string tmpBuffer(iSize, ' ');
+    tmpFile.seekg(0);
+    tmpFile.read(&tmpBuffer[0], iSize);
+    
+    // Check buffer for obvious formatting errors
+    size_t nQuotes = count(tmpBuffer.begin(),tmpBuffer.end(),'"');
+    
+    if(nQuotes%2 == 1) {
+        printf("  Input file malformed. Check that all strings have been closed.\n");
+        return false;
+    }
+    
+    // Strip comments, line endings and redundant spaces
+    regex rxComments("#.*?\n");
+    regex rxEndLine("\r?\n|\r");
+    regex rxSpaces(" +(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+    regex rxOther("\t");
+
+    tmpBuffer = regex_replace(tmpBuffer,rxComments,"");
+    tmpBuffer = regex_replace(tmpBuffer,rxEndLine,"");
+    tmpBuffer = regex_replace(tmpBuffer,rxSpaces,"");
+    tmpBuffer = regex_replace(tmpBuffer,rxOther,"");
+
+    // Set class buffer and return
+    m_Buffer = tmpBuffer;
+
+    cout << m_Buffer << endl;
+    
+    return true;
 }
