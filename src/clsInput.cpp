@@ -6,6 +6,14 @@
 
 using namespace reypic;
 
-Input::Input() {
+/**
+ *  Input Class Constructor
+ * =========================
+ *  Reads input file into string buffer and strips comments and line endings.
+ */
 
+Input::Input(char* cFile) {
+    
+    
+    
 }

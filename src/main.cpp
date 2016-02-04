@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
      *  Simulation Setup
      */
 
-    //oSim->
+    oSim->ReadInput();
 
     return ERR_NONE;
 }

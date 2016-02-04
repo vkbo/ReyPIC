@@ -14,13 +14,13 @@ class Input {
 
     public:
 
-    Input();
+    Input(char*);
     ~Input() {};
 
-    void ParseFile(char* cFile);
 
     private:
 
+    // Member Variables
     std::string m_Buffer;
 
 };

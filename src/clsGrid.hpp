@@ -2,6 +2,9 @@
  * ReyPIC – Grid Header
  */
 
+#ifndef CLASS_GRID
+#define CLASS_GRID
+
 #include "config.hpp"
 
 namespace reypic {
@@ -10,43 +13,25 @@ class Grid {
 
     public:
 
-    /**
-     *  Constructor & Destructor
-     */
-     
+    // Constructor & Destructor
     Grid();
     ~Grid() {};
 
-    /**
-     * Properties
-     */
-
-    /**
-     *  Methods
-     */
-
+    // Methods
     void Setup();
-
-// ****************************************************************************************************************** //
 
     private:
 
-    /**
-     * Properties
-     */
-
-    double aDeltaMin[3] = {1.0, 1.0, 1.0}; // Smallest allowed cell size
-    double aDeltaMax[3] = {1.0, 1.0, 1.0}; // Largest allowed cell size
-    double aGridMin[3]  = {0.0, 0.0, 0.0}; // Lower bound of grid axes
-    double aGridMax[3]  = {1.0, 1.0, 1.0}; // Upper bound of grid axes
-    int    aGridSize[3] = {1,   1,   1};   // Number of grid cells
-    double aGrid[];                        // The grid
-
-    /**
-     *  Methods
-     */
-
+    // Member Variables
+    double m_DeltaMin[3] = {1.0, 1.0, 1.0}; // Smallest allowed cell size
+    double m_DeltaMax[3] = {1.0, 1.0, 1.0}; // Largest allowed cell size
+    double m_GridMin[3]  = {0.0, 0.0, 0.0}; // Lower bound of grid axes
+    double m_GridMax[3]  = {1.0, 1.0, 1.0}; // Upper bound of grid axes
+    int    m_GridSize[3] = {1,   1,   1};   // Number of grid cells
+    double m_Grid[];                        // The grid
 
 }; // End Class Grid
 
 } // End NameSpace
+
+#endif
