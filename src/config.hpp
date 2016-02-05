@@ -34,4 +34,11 @@
 #define INPUT_EMF     3
 #define INPUT_SPECIES 4
 
+// Input File Types
+#define INVAR_INT     1
+#define INVAR_DOUBLE  2
+#define INVAR_STRING  3
+#define INVAR_3ARRINT 4
+#define INVAR_3ARRDBL 5
+
 #endif

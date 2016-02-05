@@ -23,6 +23,7 @@ class Input {
     // Methods
     bool ReadFile(char*);
     bool SplitSections();
+    bool ReadVariable(int,std::string,void*,int);
 
     private:
 

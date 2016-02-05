@@ -93,7 +93,7 @@ bool Input::ReadFile(char* cFile) {
 bool Input::SplitSections() {
     
     int    iLev = 0;
-    size_t nLen ;
+    size_t nLen;
     string sTemp;
 
     int    iSection   = INPUT_NONE;
@@ -144,7 +144,8 @@ bool Input::SplitSections() {
                         hasSpecies = true;
                         break;
                 }
-                sTemp = "";
+                sTemp    = "";
+                iSection = INPUT_NONE;
             }
         }
     }
@@ -156,3 +157,26 @@ bool Input::SplitSections() {
         return false;
     }
 }
+
+// ********************************************************************************************** //
+
+/**
+ *  Method :: ReadFile
+ * ====================
+ *  Reads the input file into buffer and strips comments and line endings.
+ */
+
+bool Input::ReadVariable(int iSection, string sVar, void *pReturn, int iType) {
+    
+    switch(iType) {
+        case INVAR_INT:
+            *(int*)pReturn = 4;
+            break;
+    }
+    
+    return true;
+}
+
+// ********************************************************************************************** //
+
+// End Class Input

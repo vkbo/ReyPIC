@@ -16,6 +16,8 @@
 using namespace std;
 using namespace reypic;
 
+// ********************************************************************************************** //
+
 /**
  * Simulation Class Constructor
  */
@@ -27,6 +29,8 @@ Simulation::Simulation() {
 
     return;
 }
+
+// ********************************************************************************************** //
 
 /**
  *  Set Input File
@@ -41,6 +45,8 @@ bool Simulation::setInputFile(char* cFile) {
 
     return true;
 }
+
+// ********************************************************************************************** //
 
 /**
  *  Set Run Mode
@@ -65,6 +71,8 @@ bool Simulation::setRunMode(int iRunMode) {
     return false;
 }
 
+// ********************************************************************************************** //
+
 /**
  *  Read Input File
  * =================
@@ -84,3 +92,30 @@ int Simulation::ReadInput() {
     
     return ERR_NONE;
 }
+
+// ********************************************************************************************** //
+
+/**
+ *  Setup
+ * =======
+ *  Sets up simulation
+ */
+
+int Simulation::Setup() {
+    
+    bool isOK = false;
+    
+    isOK = SimConfig.ReadVariable(INPUT_SIM, "nodes", &m_Nodes, INVAR_INT);
+    
+    if(!isOK) {
+        cout << "  Error" << endl;
+    }
+    
+    cout << "  Nodes: " << m_Nodes << endl << endl;
+    
+    return ERR_NONE;
+}
+
+// ********************************************************************************************** //
+
+// End Class Input

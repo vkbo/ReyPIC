@@ -74,6 +74,14 @@ int main(int argc, char* argv[]) {
         printf("\n");
         return ERR_INIT;
     }
+    
+    iErr = oSim->Setup();
+
+    if(iErr > 0) {
+        printf("  Errors encountered. Aborting ...\n");
+        printf("\n");
+        return ERR_INIT;
+    }
 
     return ERR_NONE;
 }

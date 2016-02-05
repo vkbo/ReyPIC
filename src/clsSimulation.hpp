@@ -25,7 +25,7 @@ class Simulation {
     
     // Methods
     int  ReadInput();
-    void Setup();
+    int  Setup();
     void ReadRestart();
     void MainLoop();
     int  AbortExec(int);
@@ -39,6 +39,10 @@ class Simulation {
     char* m_InputFile;
     int   m_RunMode;
     int   m_NumSpecies;
+    
+    // Parallelisation
+    int   m_Nodes   = 1;
+    int   m_Threads = 1;
 
 };
 

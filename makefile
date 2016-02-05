@@ -4,7 +4,7 @@
 
 CC      = g++
 DEBUG   = -g -Wall
-CFLAGS  = $(DEBUG) -std=c++11 -O2 -c
+CFLAGS  = $(DEBUG) -std=c++14 -O2 -c
 LFLAGS  = $(DEBUG)
 
 SRC     = src
