@@ -129,7 +129,7 @@ bool Input::SplitSections() {
                         hasSim = true;
                         break;
                     case INPUT_GRID:
-                        m_Simulation = sTemp;
+                        m_Grid = sTemp;
                         printf("  Found grid section\n");
                         hasGrid = true;
                         break;
@@ -166,15 +166,82 @@ bool Input::SplitSections() {
  *  Reads the input file into buffer and strips comments and line endings.
  */
 
-bool Input::ReadVariable(int iSection, string sVar, void *pReturn, int iType) {
+int Input::ReadVariable(int iSection, int iIndex, string sVar, void *pReturn, int iType) {
+    
+    string sBuffer, sSection, sTemp, sValue;
+    bool   getVal = false;
+    
+    // Get correct buffer
+    switch(iSection) {
+        case INPUT_SIM:
+            sBuffer  = m_Simulation;
+            sSection = "simulation";
+            break;
+        case INPUT_GRID:
+            sBuffer  = m_Grid;
+            sSection = "grid";
+            break;
+        case INPUT_EMF:
+            sBuffer  = m_EMF;
+            sSection = "emf";
+            break;
+        case INPUT_SPECIES:
+            sBuffer  = m_Species[iIndex];
+            sSection = "species("+to_string(iIndex)+")";
+            break;
+        case INPUT_NONE:
+            return ERR_ANY;
+            break;
+    }
+
+    // Find variable
+    for(char& cChar : sBuffer) {
+        
+        sTemp += cChar;
+        
+        if(cChar == '=') {
+            if(sTemp.compare(sVar+"=") == 0) {
+                getVal = true;
+                sTemp  = "";
+            }
+        }
+        
+        if(cChar == ';') {
+            if(getVal) {
+                sValue = sTemp;
+            }
+            sTemp  = "";
+            getVal = false;
+        }
+    }
+    
+    // Check value
+    size_t nLen = sValue.length();
+    if(nLen < 1) return ERR_ANY;
+    sValue = sValue.substr(0,nLen-1);
+    
+    cout << "  Value: " << sValue << " (" << nLen << ")" << endl;
     
     switch(iType) {
         case INVAR_INT:
-            *(int*)pReturn = 4;
+            try {
+                *(int*)pReturn = stoi(sValue);
+            } catch(...) {
+                printf("  Error reading value %s->%s\n",sSection.c_str(),sVar.c_str());
+                return ERR_ANY;
+            }
+            break;
+        case INVAR_DOUBLE:
+            try {
+                *(double*)pReturn = stof(sValue);
+            } catch(...) {
+                printf("  Error reading value %s->%s\n",sSection.c_str(),sVar.c_str());
+                return ERR_ANY;
+            }
             break;
     }
     
-    return true;
+    return ERR_NONE;
 }
 
 // ********************************************************************************************** //

@@ -103,15 +103,28 @@ int Simulation::ReadInput() {
 
 int Simulation::Setup() {
     
-    bool isOK = false;
+    int nErr = 0;
     
-    isOK = SimConfig.ReadVariable(INPUT_SIM, "nodes", &m_Nodes, INVAR_INT);
+    // Parallelisation
+    nErr += SimConfig.ReadVariable(INPUT_SIM, 0, "nodes",   &m_Nodes,    INVAR_INT);
+    nErr += SimConfig.ReadVariable(INPUT_SIM, 0, "threads", &m_Threads,  INVAR_INT);
+
+    // Physics
+    nErr += SimConfig.ReadVariable(INPUT_SIM, 0, "n0",      &m_N0,       INVAR_DOUBLE);
     
-    if(!isOK) {
-        cout << "  Error" << endl;
-    }
+    // Time
+    nErr += SimConfig.ReadVariable(INPUT_SIM, 0, "dt",      &m_TimeStep, INVAR_DOUBLE);
+    nErr += SimConfig.ReadVariable(INPUT_SIM, 0, "tmin",    &m_TMin,     INVAR_DOUBLE);
+    nErr += SimConfig.ReadVariable(INPUT_SIM, 0, "tmax",    &m_TMax,     INVAR_DOUBLE);
     
-    cout << "  Nodes: " << m_Nodes << endl << endl;
+    cout << "  Errors:   " << nErr << endl;
+    cout << "  Nodes:    " << m_Nodes << endl;
+    cout << "  Threads:  " << m_Threads << endl;
+    cout << "  N0:       " << m_N0 << endl;
+    cout << "  TimeStep: " << m_TimeStep << endl;
+    cout << "  TMin:     " << m_TMin << endl;
+    cout << "  TMax:     " << m_TMax << endl;
+    cout << endl;
     
     return ERR_NONE;
 }

@@ -20,6 +20,7 @@
 
 // Error Modes
 #define ERR_NONE     0
+#define ERR_ANY      1
 #define ERR_INIT     80
 #define ERR_MPI_INIT 81
 #define ERR_INPUT    82

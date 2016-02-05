@@ -36,13 +36,21 @@ class Simulation {
     private:
 
     // Member Variables
-    char* m_InputFile;
-    int   m_RunMode;
-    int   m_NumSpecies;
+    char*  m_InputFile;
+    int    m_RunMode;
+    int    m_NumSpecies;
     
     // Parallelisation
-    int   m_Nodes   = 1;
-    int   m_Threads = 1;
+    int    m_Nodes   = 1;
+    int    m_Threads = 1;
+    
+    // Physics
+    double m_N0   = 1.0;
+    
+    // Time
+    double m_TimeStep = 1.0;
+    double m_TMin     = 0.0;
+    double m_TMax     = 1.0;
 
 };
 
