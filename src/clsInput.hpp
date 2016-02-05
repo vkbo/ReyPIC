@@ -29,6 +29,7 @@ class Input {
     // Member Variables
     std::string              m_Buffer;
     std::string              m_Simulation;
+    std::string              m_Grid;
     std::string              m_EMF;
     std::vector<std::string> m_Species;
 

@@ -30,7 +30,8 @@
 // Input File Sections
 #define INPUT_NONE    0
 #define INPUT_SIM     1
-#define INPUT_EMF     2
-#define INPUT_SPECIES 3
+#define INPUT_GRID    2
+#define INPUT_EMF     3
+#define INPUT_SPECIES 4
 
 #endif

@@ -95,9 +95,11 @@ bool Input::SplitSections() {
     int    iLev = 0;
     size_t nLen ;
     string sTemp;
-    int    iSection = INPUT_NONE;
-    bool   hasSim = false;
-    bool   hasEMF = false;
+
+    int    iSection   = INPUT_NONE;
+    bool   hasSim     = false;
+    bool   hasGrid    = false;
+    bool   hasEMF     = false;
     bool   hasSpecies = false;
     
     for(char& cChar : m_Buffer) {
@@ -108,6 +110,7 @@ bool Input::SplitSections() {
             iLev++;
             if(iLev == 1) {
                 if(sTemp.compare("simulation{") == 0) iSection = INPUT_SIM;
+                if(sTemp.compare("grid{") == 0)       iSection = INPUT_GRID;
                 if(sTemp.compare("emf{") == 0)        iSection = INPUT_EMF;
                 if(sTemp.compare("species{") == 0)    iSection = INPUT_SPECIES;
                 sTemp = "";
@@ -125,6 +128,11 @@ bool Input::SplitSections() {
                         printf("  Found simulation section\n");
                         hasSim = true;
                         break;
+                    case INPUT_GRID:
+                        m_Simulation = sTemp;
+                        printf("  Found grid section\n");
+                        hasGrid = true;
+                        break;
                     case INPUT_EMF:
                         m_EMF = sTemp;
                         printf("  Found emf section\n");
@@ -141,7 +149,7 @@ bool Input::SplitSections() {
         }
     }
     
-    if(hasSim && hasEMF && hasSpecies) {
+    if(hasSim && hasGrid && hasEMF && hasSpecies) {
         printf("\n");
         return true;
     } else {
