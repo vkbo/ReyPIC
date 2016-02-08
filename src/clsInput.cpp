@@ -46,7 +46,7 @@ bool Input::ReadFile(char* cFile) {
     ifstream tmpFile(cFile);
     tmpFile.seekg(0, ios::end);
     size_t iSize = tmpFile.tellg();
-    string tmpBuffer(iSize, ' ');
+    string_t tmpBuffer(iSize, ' ');
     tmpFile.seekg(0);
     tmpFile.read(&tmpBuffer[0], iSize);
     
@@ -92,9 +92,9 @@ bool Input::ReadFile(char* cFile) {
 
 bool Input::SplitSections() {
     
-    int    iLev = 0;
-    size_t nLen;
-    string sTemp;
+    int      iLev = 0;
+    size_t   nLen;
+    string_t sTemp;
 
     int    iSection   = INPUT_NONE;
     bool   hasSim     = false;
@@ -168,8 +168,8 @@ bool Input::SplitSections() {
 
 int Input::ReadVariable(int iSection, int iIndex, string sVar, void *pReturn, int iType) {
     
-    string sBuffer, sSection, sTemp, sValue;
-    bool   getVal = false;
+    string_t sBuffer, sSection, sTemp, sValue;
+    bool     getVal = false;
     
     // Get correct buffer
     switch(iSection) {

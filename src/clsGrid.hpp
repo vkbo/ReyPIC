@@ -11,24 +11,41 @@ namespace reypic {
 
 class Grid {
 
-    public:
+public:
 
-    // Constructor & Destructor
+   /**
+    * Constructor/Destructor
+    */
+
     Grid();
-    ~Grid() {};
+    ~Grid();
 
-    // Methods
-    void Setup();
+   /**
+    * Methods
+    */
 
-    private:
+    int Setup();
 
-    // Member Variables
-    double m_DeltaMin[3] = {1.0, 1.0, 1.0}; // Smallest allowed cell size
-    double m_DeltaMax[3] = {1.0, 1.0, 1.0}; // Largest allowed cell size
-    double m_GridMin[3]  = {0.0, 0.0, 0.0}; // Lower bound of grid axes
-    double m_GridMax[3]  = {1.0, 1.0, 1.0}; // Upper bound of grid axes
-    int    m_GridSize[3] = {1,   1,   1};   // Number of grid cells
-    double m_Grid[];                        // The grid
+private:
+
+   /**
+    * Data Storage Variables
+    */
+
+    double    m_Grid[];                        // The grid
+
+   /**
+    * Configuration from Input File
+    */
+
+    double    m_GridMin[3]  = {0.0, 0.0, 0.0}; // [gridmin]    Lower bound of grid axes
+    double    m_GridMax[3]  = {1.0, 1.0, 1.0}; // [gridmax]    Input Upper bound of grid axes
+    int       m_GridSize[3] = {1,   1,   1};   // [grid]       Number of grid cells
+
+    vstring_t m_GridType    = {"","",""};      // [resolution] Grid resolution type
+    double    m_DeltaMin[3] = {1.0, 1.0, 1.0}; // [gridmin]    Smallest allowed cell size
+    double    m_DeltaMax[3] = {1.0, 1.0, 1.0}; // [gridmax]    Largest allowed cell size
+    vstring_t m_GridFunc    = {"","",""};      // [gridfuncX]  Function for grid cell sixe
 
 }; // End Class Grid
 

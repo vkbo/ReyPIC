@@ -14,6 +14,12 @@
 #include <array>
 #include <vector>
 
+// TypeDefs
+typedef std::vector<std::string> vstring_t;
+typedef std::vector<double>      vdouble_t;
+typedef std::vector<int>         vint_t;
+typedef std::string              string_t;
+
 // Run Modes
 #define RUN_MODE_TEST 1
 #define RUN_MODE_FULL 2

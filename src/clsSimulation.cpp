@@ -24,10 +24,6 @@ using namespace reypic;
 
 Simulation::Simulation() {
 
-    // Default Values
-    m_RunMode = RUN_MODE_FULL;
-
-    return;
 }
 
 // ********************************************************************************************** //

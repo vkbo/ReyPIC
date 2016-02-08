@@ -14,31 +14,44 @@ namespace reypic {
 
 class Simulation {
 
-    public:
+public:
+
+   /**
+    * Constructor/Destructor
+    */
 
     Simulation();
-    ~Simulation() {};
+    ~Simulation();
 
-    // Setters
+   /**
+    * Setters/Getters
+    */
+
     bool setInputFile(char*);
     bool setRunMode(int);
     
-    // Methods
+   /**
+    * Methods
+    */
+
     int  ReadInput();
     int  Setup();
     void ReadRestart();
     void MainLoop();
     int  AbortExec(int);
     
-    // Properties
+   /**
+    * Properties
+    */
+
     Input SimConfig;
 
-    private:
+private:
 
     // Member Variables
     char*  m_InputFile;
-    int    m_RunMode;
-    int    m_NumSpecies;
+    int    m_RunMode    = RUN_MODE_FULL;
+    int    m_NumSpecies = 0;
     
     // Parallelisation
     int    m_Nodes   = 1;

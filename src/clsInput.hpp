@@ -28,11 +28,11 @@ class Input {
     private:
 
     // Member Variables
-    std::string              m_Buffer;
-    std::string              m_Simulation;
-    std::string              m_Grid;
-    std::string              m_EMF;
-    std::vector<std::string> m_Species;
+    string_t  m_Buffer;
+    string_t  m_Simulation;
+    string_t  m_Grid;
+    string_t  m_EMF;
+    vstring_t m_Species;
 
 };
 
