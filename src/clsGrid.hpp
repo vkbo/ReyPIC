@@ -26,17 +26,17 @@ public:
 
     int Setup();
 
+   /**
+    * Properties
+    */
+
 private:
 
    /**
-    * Data Storage Variables
+    * Member Variables
     */
 
     double    m_Grid[];                        // The grid
-
-   /**
-    * Configuration from Input File
-    */
 
     double    m_GridMin[3]  = {0.0, 0.0, 0.0}; // [gridmin]    Lower bound of grid axes
     double    m_GridMax[3]  = {1.0, 1.0, 1.0}; // [gridmax]    Input Upper bound of grid axes
