@@ -36,9 +36,11 @@ public:
 
     int  ReadInput();
     int  Setup();
+    int  Init();
     void ReadRestart();
     void MainLoop();
     int  AbortExec(int);
+    int  Finalize(int);
     
    /**
     * Properties

@@ -82,6 +82,6 @@ int main(int argc, char* argv[]) {
         printf("\n");
         return ERR_INIT;
     }
-
+    
     return ERR_NONE;
 }

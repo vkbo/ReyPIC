@@ -13,6 +13,7 @@
 #include <string.h>
 #include <array>
 #include <vector>
+#include <mpi.h>
 
 // TypeDefs
 typedef std::vector<std::string> vstring_t;

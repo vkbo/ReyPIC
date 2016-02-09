@@ -2,7 +2,7 @@
 ###  Makfeile for ReyPIC
 ###
 
-CC      = g++
+CC      = mpic++
 DEBUG   = -g -Wall
 CFLAGS  = $(DEBUG) -std=c++14 -O2 -c
 LFLAGS  = $(DEBUG)
