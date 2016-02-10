@@ -15,73 +15,93 @@
 using namespace std;
 using namespace reypic;
 
+int abortExec(int);
+
 /**
  * Main Program Loop
  */
     
 int main(int argc, char* argv[]) {
 
-    // Init
-    Simulation* oSim = new Simulation();
-
-    // Set Defaults
-    int iErr = 0;
-
-    // Write Output Header
-    printf("\n");
-    printf("  ReyPIC\n");
-    printf(" *********\n");
-    printf("\n");
-    printf("  Version: %s\n", BUILD);
-    printf("\n");
-
-    // Parse Input Options
-    for(int i=1; i<argc; i++) {
-
-        // Running in Test Mode
-        if(strcmp(argv[i], "-t") == 0) {
-            printf("  Running in test mode.\n");
-            oSim->setRunMode(RUN_MODE_TEST);
-        }
-
-        // Input File
-        if(strcmp(argv[i], "-i") == 0) {
-            if(i+1 < argc) {
-                printf("  Input file: %s\n", argv[i+1]);
-                oSim->setInputFile(argv[i+1]);
-            } else {
-                printf("  ERROR: Input file must follow switch -i\n");
-                iErr++;
-            }
-        }
+    // Variables
+    int  errMPI;
+    int  iRank;
+    bool isMaster = false;
+    
+   /**
+    *  Initialise
+    */
+    
+    errMPI = MPI_Init(&argc, &argv);
+    if(errMPI != MPI_SUCCESS) {
+        return abortExec(ERR_MPI_INIT);
     }
-    printf("\n");
+    MPI_Comm_rank(MPI_COMM_WORLD, &iRank);
+    isMaster = (iRank == 0);
 
-    if(iErr > 0) {
-        printf("  Errors encountered. Aborting ...\n");
+    // Write output header
+    if(isMaster) {
         printf("\n");
-        return ERR_INIT;
-    }
-
-    /**
-     *  Simulation Setup
-     */
-
-    iErr = oSim->ReadInput();
-
-    if(iErr > 0) {
-        printf("  Errors encountered. Aborting ...\n");
+        printf("  ReyPIC – 3D Particle in Cell\n");
+        printf(" ******************************\n");
+        printf("  Version: %s\n", BUILD);
         printf("\n");
-        return ERR_INIT;
     }
     
-    iErr = oSim->Setup();
-
-    if(iErr > 0) {
-        printf("  Errors encountered. Aborting ...\n");
-        printf("\n");
-        return ERR_INIT;
+    // Check that there is a minimum of one argument
+    if(argc < 2) {
+        printf("  ERROR: No input file specified\n");
+        return abortExec(ERR_USAGE);
     }
+
+   /**
+    *  Simulation Setup
+    */
+
+    Simulation Sim;
+    int        errSim = ERR_NONE;
+
+    // Parse input options and set input file
+    for(int i=1; i<argc; i++) {
+        if(strcmp(argv[i], "-t")  == 0) Sim.setRunMode(RUN_MODE_TEST);
+        if(strcmp(argv[i], "-tt") == 0) Sim.setRunMode(RUN_MODE_EXT_TEST);
+    }
+    Sim.setInputFile(argv[argc-1]);
+
+    // Read input file
+    errSim = Sim.ReadInput();
+    if(errSim != ERR_NONE) {
+        return abortExec(errSim);
+    }
+    
+    // Set up simulation
+    errSim = Sim.Setup();
+    if(errSim != ERR_NONE) {
+        return abortExec(errSim);
+    }
+    
+   /**
+    * THE END!
+    */
+    
+    MPI_Finalize();
     
     return ERR_NONE;
+}
+
+int abortExec(int errVal) {
+    
+    int iRank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &iRank);
+    
+    if(iRank == 0) {
+        printf("\n");
+        printf("  OMG WTF HAPPENED!\n");
+        printf("  Code %d\n", errVal);
+        printf("\n");
+    }
+    
+    MPI_Finalize();
+
+    return errVal;
 }

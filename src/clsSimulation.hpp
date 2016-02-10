@@ -21,7 +21,7 @@ public:
     */
 
     Simulation();
-    ~Simulation();
+    ~Simulation() {};
 
    /**
     * Setters/Getters
@@ -30,13 +30,14 @@ public:
     bool setInputFile(char*);
     bool setRunMode(int);
     
+    bool isMaster();
+    
    /**
     * Methods
     */
 
-    int  ReadInput();
-    int  Setup();
-    int  Init();
+    int  ReadInput();    // Read input file
+    int  Setup();        // 
     void ReadRestart();
     void MainLoop();
     int  AbortExec(int);
@@ -46,26 +47,34 @@ public:
     * Properties
     */
 
-    Input SimConfig;
+    Input simInput;
 
 private:
 
-    // Member Variables
+   /**
+    * Member Variables
+    */
+
+    // General
     char*  m_InputFile;
     int    m_RunMode    = RUN_MODE_FULL;
     int    m_NumSpecies = 0;
     
     // Parallelisation
-    int    m_Nodes   = 1;
-    int    m_Threads = 1;
+    int    m_MPISize    =  0;
+    int    m_MPIRank    = -1;
+    bool   m_isMaster   = false;
+
+    int    m_Nodes      =  1;
+    int    m_Threads    =  1;
     
     // Physics
-    double m_N0   = 1.0;
+    double m_N0         = 1.0;
     
     // Time
-    double m_TimeStep = 1.0;
-    double m_TMin     = 0.0;
-    double m_TMax     = 1.0;
+    double m_TimeStep   = 1.0;
+    double m_TMin       = 0.0;
+    double m_TMax       = 1.0;
 
 };
 

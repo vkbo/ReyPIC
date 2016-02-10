@@ -16,9 +16,14 @@ using namespace reypic;
 
 Input::Input() {
     
+    MPI_Comm_size(MPI_COMM_WORLD, &m_MPISize);
+    MPI_Comm_rank(MPI_COMM_WORLD, &m_MPIRank);
+    m_isMaster = (m_MPIRank == 0);
     
 }
 
+// ********************************************************************************************** //
+//                                      Setters and Getters                                       //
 // ********************************************************************************************** //
 
 /**
@@ -33,6 +38,8 @@ int Input::getNumSpecies() {
 }
 
 // ********************************************************************************************** //
+//                                       Main Class Methods                                       //
+// ********************************************************************************************** //
 
 /**
  *  Method :: ReadFile
@@ -40,7 +47,7 @@ int Input::getNumSpecies() {
  *  Reads the input file into buffer and strips comments and line endings.
  */
 
-bool Input::ReadFile(char* cFile) {
+int Input::ReadFile(char* cFile) {
     
     // Read File into buffer
     ifstream tmpFile(cFile);
@@ -53,16 +60,20 @@ bool Input::ReadFile(char* cFile) {
     // Check for closed quotes
     size_t nQuotes = count(tmpBuffer.begin(),tmpBuffer.end(),'"');
     if(nQuotes%2 == 1) {
-        printf("  Input file malformed. Check that all strings have been closed.\n");
-        return false;
+        if(m_isMaster) {
+            printf("  Input file malformed. Check that all strings have been closed.\n");
+        }
+        return ERR_INPUTFILE;
     }
 
     // Check for closed sections
     size_t nSecStart = count(tmpBuffer.begin(),tmpBuffer.end(),'{');
     size_t nSecEnd   = count(tmpBuffer.begin(),tmpBuffer.end(),'}');
     if(nSecStart != nSecEnd) {
-        printf("  Input file malformed. Check that all ections have been closed.\n");
-        return false;
+        if(m_isMaster) {
+            printf("  Input file malformed. Check that all ections have been closed.\n");
+        }
+        return ERR_INPUTFILE;
     }
     
     // Strip comments, line endings and redundant spaces
@@ -79,7 +90,7 @@ bool Input::ReadFile(char* cFile) {
     // Set class buffer and return
     m_Buffer = tmpBuffer;
     
-    return true;
+    return ERR_NONE;
 }
 
 // ********************************************************************************************** //
@@ -90,13 +101,14 @@ bool Input::ReadFile(char* cFile) {
  *  Splits the input file buffer into root sections
  */
 
-bool Input::SplitSections() {
+int Input::SplitSections() {
     
     int      iLev = 0;
     size_t   nLen;
     string_t sTemp;
 
     int    iSection   = INPUT_NONE;
+    bool   hasConf    = false;
     bool   hasSim     = false;
     bool   hasGrid    = false;
     bool   hasEMF     = false;
@@ -109,6 +121,7 @@ bool Input::SplitSections() {
         if(cChar == '{') {
             iLev++;
             if(iLev == 1) {
+                if(sTemp.compare("config{") == 0)     iSection = INPUT_CONF;
                 if(sTemp.compare("simulation{") == 0) iSection = INPUT_SIM;
                 if(sTemp.compare("grid{") == 0)       iSection = INPUT_GRID;
                 if(sTemp.compare("emf{") == 0)        iSection = INPUT_EMF;
@@ -123,24 +136,39 @@ bool Input::SplitSections() {
                 nLen  = sTemp.length();
                 sTemp = sTemp.substr(0,nLen-1);
                 switch(iSection) {
+                    case INPUT_CONF:
+                        m_Config = sTemp;
+                        if(m_isMaster) {
+                            printf("  Found config section\n");
+                        }
+                        hasConf = true;
+                        break;
                     case INPUT_SIM:
                         m_Simulation = sTemp;
-                        printf("  Found simulation section\n");
+                        if(m_isMaster) {
+                            printf("  Found simulation section\n");
+                        }
                         hasSim = true;
                         break;
                     case INPUT_GRID:
                         m_Grid = sTemp;
-                        printf("  Found grid section\n");
+                        if(m_isMaster) {
+                            printf("  Found grid section\n");
+                        }
                         hasGrid = true;
                         break;
                     case INPUT_EMF:
                         m_EMF = sTemp;
-                        printf("  Found emf section\n");
+                        if(m_isMaster) {
+                            printf("  Found emf section\n");
+                        }
                         hasEMF = true;
                         break;
                     case INPUT_SPECIES:
                         m_Species.push_back(sTemp);
-                        printf("  Found species section (%d)\n", (int)m_Species.size());
+                        if(m_isMaster) {
+                            printf("  Found species section (%d)\n", (int)m_Species.size());
+                        }
                         hasSpecies = true;
                         break;
                 }
@@ -150,11 +178,13 @@ bool Input::SplitSections() {
         }
     }
     
-    if(hasSim && hasGrid && hasEMF && hasSpecies) {
-        printf("\n");
-        return true;
+    if(hasConf && hasSim && hasGrid && hasEMF && hasSpecies) {
+        if(m_isMaster) {
+            printf("\n");
+        }
+        return ERR_NONE;
     } else {
-        return false;
+        return ERR_INPUTFILE;
     }
 }
 
@@ -173,6 +203,10 @@ int Input::ReadVariable(int iSection, int iIndex, string sVar, void *pReturn, in
     
     // Get correct buffer
     switch(iSection) {
+        case INPUT_CONF:
+            sBuffer  = m_Config;
+            sSection = "config";
+            break;
         case INPUT_SIM:
             sBuffer  = m_Simulation;
             sSection = "simulation";
@@ -220,14 +254,18 @@ int Input::ReadVariable(int iSection, int iIndex, string sVar, void *pReturn, in
     if(nLen < 1) return ERR_ANY;
     sValue = sValue.substr(0,nLen-1);
     
-    cout << "  Value: " << sValue << " (" << nLen << ")" << endl;
+    if(m_isMaster) {
+        cout << "  Value: " << sValue << " (" << nLen << ")" << endl;
+    }
     
     switch(iType) {
         case INVAR_INT:
             try {
                 *(int*)pReturn = stoi(sValue);
             } catch(...) {
-                printf("  Error reading value %s->%s\n",sSection.c_str(),sVar.c_str());
+                if(m_isMaster) {
+                    printf("  Error reading value %s->%s\n",sSection.c_str(),sVar.c_str());
+                }
                 return ERR_ANY;
             }
             break;
@@ -235,7 +273,9 @@ int Input::ReadVariable(int iSection, int iIndex, string sVar, void *pReturn, in
             try {
                 *(double*)pReturn = stof(sValue);
             } catch(...) {
-                printf("  Error reading value %s->%s\n",sSection.c_str(),sVar.c_str());
+                if(m_isMaster) {
+                    printf("  Error reading value %s->%s\n",sSection.c_str(),sVar.c_str());
+                }
                 return ERR_ANY;
             }
             break;
