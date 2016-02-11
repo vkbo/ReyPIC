@@ -20,18 +20,18 @@ int abortExec(int);
 /**
  * Main Program Loop
  */
-    
+
 int main(int argc, char* argv[]) {
 
     // Variables
     int  errMPI;
     int  iRank;
     bool isMaster = false;
-    
+
    /**
     *  Initialise
     */
-    
+
     errMPI = MPI_Init(&argc, &argv);
     if(errMPI != MPI_SUCCESS) {
         return abortExec(ERR_MPI_INIT);
@@ -47,10 +47,12 @@ int main(int argc, char* argv[]) {
         printf("  Version: %s\n", BUILD);
         printf("\n");
     }
-    
+
     // Check that there is a minimum of one argument
     if(argc < 2) {
-        printf("  ERROR: No input file specified\n");
+        if(isMaster) {
+            printf("  ERROR: No input file specified\n");
+        }
         return abortExec(ERR_USAGE);
     }
 
@@ -73,34 +75,34 @@ int main(int argc, char* argv[]) {
     if(errSim != ERR_NONE) {
         return abortExec(errSim);
     }
-    
+
     // Set up simulation
     errSim = Sim.Setup();
     if(errSim != ERR_NONE) {
         return abortExec(errSim);
     }
-    
+
    /**
     * THE END!
     */
-    
+
     MPI_Finalize();
-    
+
     return ERR_NONE;
 }
 
 int abortExec(int errVal) {
-    
+
     int iRank;
     MPI_Comm_rank(MPI_COMM_WORLD, &iRank);
-    
+
     if(iRank == 0) {
         printf("\n");
         printf("  OMG WTF HAPPENED!\n");
         printf("  Code %d\n", errVal);
         printf("\n");
     }
-    
+
     MPI_Finalize();
 
     return errVal;
