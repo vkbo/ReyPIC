@@ -41,9 +41,14 @@ private:
     * Member Variables
     */
 
+    // Parallelisation
+    int    m_MPISize     =  0;             // Number of nodes
+    int    m_MPIRank     = -1;             // Node number
+    bool   m_isMaster    = false;          // True if this node is master
+
     char*  m_Name;
-    double m_Charge = 0; // Species charge
-    double m_Mass   = 1; // Species mass
+    double m_Charge     = 0;               // Species charge
+    double m_Mass       = 1;               // Species mass
 
     double m_Thermal[3] = {0.0, 0.0, 0.0}; // Thermal distribution
     double m_Fluid[3]   = {0.0, 0.0, 0.0}; // Fluid momentum

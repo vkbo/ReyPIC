@@ -10,16 +10,17 @@ using namespace reypic;
 // ********************************************************************************************** //
 
 /**
- *  Input Class Constructor
- * =========================
+ *  Class Constructor
+ * ===================
  */
 
 Input::Input() {
-    
+
+    // Read MPI setup
     MPI_Comm_size(MPI_COMM_WORLD, &m_MPISize);
     MPI_Comm_rank(MPI_COMM_WORLD, &m_MPIRank);
     m_isMaster = (m_MPIRank == 0);
-    
+
 }
 
 // ********************************************************************************************** //
@@ -33,7 +34,7 @@ Input::Input() {
  */
 
 int Input::getNumSpecies() {
-    
+
     return (int)m_Species.size();
 }
 
@@ -48,7 +49,7 @@ int Input::getNumSpecies() {
  */
 
 int Input::ReadFile(char* cFile) {
-    
+
     // Read File into buffer
     ifstream tmpFile(cFile);
     tmpFile.seekg(0, ios::end);
@@ -56,7 +57,7 @@ int Input::ReadFile(char* cFile) {
     string_t tmpBuffer(iSize, ' ');
     tmpFile.seekg(0);
     tmpFile.read(&tmpBuffer[0], iSize);
-    
+
     // Check for closed quotes
     size_t nQuotes = count(tmpBuffer.begin(),tmpBuffer.end(),'"');
     if(nQuotes%2 == 1) {
@@ -75,7 +76,7 @@ int Input::ReadFile(char* cFile) {
         }
         return ERR_INPUTFILE;
     }
-    
+
     // Strip comments, line endings and redundant spaces
     regex rxComments("#.*?\n");
     regex rxEndLine("\r?\n|\r");
@@ -89,7 +90,7 @@ int Input::ReadFile(char* cFile) {
 
     // Set class buffer and return
     m_Buffer = tmpBuffer;
-    
+
     return ERR_NONE;
 }
 
@@ -102,7 +103,7 @@ int Input::ReadFile(char* cFile) {
  */
 
 int Input::SplitSections() {
-    
+
     int      iLev = 0;
     size_t   nLen;
     string_t sTemp;
@@ -113,11 +114,11 @@ int Input::SplitSections() {
     bool   hasGrid    = false;
     bool   hasEMF     = false;
     bool   hasSpecies = false;
-    
+
     for(char& cChar : m_Buffer) {
 
         sTemp += cChar;
-        
+
         if(cChar == '{') {
             iLev++;
             if(iLev == 1) {
@@ -177,7 +178,7 @@ int Input::SplitSections() {
             }
         }
     }
-    
+
     if(hasConf && hasSim && hasGrid && hasEMF && hasSpecies) {
         if(m_isMaster) {
             printf("\n");
@@ -197,10 +198,10 @@ int Input::SplitSections() {
  */
 
 int Input::ReadVariable(int iSection, int iIndex, string sVar, void *pReturn, int iType) {
-    
+
     string_t sBuffer, sSection, sTemp, sValue;
     bool     getVal = false;
-    
+
     // Get correct buffer
     switch(iSection) {
         case INPUT_CONF:
@@ -230,16 +231,16 @@ int Input::ReadVariable(int iSection, int iIndex, string sVar, void *pReturn, in
 
     // Find variable
     for(char& cChar : sBuffer) {
-        
+
         sTemp += cChar;
-        
+
         if(cChar == '=') {
             if(sTemp.compare(sVar+"=") == 0) {
                 getVal = true;
                 sTemp  = "";
             }
         }
-        
+
         if(cChar == ';') {
             if(getVal) {
                 sValue = sTemp;
@@ -248,16 +249,16 @@ int Input::ReadVariable(int iSection, int iIndex, string sVar, void *pReturn, in
             getVal = false;
         }
     }
-    
+
     // Check value
     size_t nLen = sValue.length();
     if(nLen < 1) return ERR_ANY;
     sValue = sValue.substr(0,nLen-1);
-    
+
     if(m_isMaster) {
         cout << "  Value: " << sValue << " (" << nLen << ")" << endl;
     }
-    
+
     switch(iType) {
         case INVAR_INT:
             try {
@@ -280,7 +281,7 @@ int Input::ReadVariable(int iSection, int iIndex, string sVar, void *pReturn, in
             }
             break;
     }
-    
+
     return ERR_NONE;
 }
 

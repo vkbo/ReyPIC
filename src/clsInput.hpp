@@ -20,13 +20,13 @@ public:
 
     Input();
     ~Input() {};
-    
+
    /**
     * Setters/Getters
     */
-    
+
     int  getNumSpecies();
-    
+
    /**
     * Methods
     */
@@ -41,18 +41,18 @@ private:
     * Member Variables
     */
 
-    // Settings
-    int       m_MPISize    =  0;
-    int       m_MPIRank    = -1;
-    bool      m_isMaster   = false;
-    
+    // Parallelisation
+    int       m_MPISize     =  0;    // Number of nodes
+    int       m_MPIRank     = -1;    // Node number
+    bool      m_isMaster    = false; // True if this node is master
+
     // Buffers
-    string_t  m_Buffer;     // Full input file buffer
-    string_t  m_Config;     // Config section
-    string_t  m_Simulation; // Simulation section
-    string_t  m_Grid;       // Grid section
-    string_t  m_EMF;        // EMF section
-    vstring_t m_Species;    // Vector of species sections
+    string_t  m_Buffer;              // Full input file buffer
+    string_t  m_Config;              // Config section
+    string_t  m_Simulation;          // Simulation section
+    string_t  m_Grid;                // Grid section
+    string_t  m_EMF;                 // EMF section
+    vstring_t m_Species;             // Vector of species sections
 
 };
 

@@ -2,7 +2,7 @@
  *  ReyPIC – Simulation Class Source
  * ==================================
  *  This class wraps the entire simulation.
- * 
+ *
  *  Sequence:
  *  1. Read input file.
  *  2. Setup simulation. This creates the grid and the particle arrays.
@@ -19,11 +19,13 @@ using namespace reypic;
 // ********************************************************************************************** //
 
 /**
- * Simulation Class Constructor
+ *  Class Constructor
+ * ===================
  */
 
 Simulation::Simulation() {
-    
+
+    // Read MPI setup
     MPI_Comm_size(MPI_COMM_WORLD, &m_MPISize);
     MPI_Comm_rank(MPI_COMM_WORLD, &m_MPIRank);
     m_isMaster = (m_MPIRank == 0);
@@ -100,24 +102,24 @@ bool Simulation::isMaster() {
  */
 
 int Simulation::ReadInput() {
-    
+
     int errFile = ERR_NONE;
-    
+
     // Read input file
     errFile = simInput.ReadFile(m_InputFile);
     if(errFile != ERR_NONE) {
         return errFile;
     }
-    
+
     // Split input file sections
     errFile = simInput.SplitSections();
     if(errFile != ERR_NONE) {
         return errFile;
     }
-    
+
     // Get number of species
     m_NumSpecies = simInput.getNumSpecies();
-    
+
     return ERR_NONE;
 }
 
@@ -130,26 +132,26 @@ int Simulation::ReadInput() {
  */
 
 int Simulation::Setup() {
-    
+
     int nErr = 0;
-    
+
     // Parallelisation
     nErr += simInput.ReadVariable(INPUT_SIM, 0, "nodes",   &m_Nodes,    INVAR_INT);
     nErr += simInput.ReadVariable(INPUT_SIM, 0, "threads", &m_Threads,  INVAR_INT);
 
     // Physics
     nErr += simInput.ReadVariable(INPUT_SIM, 0, "n0",      &m_N0,       INVAR_DOUBLE);
-    
+
     // Time
     nErr += simInput.ReadVariable(INPUT_SIM, 0, "dt",      &m_TimeStep, INVAR_DOUBLE);
     nErr += simInput.ReadVariable(INPUT_SIM, 0, "tmin",    &m_TMin,     INVAR_DOUBLE);
     nErr += simInput.ReadVariable(INPUT_SIM, 0, "tmax",    &m_TMax,     INVAR_DOUBLE);
-    
+
     // Force m_Nodes to be equal to m_MPISize.
     // This makes m_Nodes redundant as an input variable, but the intention is to have m_Nodes be
     // able to split the domain in other dimensions than x1.
     m_Nodes = m_MPISize;
-    
+
     if(m_isMaster) {
         cout << "  Errors:   " << nErr << endl;
         cout << "  Nodes:    " << m_Nodes << endl;
