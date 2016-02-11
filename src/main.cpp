@@ -91,6 +91,12 @@ int main(int argc, char* argv[]) {
     return ERR_NONE;
 }
 
+// ********************************************************************************************** //
+
+/**
+ * Abort Execution
+ */
+
 int abortExec(int errVal) {
 
     int iRank;
@@ -107,3 +113,7 @@ int abortExec(int errVal) {
 
     return errVal;
 }
+
+// ********************************************************************************************** //
+
+// End Main

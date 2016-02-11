@@ -16,13 +16,9 @@
 #include <mpi.h>
 
 // TypeDefs
-typedef std::vector<std::string>          vstring_t;
-typedef std::vector<std::vector<double> > vvdouble_t;
-typedef std::vector<std::vector<int> >    vvint_t;
-typedef std::vector<double>               vdouble_t;
-typedef std::vector<int>                  vint_t;
-typedef std::string                       string_t;
-typedef unsigned long int                 index_t;
+typedef std::vector<std::string> vstring_t;
+typedef std::string              string_t;
+typedef unsigned long int        index_t;
 
 // Run Modes
 #define RUN_MODE_FULL     1
@@ -35,11 +31,12 @@ typedef unsigned long int                 index_t;
 #define ERR_USAGE     80
 #define ERR_MPI_INIT  81
 #define ERR_INPUTFILE 82
+#define ERR_INPUTVAR  83
 
-#define ERR_INIT      83
-#define ERR_SETUP     84
-#define ERR_EXEC      85
-#define ERR_DIAG      86
+#define ERR_INIT      84
+#define ERR_SETUP     85
+#define ERR_EXEC      86
+#define ERR_DIAG      87
 
 // Input File Sections
 #define INPUT_NONE    0

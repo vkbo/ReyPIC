@@ -259,30 +259,40 @@ int Input::ReadVariable(int iSection, int iIndex, string sVar, void *pReturn, in
         cout << "  Value: " << sValue << " (" << nLen << ")" << endl;
     }
 
+    error_t errParse = ERR_NONE;
     switch(iType) {
         case INVAR_INT:
             try {
                 *(int*)pReturn = stoi(sValue);
             } catch(...) {
-                if(m_isMaster) {
-                    printf("  Error reading value %s->%s\n",sSection.c_str(),sVar.c_str());
-                }
-                return ERR_ANY;
+                errParse = ERR_INPUTVAR;
             }
             break;
         case INVAR_DOUBLE:
             try {
                 *(double*)pReturn = stof(sValue);
             } catch(...) {
-                if(m_isMaster) {
-                    printf("  Error reading value %s->%s\n",sSection.c_str(),sVar.c_str());
-                }
-                return ERR_ANY;
+                errParse = ERR_INPUTVAR;
+            }
+            break;
+        case INVAR_STRING:
+            if(nLen < 2) {
+                errParse = ERR_INPUTVAR;
+                break;
+            }
+            try {
+                *(string_t*)pReturn = sValue;
+            } catch(...) {
+                errParse = ERR_INPUTVAR;
             }
             break;
     }
 
-    return ERR_NONE;
+    if(errParse != ERR_NONE && m_isMaster) {
+        printf("  Error reading value %s->%s\n",sSection.c_str(),sVar.c_str());
+    }
+
+    return errParse;
 }
 
 // ********************************************************************************************** //
