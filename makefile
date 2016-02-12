@@ -4,7 +4,7 @@
 
 CC      = mpic++
 DEBUG   = -g -Wall
-CFLAGS  = $(DEBUG) -std=c++11 -O2 -c
+CFLAGS  = $(DEBUG) -std=c++11 -march=native -O4 -c
 LFLAGS  = $(DEBUG)
 
 SRC     = src
@@ -28,7 +28,7 @@ $(shell [ -d "$(OUTPUT)" ] || mkdir -p $(OUTPUT))
 $(shell echo "#define BUILD \"$(VERSION)\"" > $(SRC)/build.hpp)
 
 # Executable
-$(EXEC) : $(BUILD)/main.o $(OBJECTS) $(BNOFILE) $(SRC)/build.hpp
+$(EXEC) : $(BUILD)/main.o $(OBJECTS)
 	$(CC) $(LFLAGS) $(BUILD)/main.o $(OBJECTS) $(LIBFLAGS) -o $@
 
 # Core Files
@@ -38,7 +38,7 @@ $(BUILD)/main.o : $(MAIN) $(SRC)/build.hpp
 
 # Classes
 
-$(BUILD)/clsSimulation.o : $(SRC)/clsSimulation.cpp $(SRC)/clsSimulation.hpp
+$(BUILD)/clsSimulation.o : $(SRC)/clsSimulation.cpp $(SRC)/clsSimulation.hpp 
 	$(CC) $(CFLAGS) $(SRC)/clsSimulation.cpp -o $@
 
 $(BUILD)/clsMath.o : $(SRC)/clsMath.cpp $(SRC)/clsMath.hpp

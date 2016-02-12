@@ -197,7 +197,7 @@ int Input::SplitSections() {
  *  Reads the input file into buffer and strips comments and line endings.
  */
 
-int Input::ReadVariable(int iSection, int iIndex, string sVar, void *pReturn, int iType) {
+int Input::ReadVariable(int iSection, int iIndex, string_t sVar, void *pReturn, int iType) {
 
     string_t sBuffer, sSection, sTemp, sValue;
     bool     getVal = false;
@@ -261,6 +261,7 @@ int Input::ReadVariable(int iSection, int iIndex, string sVar, void *pReturn, in
 
     error_t errParse = ERR_NONE;
     switch(iType) {
+
         case INVAR_INT:
             try {
                 *(int*)pReturn = stoi(sValue);
@@ -268,6 +269,7 @@ int Input::ReadVariable(int iSection, int iIndex, string sVar, void *pReturn, in
                 errParse = ERR_INPUTVAR;
             }
             break;
+
         case INVAR_DOUBLE:
             try {
                 *(double*)pReturn = stof(sValue);
@@ -275,13 +277,53 @@ int Input::ReadVariable(int iSection, int iIndex, string sVar, void *pReturn, in
                 errParse = ERR_INPUTVAR;
             }
             break;
+
         case INVAR_STRING:
             if(nLen < 2) {
                 errParse = ERR_INPUTVAR;
                 break;
             }
             try {
-                *(string_t*)pReturn = sValue;
+                *(string_t*)pReturn = stripQuotes(sValue);
+            } catch(...) {
+                errParse = ERR_INPUTVAR;
+            }
+            break;
+
+        case INVAR_VINT:
+            try {
+                vstring_t vsValue = strExplode(sValue);
+                vint_t    tmpVal(vsValue.size());
+
+                int i = 0;
+                for(string_t sElem : vsValue) {
+                    tmpVal[i++] = stoi(sElem);
+                }
+                *(vint_t*)pReturn = tmpVal;
+            } catch(...) {
+                errParse = ERR_INPUTVAR;
+            }
+            break;
+
+        case INVAR_VDOUBLE:
+            try {
+                vstring_t vsValue = strExplode(sValue);
+                vdouble_t tmpVal(vsValue.size());
+
+                int i = 0;
+                for(string_t sElem : vsValue) {
+                    tmpVal[i++] = stof(sElem);
+                }
+                *(vdouble_t*)pReturn = tmpVal;
+            } catch(...) {
+                errParse = ERR_INPUTVAR;
+            }
+            break;
+
+        case INVAR_VSTRING:
+            try {
+                vstring_t vsValue = strExplode(sValue);
+                *(vstring_t*)pReturn = vsValue;
             } catch(...) {
                 errParse = ERR_INPUTVAR;
             }
@@ -293,6 +335,46 @@ int Input::ReadVariable(int iSection, int iIndex, string sVar, void *pReturn, in
     }
 
     return errParse;
+}
+
+// ********************************************************************************************** //
+//                                        Member Functions                                        //
+// ********************************************************************************************** //
+
+/**
+ *  Function :: strExplode
+ * ========================
+ *  Splits a string into a vector of strings by commas outside of quotes
+ */
+
+vstring_t Input::strExplode(const string_t& sString) {
+    
+    vstring_t vsReturn;
+    regex     rxCSV(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+    
+    sregex_token_iterator rxIt(sString.begin(), sString.end(), rxCSV, -1);
+    sregex_token_iterator reg_end;
+    for(; rxIt != reg_end; ++rxIt) {
+        vsReturn.push_back(stripQuotes(rxIt->str()));
+    }
+    
+    return vsReturn;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Function :: stripQuotes
+ * =========================
+ *  Strips quotes from a string
+ */
+
+string_t Input::stripQuotes(const string_t& sString) {
+    
+    regex    rxQuote("\"");
+    string_t sReturn = regex_replace(sString,rxQuote,"");
+
+    return sReturn;
 }
 
 // ********************************************************************************************** //

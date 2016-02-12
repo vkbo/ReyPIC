@@ -48,7 +48,9 @@ public:
     * Properties
     */
 
-    Input simInput;
+    Input   simInput;
+    Grid    simGrid;
+    Species simSpecies[];
 
 private:
 

@@ -53,6 +53,13 @@ private:
     string_t  m_Grid;                // Grid section
     string_t  m_EMF;                 // EMF section
     vstring_t m_Species;             // Vector of species sections
+    
+   /**
+    * Member Functions
+    */
+
+    vstring_t strExplode(const string_t&);
+    string_t  stripQuotes(const string_t&);
 
 };
 

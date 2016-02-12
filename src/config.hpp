@@ -17,6 +17,8 @@
 
 // TypeDefs
 typedef std::vector<std::string> vstring_t;
+typedef std::vector<double>      vdouble_t;
+typedef std::vector<long int>    vint_t;
 typedef std::string              string_t;
 typedef unsigned long int        index_t;
 
@@ -50,7 +52,8 @@ typedef unsigned long int        index_t;
 #define INVAR_INT     1
 #define INVAR_DOUBLE  2
 #define INVAR_STRING  3
-#define INVAR_3ARRINT 4
-#define INVAR_3ARRDBL 5
+#define INVAR_VINT    4
+#define INVAR_VDOUBLE 5
+#define INVAR_VSTRING 6
 
 #endif

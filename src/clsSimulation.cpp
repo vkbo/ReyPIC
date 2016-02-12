@@ -135,9 +135,9 @@ int Simulation::Setup() {
 
     int nErr = 0;
 
-    // Parallelisation
-    nErr += simInput.ReadVariable(INPUT_SIM, 0, "nodes",   &m_Nodes,    INVAR_INT);
-    nErr += simInput.ReadVariable(INPUT_SIM, 0, "threads", &m_Threads,  INVAR_INT);
+    // Configuration
+    nErr += simInput.ReadVariable(INPUT_CONF, 0, "nodes",   &m_Nodes,    INVAR_INT);
+    nErr += simInput.ReadVariable(INPUT_CONF, 0, "threads", &m_Threads,  INVAR_INT);
 
     // Physics
     nErr += simInput.ReadVariable(INPUT_SIM, 0, "n0",      &m_N0,       INVAR_DOUBLE);
@@ -152,16 +152,8 @@ int Simulation::Setup() {
     // able to split the domain in other dimensions than x1.
     m_Nodes = m_MPISize;
 
-    if(m_isMaster) {
-        cout << "  Errors:   " << nErr << endl;
-        cout << "  Nodes:    " << m_Nodes << endl;
-        cout << "  Threads:  " << m_Threads << endl;
-        cout << "  N0:       " << m_N0 << endl;
-        cout << "  TimeStep: " << m_TimeStep << endl;
-        cout << "  TMin:     " << m_TMin << endl;
-        cout << "  TMax:     " << m_TMax << endl;
-        cout << endl;
-    }
+    // Grid Setup
+    simGrid.Setup(&simInput);
 
     return ERR_NONE;
 }
