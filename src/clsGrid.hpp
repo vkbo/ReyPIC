@@ -6,6 +6,7 @@
 #define CLASS_GRID
 
 #include "config.hpp"
+#include "clsMath.hpp"
 
 namespace reypic {
 

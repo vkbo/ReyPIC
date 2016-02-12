@@ -15,7 +15,7 @@ EXEC    = reypic.e
 MAIN    = $(SRC)/main.cpp
 VERSION = $(shell git describe)
 
-CLASSES = clsSimulation.o clsInput.o clsSpecies.o clsGrid.o
+CLASSES = clsSimulation.o clsMath.o clsInput.o clsSpecies.o clsGrid.o
 OBJECTS = $(addprefix $(BUILD)/,$(CLASSES))
 
 ##
@@ -40,6 +40,9 @@ $(BUILD)/main.o : $(MAIN) $(SRC)/build.hpp
 
 $(BUILD)/clsSimulation.o : $(SRC)/clsSimulation.cpp $(SRC)/clsSimulation.hpp
 	$(CC) $(CFLAGS) $(SRC)/clsSimulation.cpp -o $@
+
+$(BUILD)/clsMath.o : $(SRC)/clsMath.cpp $(SRC)/clsMath.hpp
+	$(CC) $(CFLAGS) $(SRC)/clsMath.cpp -o $@
 
 $(BUILD)/clsInput.o : $(SRC)/clsInput.cpp $(SRC)/clsInput.hpp
 	$(CC) $(CFLAGS) $(SRC)/clsInput.cpp -o $@

@@ -6,6 +6,7 @@
 #define CLASS_SPECIES
 
 #include "config.hpp"
+#include "clsMath.hpp"
 
 namespace reypic {
 
@@ -42,9 +43,9 @@ private:
     */
 
     // Parallelisation
-    int    m_MPISize     =  0;             // Number of nodes
-    int    m_MPIRank     = -1;             // Node number
-    bool   m_isMaster    = false;          // True if this node is master
+    int    m_MPISize    =  0;              // Number of nodes
+    int    m_MPIRank    = -1;              // Node number
+    bool   m_isMaster   = false;           // True if this node is master
 
     char*  m_Name;
     double m_Charge     = 0;               // Species charge

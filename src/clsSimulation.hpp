@@ -7,7 +7,6 @@
 
 #include "config.hpp"
 
-// Dependent Classes
 #include "clsInput.hpp"
 #include "clsGrid.hpp"
 #include "clsSpecies.hpp"
