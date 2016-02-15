@@ -35,26 +35,34 @@ int Grid::Setup(Input* simInput) {
     
     error_t errVal;
     
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "grid",   &m_NGrid,   INVAR_VINT);
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "xmin",   &m_XMin,    INVAR_VDOUBLE);
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "xmax",   &m_XMax,    INVAR_VDOUBLE);
+    errVal += simInput->ReadVariable(INPUT_GRID, 0, "grid",    &m_NGrid,    INVAR_VINT);
+    errVal += simInput->ReadVariable(INPUT_GRID, 0, "xmin",    &m_XMin,     INVAR_VDOUBLE);
+    errVal += simInput->ReadVariable(INPUT_GRID, 0, "xmax",    &m_XMax,     INVAR_VDOUBLE);
 
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "gridres", &m_GridRes, INVAR_VSTRING);
+    errVal += simInput->ReadVariable(INPUT_GRID, 0, "gridres",  &m_GridRes,  INVAR_VSTRING);
+    
+    vstring_t vsGridFunc = {"","",""};
+    errVal += simInput->ReadVariable(INPUT_GRID, 0, "gridfunc", &vsGridFunc, INVAR_VSTRING);
     
     if(m_isMaster) {
         for(auto dVal : m_NGrid) {
-            cout << "NGrid: " << dVal << endl;
+            cout << "  NGrid: " << dVal << endl;
         }
         for(auto dVal : m_XMin) {
-            cout << "XMin:  " << dVal << endl;
+            cout << "  XMin:  " << dVal << endl;
         }
         for(auto dVal : m_XMax) {
-            cout << "XMax:  " << dVal << endl;
+            cout << "  XMax:  " << dVal << endl;
         }
         for(auto dVal : m_GridRes) {
-            cout << "Res:   " << dVal << endl;
+            cout << "  Res:   " << dVal << endl;
+        }
+        for(auto dVal : vsGridFunc) {
+            cout << "  Func:  " << dVal << endl;
         }
     }
+    
+    m_GridFunc[0].setEquation(vsGridFunc[0]);
 
 
     return ERR_NONE;
