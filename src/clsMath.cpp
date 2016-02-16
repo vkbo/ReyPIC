@@ -1,5 +1,7 @@
 /**
- * ReyPIC – Math Source
+ *  ReyPIC – Math Source
+ * ======================
+ *  Loosely based on: http://www.codeproject.com/Articles/345888/How-to-write-a-simple-interpreter-in-JavaScript
  */
 
 #include "clsMath.hpp"
@@ -28,7 +30,7 @@ Math::Math() {
  */
 
 bool Math::setEquation(string_t sEquation) {
-    
+
     int      idCurr;
     int      idPrev  = MT_NONE;
     char     cPrev   = ' ';
@@ -37,13 +39,13 @@ bool Math::setEquation(string_t sEquation) {
     sEquation += " "; // Append a space to make sure last character is evaluated
 
     for(char cCurr : sEquation) {
-        
+
         // Get specific type
         idCurr = MT_NONE;
         if(isdigit(cCurr)) idCurr = MT_NUMBER;
         if(isalpha(cCurr)) idCurr = MT_WORD;
         if(ispunct(cCurr)) idCurr = MT_OPERATOR;
-        
+
         // Numbers following characters are part of words
         if(idCurr == MT_NUMBER && idPrev == MT_WORD) idCurr = MT_WORD;
         // '.' is always part of a number
@@ -56,7 +58,7 @@ bool Math::setEquation(string_t sEquation) {
         if(cCurr == '-' && (cPrev == 'd' || cPrev == 'e') && idPrev == MT_NUMBER) {
             idCurr = MT_NUMBER;
         }
-        
+
         // If a new type was encountered, push the previous onto the lexer
         if(idCurr != idPrev) {
             if(idPrev != MT_NONE) {
@@ -65,19 +67,19 @@ bool Math::setEquation(string_t sEquation) {
             sBuffer = "";
         }
         sBuffer += cCurr;
-        
+
         // Set previous values for next loop
         idPrev = idCurr;
         cPrev  = cCurr;
     }
-    
+
     // Echo lexer for debug
     cout << endl;
     for(auto lxItem : m_Lexer) {
         cout << "  Type " << lxItem.type << " : Content " << lxItem.content << endl;
     }
     cout << endl;
-    
+
     return true;
 }
 
