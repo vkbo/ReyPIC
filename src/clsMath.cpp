@@ -97,6 +97,7 @@ bool Math::setEquation(string_t sEquation) {
 
         if(idType == MP_INVALID) {
             cout << "  Type Error" << endl;
+            return false;
         } else {
             m_Lexer.push_back(lexer({.type=idType, .content=lxItem.content, .value=dValue}));
         }
