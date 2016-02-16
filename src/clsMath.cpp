@@ -96,7 +96,7 @@ bool Math::setEquation(string_t sEquation) {
         }
 
         if(idType == MP_INVALID) {
-            cout << "  Type Error" << endl;
+            printf("  Math Error: Unknown entry '%s'\n", lxItem.content.c_str());
             return false;
         } else {
             m_Lexer.push_back(lexer({.type=idType, .content=lxItem.content, .value=dValue}));
