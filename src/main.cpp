@@ -24,9 +24,9 @@ int abortExec(int);
 int main(int argc, char* argv[]) {
 
     // Variables
-    int  errMPI;
-    int  iRank;
-    bool isMaster = false;
+    error_t errMPI;
+    int     iRank;
+    bool    isMaster = false;
 
    /**
     *  Initialise
@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
     */
 
     Simulation Sim;
-    int        errSim = ERR_NONE;
+    error_t errSim = ERR_NONE;
 
     // Parse input options and set input file
     for(int i=1; i<argc; i++) {
