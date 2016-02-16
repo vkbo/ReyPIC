@@ -85,6 +85,10 @@ bool Math::setEquation(string_t sEquation) {
                 idType = validOperator(&lxItem.content);
                 dValue = 0.0;
                 break;
+            case MT_NUMBER:
+                idType = validNumber(&lxItem.content, &lxItem.value);
+                dValue = lxItem.value;
+                break;
             case MT_WORD:
                 idType = validWord(&lxItem.content);
                 dValue = 0.0;
@@ -101,7 +105,7 @@ bool Math::setEquation(string_t sEquation) {
     // Echo lexer for debug
     cout << endl;
     for(auto lxItem : m_Lexer) {
-        cout << "  Type " << lxItem.type << " : Content " << lxItem.content << endl;
+        cout << "  Type " << lxItem.type << " : Content " << lxItem.content << " : Value " << lxItem.value << endl;
     }
     cout << endl;
 
@@ -118,29 +122,29 @@ bool Math::setEquation(string_t sEquation) {
  *  Checks if string is a valid operator, and returns its type
  */
 
-int Math::validOperator(string_t* sVar) {
+int Math::validOperator(string_t* pVar) {
 
     for(string_t sItem : m_OMath) {
-        if(sItem == *sVar) {
+        if(sItem == *pVar) {
             return MP_O_MATH;
         }
     }
 
-    if(*sVar == "(") {
+    if(*pVar == "(") {
         return MP_O_LBRACK;
     }
 
-    if(*sVar == ")") {
+    if(*pVar == ")") {
         return MP_O_RBRACK;
     }
 
     for(string_t sItem : m_OLogical) {
-        if(sItem == *sVar) {
+        if(sItem == *pVar) {
             return MP_O_LOGICAL;
         }
     }
 
-    if(*sVar == ",") {
+    if(*pVar == ",") {
         return MP_O_SEPARATOR;
     }
 
@@ -155,31 +159,50 @@ int Math::validOperator(string_t* sVar) {
  *  Checks if string is a valid word, and returns its type
  */
 
-int Math::validWord(string_t* sVar) {
+int Math::validWord(string_t* pVar) {
 
     for(string_t sItem : m_WVariable) {
-        if(sItem == *sVar) {
+        if(sItem == *pVar) {
             return MP_W_VARIABLE;
         }
     }
 
     for(string_t sItem : m_WFunc) {
-        if(sItem == *sVar) {
+        if(sItem == *pVar) {
             return MP_W_FUNC;
         }
     }
 
     for(string_t sItem : m_WConst) {
-        if(sItem == *sVar) {
+        if(sItem == *pVar) {
             return MP_W_CONST;
         }
     }
 
-    if(*sVar == "if") {
+    if(*pVar == "if") {
         return MP_W_IF;
     }
 
     return MP_INVALID;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Function :: validNumber
+ * =========================
+ *  Checks if string is a valid number, and returns its type
+ */
+
+int Math::validNumber(string_t* pVar, double* pValue) {
+
+    try {
+        *pValue = stof(*pVar);
+        return MP_N_NUMBER;
+    } catch(...) {
+        *pValue = 0.0;
+        return MP_INVALID;
+    }
 }
 
 // ********************************************************************************************** //
