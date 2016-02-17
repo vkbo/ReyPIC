@@ -59,6 +59,10 @@ bool Math::setEquation(string_t sEquation) {
         if(cCurr == '-' && (cPrev == 'd' || cPrev == 'e') && idPrev == MT_NUMBER) {
             idCurr = MT_NUMBER;
         }
+        // Check if operator is actually a separataor
+        if(cCurr == '(' || cCurr == ')' || cCurr == ',') {
+            idCurr = MT_SEPARATOR;
+        }
 
         // If a new type was encountered, push the previous onto the lexer
         if(idCurr != idPrev) {
@@ -91,6 +95,10 @@ bool Math::setEquation(string_t sEquation) {
                 break;
             case MT_WORD:
                 idType = validWord(&lxItem.content);
+                dValue = 0.0;
+                break;
+            case MT_SEPARATOR:
+                idType = validSeparator(&lxItem.content);
                 dValue = 0.0;
                 break;
         }
@@ -131,22 +139,10 @@ int Math::validOperator(string_t* pVar) {
         }
     }
 
-    if(*pVar == "(") {
-        return MP_O_LBRACK;
-    }
-
-    if(*pVar == ")") {
-        return MP_O_RBRACK;
-    }
-
     for(string_t sItem : m_OLogical) {
         if(sItem == *pVar) {
             return MP_O_LOGICAL;
         }
-    }
-
-    if(*pVar == ",") {
-        return MP_O_SEPARATOR;
     }
 
     return MP_INVALID;
@@ -204,6 +200,31 @@ int Math::validNumber(string_t* pVar, double* pValue) {
         *pValue = 0.0;
         return MP_INVALID;
     }
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Function :: validSeparator
+ * ============================
+ *  Checks if string is a valid separataor, and returns its type
+ */
+
+int Math::validSeparator(string_t* pVar) {
+
+    if(*pVar == "(") {
+        return MP_S_LBRACK;
+    }
+
+    if(*pVar == ")") {
+        return MP_S_RBRACK;
+    }
+
+    if(*pVar == ",") {
+        return MP_S_COMMA;
+    }
+
+    return MP_INVALID;
 }
 
 // ********************************************************************************************** //

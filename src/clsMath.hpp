@@ -6,10 +6,11 @@
 #define CLASS_MATH
 
 // Class-specific macros
-#define MT_NONE     0
-#define MT_OPERATOR 1
-#define MT_NUMBER   2
-#define MT_WORD     3
+#define MT_NONE      0
+#define MT_OPERATOR  1
+#define MT_NUMBER    2
+#define MT_WORD      3
+#define MT_SEPARATOR 4
 
 #define MP_INVALID    -1
 #define MP_NONE        0
@@ -20,9 +21,9 @@
 #define MP_W_IF        5
 #define MP_O_LOGICAL   6
 #define MP_O_MATH      7
-#define MP_O_LBRACK    8
-#define MP_O_RBRACK    9
-#define MP_O_SEPARATOR 10
+#define MP_S_LBRACK    8
+#define MP_S_RBRACK    9
+#define MP_S_COMMA     10
 
 // Includes
 #include "config.hpp"
@@ -76,6 +77,7 @@ private:
     int validOperator(string_t*);
     int validWord(string_t*);
     int validNumber(string_t*, double*);
+    int validSeparator(string_t*);
 
    /**
     * Member Variables
