@@ -79,6 +79,7 @@ bool Math::setEquation(string_t sEquation) {
     }
 
     // Clean up lexer and check for invalid entries
+    idPrev = MP_NONE;
     for(auto lxItem : vLexer) {
 
         int    idType = MP_NONE;
@@ -109,6 +110,12 @@ bool Math::setEquation(string_t sEquation) {
         } else {
             m_Lexer.push_back(lexer({.type=idType, .content=lxItem.content, .value=dValue}));
         }
+
+        if(idType == idPrev) {
+            printf("  Math Error: Unknown entry '%s'\n", lxItem.content.c_str());
+            return false;
+        }
+        idPrev = idType;
     }
 
     // Echo lexer for debug
@@ -135,13 +142,13 @@ int Math::validOperator(string_t* pVar) {
 
     for(string_t sItem : m_OMath) {
         if(sItem == *pVar) {
-            return MP_O_MATH;
+            return MP_MATH;
         }
     }
 
     for(string_t sItem : m_OLogical) {
         if(sItem == *pVar) {
-            return MP_O_LOGICAL;
+            return MP_LOGICAL;
         }
     }
 
@@ -160,24 +167,20 @@ int Math::validWord(string_t* pVar) {
 
     for(string_t sItem : m_WVariable) {
         if(sItem == *pVar) {
-            return MP_W_VARIABLE;
+            return MP_VARIABLE;
         }
     }
 
     for(string_t sItem : m_WFunc) {
         if(sItem == *pVar) {
-            return MP_W_FUNC;
+            return MP_FUNC;
         }
     }
 
     for(string_t sItem : m_WConst) {
         if(sItem == *pVar) {
-            return MP_W_CONST;
+            return MP_CONST;
         }
-    }
-
-    if(*pVar == "if") {
-        return MP_W_IF;
     }
 
     return MP_INVALID;
@@ -195,7 +198,7 @@ int Math::validNumber(string_t* pVar, double* pValue) {
 
     try {
         *pValue = stof(*pVar);
-        return MP_N_NUMBER;
+        return MP_NUMBER;
     } catch(...) {
         *pValue = 0.0;
         return MP_INVALID;
@@ -213,15 +216,15 @@ int Math::validNumber(string_t* pVar, double* pValue) {
 int Math::validSeparator(string_t* pVar) {
 
     if(*pVar == "(") {
-        return MP_S_LBRACK;
+        return MP_LBRACK;
     }
 
     if(*pVar == ")") {
-        return MP_S_RBRACK;
+        return MP_RBRACK;
     }
 
     if(*pVar == ",") {
-        return MP_S_COMMA;
+        return MP_COMMA;
     }
 
     return MP_INVALID;

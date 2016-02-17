@@ -12,18 +12,17 @@
 #define MT_WORD      3
 #define MT_SEPARATOR 4
 
-#define MP_INVALID    -1
-#define MP_NONE        0
-#define MP_N_NUMBER    1
-#define MP_W_VARIABLE  2
-#define MP_W_FUNC      3
-#define MP_W_CONST     4
-#define MP_W_IF        5
-#define MP_O_LOGICAL   6
-#define MP_O_MATH      7
-#define MP_S_LBRACK    8
-#define MP_S_RBRACK    9
-#define MP_S_COMMA     10
+#define MP_INVALID  -1
+#define MP_NONE      0
+#define MP_NUMBER    1
+#define MP_VARIABLE  2
+#define MP_FUNC      3
+#define MP_CONST     4
+#define MP_LOGICAL   5
+#define MP_MATH      6
+#define MP_LBRACK    7
+#define MP_RBRACK    8
+#define MP_COMMA     9
 
 // Includes
 #include "config.hpp"
@@ -84,7 +83,7 @@ private:
     */
 
     vstring_t          m_WVariable = {"x1","x2","x3"};
-    const vstring_t    m_WFunc     = {"sin","cos","tan","exp","abs","mod"};
+    const vstring_t    m_WFunc     = {"sin","cos","tan","exp","abs","mod","if"};
     const vstring_t    m_WConst    = {"pi"};
     const vstring_t    m_OLogical  = {"&&","||","==","<",">",">=","<=","!=","<>"};
     const vstring_t    m_OMath     = {"+","-","*","/","^"};
