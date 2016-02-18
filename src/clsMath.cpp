@@ -104,17 +104,13 @@ bool Math::setEquation(string_t sEquation) {
                 break;
         }
 
-        if(idType == MP_INVALID) {
+        if(idType == MP_INVALID || idType == idPrev) {
             printf("  Math Error: Unknown entry '%s'\n", lxItem.content.c_str());
             return false;
         } else {
             m_Lexer.push_back(lexer({.type=idType, .content=lxItem.content, .value=dValue}));
         }
 
-        if(idType == idPrev) {
-            printf("  Math Error: Unknown entry '%s'\n", lxItem.content.c_str());
-            return false;
-        }
         idPrev = idType;
     }
 
