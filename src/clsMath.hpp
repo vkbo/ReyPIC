@@ -63,7 +63,7 @@ private:
     * Structs
     */
 
-    struct lexer {
+    struct token {
         int      type;
         string_t content;
         double   value;
@@ -73,10 +73,13 @@ private:
     * Member Functions
     */
 
-    int validOperator(string_t*);
-    int validWord(string_t*);
-    int validNumber(string_t*, double*);
-    int validSeparator(string_t*);
+    bool eqLexer();
+    bool eqParser();
+
+    int  validOperator(string_t*);
+    int  validWord(string_t*);
+    int  validNumber(string_t*, double*);
+    int  validSeparator(string_t*);
 
    /**
     * Member Variables
@@ -89,7 +92,7 @@ private:
     const vstring_t    m_OMath     = {"+","-","*","/","^"};
 
     string_t           m_Equation  = "";
-    std::vector<lexer> m_Lexer;
+    std::vector<token> m_Tokens;
 
 };
 

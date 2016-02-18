@@ -31,15 +31,33 @@ Math::Math() {
 
 bool Math::setEquation(string_t sEquation) {
 
+    // Append a space to make sure last character is evaluated
+    m_Equation = sEquation + " ";
+
+    bool okLexer = eqLexer();
+    bool okParser = eqParser();
+
+    return (okLexer && okParser);
+}
+
+// ********************************************************************************************** //
+//                                        Member Functions                                        //
+// ********************************************************************************************** //
+
+/**
+ *  The Equation Lexer
+ * ====================
+ */
+
+bool Math::eqLexer() {
+
     int           idCurr;
     int           idPrev  = MT_NONE;
     char          cPrev   = ' ';
     string_t      sBuffer = "";
-    vector<lexer> vLexer;
+    vector<token> vTokens;
 
-    sEquation += " "; // Append a space to make sure last character is evaluated
-
-    for(char cCurr : sEquation) {
+    for(char cCurr : m_Equation) {
 
         // Get specific type
         idCurr = MT_NONE;
@@ -67,7 +85,7 @@ bool Math::setEquation(string_t sEquation) {
         // If a new type was encountered, push the previous onto the lexer
         if(idCurr != idPrev) {
             if(idPrev != MT_NONE) {
-                vLexer.push_back(lexer({.type=idPrev, .content=sBuffer, .value=0.0}));
+                vTokens.push_back(token({.type=idPrev, .content=sBuffer, .value=0.0}));
             }
             sBuffer = "";
         }
@@ -80,7 +98,7 @@ bool Math::setEquation(string_t sEquation) {
 
     // Clean up lexer and check for invalid entries
     idPrev = MP_NONE;
-    for(auto lxItem : vLexer) {
+    for(auto lxItem : vTokens) {
 
         int    idType = MP_NONE;
         double dValue = 0.0;
@@ -108,7 +126,7 @@ bool Math::setEquation(string_t sEquation) {
             printf("  Math Error: Unknown entry '%s'\n", lxItem.content.c_str());
             return false;
         } else {
-            m_Lexer.push_back(lexer({.type=idType, .content=lxItem.content, .value=dValue}));
+            m_Tokens.push_back(token({.type=idType, .content=lxItem.content, .value=dValue}));
         }
 
         idPrev = idType;
@@ -116,7 +134,7 @@ bool Math::setEquation(string_t sEquation) {
 
     // Echo lexer for debug
     cout << endl;
-    for(auto lxItem : m_Lexer) {
+    for(auto lxItem : m_Tokens) {
         cout << "  Type " << lxItem.type << " : Content " << lxItem.content << " : Value " << lxItem.value << endl;
     }
     cout << endl;
@@ -125,7 +143,17 @@ bool Math::setEquation(string_t sEquation) {
 }
 
 // ********************************************************************************************** //
-//                                        Member Functions                                        //
+
+/**
+ *  The Equation Parser
+ * =====================
+ */
+
+bool Math::eqParser() {
+
+    return true;
+}
+
 // ********************************************************************************************** //
 
 /**
