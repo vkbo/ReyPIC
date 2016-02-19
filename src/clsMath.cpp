@@ -54,12 +54,6 @@ bool Math::setEquation(string_t sEquation) {
     bool okParser = eqParser();
     if(!okParser) return false;
 
-    // cout << endl;
-    // for(auto tItem : m_ParseTree) {
-    //     cout << "  Type " << tItem.type << " : Content " << tItem.content << " : Value " << tItem.value << endl;
-    // }
-    // cout << endl;
-
     m_Parsed = true;
     return true;
 }
@@ -176,7 +170,7 @@ bool Math::eqLexer() {
 
     int           idCurr;
     int           idPrev  = MT_NONE;
-    char          cPrev   = ' ';
+    char          cPrev   = '#';
     string_t      sBuffer = "";
     vector<token> vTokens;
 
@@ -204,9 +198,14 @@ bool Math::eqLexer() {
         if(cCurr == '(' || cCurr == ')' || cCurr == ',') {
             idCurr = MT_SEPARATOR;
         }
+        // Check if unary minus
+        if( cCurr == '-' &&
+            !(idPrev == MT_NUMBER || idPrev == MT_WORD || (idPrev == MT_NONE && cPrev != '#')) ) {
+            cCurr = '_';
+        }
 
         // If a new type was encountered, push the previous onto the lexer
-        if(idCurr != idPrev) {
+        if(idCurr != idPrev || idPrev == MT_SEPARATOR) {
             if(idPrev != MT_NONE) {
                 vTokens.push_back(token({.type=idPrev, .content=sBuffer, .value=0.0}));
             }
@@ -245,7 +244,8 @@ bool Math::eqLexer() {
                 break;
         }
 
-        if(idType == MP_INVALID || idType == idPrev) {
+        if( idType == MP_INVALID || (idType == idPrev && !(
+            idType == MP_LBRACK || idType == MP_RBRACK ))) {
             printf("  Math Error: Unknown entry '%s'\n", tItem.content.c_str());
             return false;
         } else {
@@ -310,7 +310,7 @@ bool Math::eqParser() {
                 break;
 
             case MP_LOGICAL:
-                iErase   = 0;
+                iErase = 0;
 
                 precedenceLogical(tItem.content,&itemPrec,&itemAssoc);
                 for(auto tStack : vtStack) {
@@ -333,7 +333,7 @@ bool Math::eqParser() {
                 break;
 
             case MP_MATH:
-                iErase   = 0;
+                iErase = 0;
 
                 precedenceMath(tItem.content,&itemPrec,&itemAssoc);
                 for(auto tStack : vtStack) {
@@ -624,6 +624,10 @@ void Math::precedenceLogical(string_t sOperator, int* pPrecedence, int* pAssoc) 
 void Math::precedenceMath(string_t sOperator, int* pPrecedence, int* pAssoc) {
 
     if(sOperator == "^") {
+        *pPrecedence = 5;
+        *pAssoc = ASSOC_R;
+    } else
+    if(sOperator == "_") {
         *pPrecedence = 4;
         *pAssoc = ASSOC_R;
     } else
@@ -857,31 +861,48 @@ bool Math::evalLogical(string_t sVariable, vdouble_t* pStack, double* pReturn) {
 
 bool Math::evalMath(string_t sVariable, vdouble_t* pStack, double* pReturn) {
 
-    if(pStack->size() < 2) return false;
+    bool isValid = false;
 
-    bool   isValid = false;
-    double dValR   = pStack->back(); pStack->pop_back();
-    double dValL   = pStack->back(); pStack->pop_back();
-
+    if(sVariable == "_") {
+        if(pStack->size() < 1) return false;
+        double dVal  = pStack->back(); pStack->pop_back();
+        *pReturn     = -dVal;
+        isValid      = true;
+    } else
     if(sVariable == "+") {
-        *pReturn = dValL + dValR;
-        isValid = true;
+        if(pStack->size() < 2) return false;
+        double dValR = pStack->back(); pStack->pop_back();
+        double dValL = pStack->back(); pStack->pop_back();
+        *pReturn     = dValL + dValR;
+        isValid      = true;
     } else
     if(sVariable == "-") {
-        *pReturn = dValL - dValR;
-        isValid = true;
+        if(pStack->size() < 2) return false;
+        double dValR = pStack->back(); pStack->pop_back();
+        double dValL = pStack->back(); pStack->pop_back();
+        *pReturn     = dValL - dValR;
+        isValid      = true;
     } else
     if(sVariable == "*") {
-        *pReturn = dValL * dValR;
-        isValid = true;
+        if(pStack->size() < 2) return false;
+        double dValR = pStack->back(); pStack->pop_back();
+        double dValL = pStack->back(); pStack->pop_back();
+        *pReturn     = dValL * dValR;
+        isValid      = true;
     } else
     if(sVariable == "/") {
-        *pReturn = dValL / dValR;
-        isValid = true;
+        if(pStack->size() < 2) return false;
+        double dValR = pStack->back(); pStack->pop_back();
+        double dValL = pStack->back(); pStack->pop_back();
+        *pReturn     = dValL / dValR;
+        isValid      = true;
     } else
     if(sVariable == "^") {
-        *pReturn = pow(dValL,dValR);
-        isValid = true;
+        if(pStack->size() < 2) return false;
+        double dValR = pStack->back(); pStack->pop_back();
+        double dValL = pStack->back(); pStack->pop_back();
+        *pReturn     = pow(dValL,dValR);
+        isValid      = true;
     }
 
     return isValid;

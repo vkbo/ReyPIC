@@ -66,11 +66,13 @@ int Grid::Setup(Input* simInput) {
     vdouble_t vdValues    = {0.1, 0.2, 0.3};
     double    dEval;
 
-    m_GridFunc[0].setVariables(vsVariables);
-    m_GridFunc[0].setEquation(vsGridFunc[0]);
-    m_GridFunc[0].Eval(vdValues, &dEval);
-
-    cout << "  Eval: " << dEval << endl << endl;
+    for(int iDim=0; iDim<3; iDim++) {
+        dEval = 0.0;
+        m_GridFunc[iDim].setVariables(vsVariables);
+        m_GridFunc[iDim].setEquation(vsGridFunc[iDim]);
+        m_GridFunc[iDim].Eval(vdValues, &dEval);
+        cout << "  Eval: " << dEval << endl << endl;
+    }
 
     return ERR_NONE;
 }

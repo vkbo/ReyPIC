@@ -107,7 +107,7 @@ private:
     const vstring_t    m_WFunc     = {"sin","cos","tan","exp","log","abs","mod","if"};
     const vstring_t    m_WConst    = {"pi"};
     const vstring_t    m_OLogical  = {"&&","||","==","<",">",">=","<=","!=","<>"};
-    const vstring_t    m_OMath     = {"+","-","*","/","^"};
+    const vstring_t    m_OMath     = {"+","-","*","/","^","_"};
 
     string_t           m_Equation;
     vstring_t          m_WVariable;
