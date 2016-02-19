@@ -132,12 +132,15 @@ bool Math::eqLexer() {
         idPrev = idType;
     }
 
+    // Add end token
+    m_Tokens.push_back(token({.type=MP_END, .content="end", .value=0.0}));
+
     // Echo lexer for debug
-    cout << endl;
-    for(auto tItem : m_Tokens) {
-        cout << "  Type " << tItem.type << " : Content " << tItem.content << " : Value " << tItem.value << endl;
-    }
-    cout << endl;
+    // cout << endl;
+    // for(auto tItem : m_Tokens) {
+    //     cout << "  Type " << tItem.type << " : Content " << tItem.content << " : Value " << tItem.value << endl;
+    // }
+    // cout << endl;
 
     return true;
 }
@@ -158,6 +161,13 @@ bool Math::eqParser() {
 
     for(auto tItem : m_Tokens) {
 
+        int  itemPrec   = 0;
+        int  itemAssoc  = 0;
+        int  stackPrec  = 0;
+        int  stackAssoc = 0;
+        int  iErase     = 0;
+        bool isClosed   = false;
+
         switch(tItem.type) {
 
             case MP_NUMBER:
@@ -176,14 +186,155 @@ bool Math::eqParser() {
                 vtStack.insert(vtStack.begin(), tItem);
                 break;
 
-            case MP_COMMA:
+            case MP_LOGICAL:
+                iErase   = 0;
+
+                precedenceLogical(tItem.content,&itemPrec,&itemAssoc);
+                for(auto tStack : vtStack) {
+                    precedenceLogical(tStack.content,&stackPrec,&stackAssoc);
+                    if( tStack.type == MP_MATH &&
+                        ( (itemAssoc == ASSOC_L && itemPrec <= stackPrec) ||
+                          (itemAssoc == ASSOC_R && itemPrec <  stackPrec) ) ) {
+                        vtOutput.push_back(tStack);
+                        iErase++;
+                    } else {
+                        break;
+                    }
+                }
+
+                if(iErase > 0) {
+                    vtStack.erase(vtStack.begin(),vtStack.begin()+iErase);
+                }
+                vtStack.insert(vtStack.begin(), tItem);
+
                 break;
 
+            case MP_MATH:
+                iErase   = 0;
+
+                precedenceMath(tItem.content,&itemPrec,&itemAssoc);
+                for(auto tStack : vtStack) {
+                    precedenceMath(tStack.content,&stackPrec,&stackAssoc);
+                    if( tStack.type == MP_MATH &&
+                        ( (itemAssoc == ASSOC_L && itemPrec <= stackPrec) ||
+                          (itemAssoc == ASSOC_R && itemPrec <  stackPrec) ) ) {
+                        vtOutput.push_back(tStack);
+                        iErase++;
+                    } else {
+                        break;
+                    }
+                }
+
+                if(iErase > 0) {
+                    vtStack.erase(vtStack.begin(),vtStack.begin()+iErase);
+                }
+                vtStack.insert(vtStack.begin(), tItem);
+
+                break;
+
+            case MP_LBRACK:
+                vtStack.insert(vtStack.begin(), tItem);
+                break;
+
+            case MP_RBRACK:
+                iErase   = 0;
+                isClosed = false;
+
+                for(auto tStack : vtStack) {
+                    if(tStack.type != MP_LBRACK) {
+                        vtOutput.push_back(tStack);
+                        iErase++;
+                    } else {
+                        isClosed = true;
+                        break;
+                    }
+                }
+
+                if(iErase > 0) {
+                    vtStack.erase(vtStack.begin(),vtStack.begin()+iErase);
+                }
+
+                // Check if brackets were closed
+                if(isClosed) {
+                    vtStack.erase(vtStack.begin());
+                } else {
+                    printf("  Math Error: Paranthesis mismatch\n");
+                    return false;
+                }
+
+                // Check if the next token on stack is a function
+                if(vtStack.front().type == MP_FUNC) {
+                    vtOutput.push_back(vtStack.front());
+                    vtStack.erase(vtStack.begin());
+                }
+
+                break;
+
+            case MP_COMMA:
+                iErase   = 0;
+                isClosed = false;
+
+                for(auto tStack : vtStack) {
+                    if(tStack.type != MP_LBRACK) {
+                        vtOutput.push_back(tStack);
+                        iErase++;
+                    } else {
+                        isClosed = true;
+                        break;
+                    }
+                }
+
+                if(iErase > 0) {
+                    vtStack.erase(vtStack.begin(),vtStack.begin()+iErase);
+                }
+
+                break;
+
+            case MP_END:
+                iErase = 0;
+
+                if( vtStack.front().type == MP_LBRACK ||
+                    vtStack.front().type == MP_RBRACK ) {
+                   printf("  Math Error: Paranthesis mismatch\n");
+                   return false;
+                }
+
+                for(auto tStack : vtStack) {
+                    vtOutput.push_back(tStack);
+                    iErase++;
+                }
+                if(iErase > 0) {
+                    vtStack.erase(vtStack.begin(),vtStack.begin()+iErase);
+                }
+
+                cout << "  Output: ";
+                for(auto tTemp : vtOutput) {
+                    cout << tTemp.content << " ";
+                }
+                cout << "| Stack: ";
+                for(auto tTemp : vtStack) {
+                    cout << tTemp.content << " ";
+                }
+                cout << "| Current: " << tItem.content;
+                cout << endl;
+
+                return true;
+                break;
         }
 
+        cout << "  Output: ";
+        for(auto tTemp : vtOutput) {
+            cout << tTemp.content << " ";
+        }
+        cout << "| Stack: ";
+        for(auto tTemp : vtStack) {
+            cout << tTemp.content << " ";
+        }
+        cout << "| Current: " << tItem.content;
+        cout << endl;
     }
 
-    return true;
+    return false;
 }
 
 // ********************************************************************************************** //

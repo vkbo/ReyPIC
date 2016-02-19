@@ -23,6 +23,7 @@
 #define MP_LBRACK    7
 #define MP_RBRACK    8
 #define MP_COMMA     9
+#define MP_END       10
 
 #define ASSOC_L      1
 #define ASSOC_R      2
