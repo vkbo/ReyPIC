@@ -34,7 +34,7 @@ bool Math::setEquation(string_t sEquation) {
     // Append a space to make sure last character is evaluated
     m_Equation = sEquation + " ";
 
-    bool okLexer = eqLexer();
+    bool okLexer  = eqLexer();
     bool okParser = eqParser();
 
     return (okLexer && okParser);
@@ -98,35 +98,35 @@ bool Math::eqLexer() {
 
     // Clean up lexer and check for invalid entries
     idPrev = MP_NONE;
-    for(auto lxItem : vTokens) {
+    for(auto tItem : vTokens) {
 
         int    idType = MP_NONE;
         double dValue = 0.0;
 
-        switch(lxItem.type) {
+        switch(tItem.type) {
             case MT_OPERATOR:
-                idType = validOperator(&lxItem.content);
+                idType = validOperator(&tItem.content);
                 dValue = 0.0;
                 break;
             case MT_NUMBER:
-                idType = validNumber(&lxItem.content, &lxItem.value);
-                dValue = lxItem.value;
+                idType = validNumber(&tItem.content, &tItem.value);
+                dValue = tItem.value;
                 break;
             case MT_WORD:
-                idType = validWord(&lxItem.content);
+                idType = validWord(&tItem.content);
                 dValue = 0.0;
                 break;
             case MT_SEPARATOR:
-                idType = validSeparator(&lxItem.content);
+                idType = validSeparator(&tItem.content);
                 dValue = 0.0;
                 break;
         }
 
         if(idType == MP_INVALID || idType == idPrev) {
-            printf("  Math Error: Unknown entry '%s'\n", lxItem.content.c_str());
+            printf("  Math Error: Unknown entry '%s'\n", tItem.content.c_str());
             return false;
         } else {
-            m_Tokens.push_back(token({.type=idType, .content=lxItem.content, .value=dValue}));
+            m_Tokens.push_back(token({.type=idType, .content=tItem.content, .value=dValue}));
         }
 
         idPrev = idType;
@@ -134,8 +134,8 @@ bool Math::eqLexer() {
 
     // Echo lexer for debug
     cout << endl;
-    for(auto lxItem : m_Tokens) {
-        cout << "  Type " << lxItem.type << " : Content " << lxItem.content << " : Value " << lxItem.value << endl;
+    for(auto tItem : m_Tokens) {
+        cout << "  Type " << tItem.type << " : Content " << tItem.content << " : Value " << tItem.value << endl;
     }
     cout << endl;
 
@@ -147,9 +147,41 @@ bool Math::eqLexer() {
 /**
  *  The Equation Parser
  * =====================
+ *  Using the Shunting-yard algorithm
+ *  https://en.wikipedia.org/wiki/Shunting-yard_algorithm
  */
 
 bool Math::eqParser() {
+
+    vector<token> vtOutput;
+    vector<token> vtStack;
+
+    for(auto tItem : m_Tokens) {
+
+        switch(tItem.type) {
+
+            case MP_NUMBER:
+                vtOutput.push_back(tItem);
+                break;
+
+            case MP_VARIABLE:
+                vtOutput.push_back(tItem);
+                break;
+
+            case MP_CONST:
+                vtOutput.push_back(tItem);
+                break;
+
+            case MP_FUNC:
+                vtStack.insert(vtStack.begin(), tItem);
+                break;
+
+            case MP_COMMA:
+                break;
+
+        }
+
+    }
 
     return true;
 }
@@ -252,6 +284,90 @@ int Math::validSeparator(string_t* pVar) {
     }
 
     return MP_INVALID;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Function :: precedenceLogical
+ * ===============================
+ *  Returns precedence and associativity of operator
+ */
+
+void Math::precedenceLogical(string_t sOperator, int* pPrecedence, int* pAssoc) {
+
+    if(sOperator == "&&") {
+        *pPrecedence = 3;
+        *pAssoc = ASSOC_L;
+    } else
+    if(sOperator == "||") {
+        *pPrecedence = 2;
+        *pAssoc = ASSOC_L;
+    } else
+    if(sOperator == "==") {
+        *pPrecedence = 9;
+        *pAssoc = ASSOC_L;
+    } else
+    if(sOperator == "<") {
+        *pPrecedence = 9;
+        *pAssoc = ASSOC_L;
+    } else
+    if(sOperator == ">") {
+        *pPrecedence = 9;
+        *pAssoc = ASSOC_L;
+    } else
+    if(sOperator == ">=") {
+        *pPrecedence = 9;
+        *pAssoc = ASSOC_L;
+    } else
+    if(sOperator == "<=") {
+        *pPrecedence = 9;
+        *pAssoc = ASSOC_L;
+    } else
+    if(sOperator == "!=") {
+        *pPrecedence = 9;
+        *pAssoc = ASSOC_L;
+    } else
+    if(sOperator == "<>") {
+        *pPrecedence = 9;
+        *pAssoc = ASSOC_L;
+    }
+
+    return;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Function :: precedenceMath
+ * ============================
+ *  Returns precedence and associativity of operator
+ */
+
+void Math::precedenceMath(string_t sOperator, int* pPrecedence, int* pAssoc) {
+
+    if(sOperator == "^") {
+        *pPrecedence = 4;
+        *pAssoc = ASSOC_R;
+    } else
+    if(sOperator == "*") {
+        *pPrecedence = 3;
+        *pAssoc = ASSOC_L;
+    } else
+    if(sOperator == "/") {
+        *pPrecedence = 3;
+        *pAssoc = ASSOC_L;
+    } else
+    if(sOperator == "+") {
+        *pPrecedence = 2;
+        *pAssoc = ASSOC_L;
+    } else
+    if(sOperator == "-") {
+        *pPrecedence = 2;
+        *pAssoc = ASSOC_L;
+    }
+
+    return;
 }
 
 // ********************************************************************************************** //

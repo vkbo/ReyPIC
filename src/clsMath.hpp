@@ -16,13 +16,16 @@
 #define MP_NONE      0
 #define MP_NUMBER    1
 #define MP_VARIABLE  2
-#define MP_FUNC      3
-#define MP_CONST     4
+#define MP_CONST     3
+#define MP_FUNC      4
 #define MP_LOGICAL   5
 #define MP_MATH      6
 #define MP_LBRACK    7
 #define MP_RBRACK    8
 #define MP_COMMA     9
+
+#define ASSOC_L      1
+#define ASSOC_R      2
 
 // Includes
 #include "config.hpp"
@@ -80,6 +83,9 @@ private:
     int  validWord(string_t*);
     int  validNumber(string_t*, double*);
     int  validSeparator(string_t*);
+
+    void precedenceLogical(string_t, int*, int*);
+    void precedenceMath(string_t, int*, int*);
 
    /**
     * Member Variables
