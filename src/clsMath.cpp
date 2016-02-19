@@ -49,15 +49,19 @@ bool Math::setEquation(string_t sEquation) {
     m_Equation = sEquation + " ";
 
     bool okLexer  = eqLexer();
+    if(!okLexer) return false;
+
     bool okParser = eqParser();
+    if(!okParser) return false;
 
-    cout << endl;
-    for(auto tItem : m_ParseTree) {
-        cout << "  Type " << tItem.type << " : Content " << tItem.content << " : Value " << tItem.value << endl;
-    }
-    cout << endl;
+    // cout << endl;
+    // for(auto tItem : m_ParseTree) {
+    //     cout << "  Type " << tItem.type << " : Content " << tItem.content << " : Value " << tItem.value << endl;
+    // }
+    // cout << endl;
 
-    return (okLexer && okParser);
+    m_Parsed = true;
+    return true;
 }
 
 // ********************************************************************************************** //
@@ -76,6 +80,11 @@ bool Math::Eval(vdouble_t vdValues, double* pReturn) {
 
     vdouble_t vdStack;
     double    dValue;
+
+    if(!m_Parsed) {
+        printf("  Math Eval Error: No valid equation to evaluate\n");
+        return false;
+    }
 
     if(m_WVariable.size() != vdValues.size()) {
         printf("  Math Eval Error: Values vector must be the same length as variables vector\n");
@@ -689,6 +698,8 @@ bool Math::evalConstant(string_t sVariable, double* pReturn) {
 
 bool Math::evalFunction(string_t sVariable, vdouble_t* pStack, double* pReturn) {
 
+    if(pStack->size() < 1) return false;
+
     bool isValid = false;
 
     if(sVariable == "sin") {
@@ -717,8 +728,12 @@ bool Math::evalFunction(string_t sVariable, vdouble_t* pStack, double* pReturn) 
         isValid = true;
     } else
     if(sVariable == "mod") {
+
+        if(pStack->size() < 2) return false;
+
         double dValL = pStack->back(); pStack->pop_back();
         double dValR = pStack->back(); pStack->pop_back();
+
         if(dValL == floor(dValL) && dValR == floor(dValR)) {
             *pReturn = (int)floor(dValL)%(int)floor(dValR);
             isValid = true;
@@ -727,14 +742,19 @@ bool Math::evalFunction(string_t sVariable, vdouble_t* pStack, double* pReturn) 
         }
     } else
     if(sVariable == "if") {
+
+        if(pStack->size() < 3) return false;
+
         double dFalse = pStack->back(); pStack->pop_back();
         double dTrue  = pStack->back(); pStack->pop_back();
         double dBool  = pStack->back(); pStack->pop_back();
+
         if(dBool == EVAL_TRUE) {
             *pReturn = dTrue;
         } else {
             *pReturn = dFalse;
         }
+
         isValid = true;
     }
 
@@ -750,6 +770,10 @@ bool Math::evalFunction(string_t sVariable, vdouble_t* pStack, double* pReturn) 
  */
 
 bool Math::evalLogical(string_t sVariable, vdouble_t* pStack, double* pReturn) {
+
+    if(pStack->size() < 2) {
+        return false;
+    }
 
     bool   isValid = false;
     double dValR   = pStack->back(); pStack->pop_back();
@@ -832,6 +856,8 @@ bool Math::evalLogical(string_t sVariable, vdouble_t* pStack, double* pReturn) {
  */
 
 bool Math::evalMath(string_t sVariable, vdouble_t* pStack, double* pReturn) {
+
+    if(pStack->size() < 2) return false;
 
     bool   isValid = false;
     double dValR   = pStack->back(); pStack->pop_back();

@@ -102,6 +102,8 @@ private:
     * Member Variables
     */
 
+    bool               m_Parsed    = false;
+
     const vstring_t    m_WFunc     = {"sin","cos","tan","exp","log","abs","mod","if"};
     const vstring_t    m_WConst    = {"pi"};
     const vstring_t    m_OLogical  = {"&&","||","==","<",">",">=","<=","!=","<>"};
