@@ -29,6 +29,20 @@ Math::Math() {
  * ==================
  */
 
+void Math::setVariables(vstring_t vsVariable) {
+
+    m_WVariable = vsVariable;
+
+    return;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Set the Equation
+ * ==================
+ */
+
 bool Math::setEquation(string_t sEquation) {
 
     // Append a space to make sure last character is evaluated
@@ -37,7 +51,107 @@ bool Math::setEquation(string_t sEquation) {
     bool okLexer  = eqLexer();
     bool okParser = eqParser();
 
+    cout << endl;
+    for(auto tItem : m_ParseTree) {
+        cout << "  Type " << tItem.type << " : Content " << tItem.content << " : Value " << tItem.value << endl;
+    }
+    cout << endl;
+
     return (okLexer && okParser);
+}
+
+// ********************************************************************************************** //
+//                                       Main Class Methods                                       //
+// ********************************************************************************************** //
+
+/**
+ *  Evaluate the Parsed Function
+ * ==============================
+ *  Takes vector of variables and vector of values as input
+ *  Using Reverse Polish notation
+ *  https://en.wikipedia.org/wiki/Reverse_Polish_notation
+ */
+
+bool Math::Eval(vdouble_t vdValues, double* pReturn) {
+
+    vdouble_t vdStack;
+    double    dValue;
+
+    if(m_WVariable.size() != vdValues.size()) {
+        printf("  Math Eval Error: Values vector must be the same length as variables vector\n");
+        return false;
+    }
+
+    for(auto tItem : m_ParseTree) {
+
+        switch(tItem.type) {
+
+            case MP_NUMBER:
+                vdStack.push_back(tItem.value);
+                break;
+
+            case MP_VARIABLE:
+                dValue = 0.0;
+                if(evalVariable(tItem.content, &vdValues, &dValue)) {
+                    vdStack.push_back(dValue);
+                } else {
+                    printf("  Math Eval Error: Unknown variable %s\n",tItem.content.c_str());
+                    return false;
+                }
+                break;
+
+            case MP_CONST:
+                dValue = 0.0;
+                if(evalConstant(tItem.content, &dValue)) {
+                    vdStack.push_back(dValue);
+                } else {
+                    printf("  Math Eval Error: Unknown constant %s\n",tItem.content.c_str());
+                    return false;
+                }
+                break;
+
+            case MP_FUNC:
+                dValue = 0.0;
+                if(evalFunction(tItem.content, &vdStack, &dValue)) {
+                    vdStack.push_back(dValue);
+                } else {
+                    printf("  Math Eval Error: Unknown function %s\n",tItem.content.c_str());
+                    return false;
+                }
+                break;
+
+            case MP_LOGICAL:
+                dValue = 0.0;
+                if(evalLogical(tItem.content, &vdStack, &dValue)) {
+                    vdStack.push_back(dValue);
+                } else {
+                    printf("  Math Eval Error: Unknown logic operator %s\n",tItem.content.c_str());
+                    return false;
+                }
+                break;
+
+            case MP_MATH:
+                dValue = 0.0;
+                if(evalMath(tItem.content, &vdStack, &dValue)) {
+                    vdStack.push_back(dValue);
+                } else {
+                    printf("  Math Eval Error: Unknown operator %s\n",tItem.content.c_str());
+                    return false;
+                }
+                break;
+        }
+
+        cout << "  Stack: ";
+        for(auto dValue : vdStack) {
+            cout << dValue << " ";
+        }
+        cout << "| Current: " << tItem.content << endl;
+    }
+    cout << endl;
+
+    *pReturn = vdStack.front();
+
+    return true;
 }
 
 // ********************************************************************************************** //
@@ -307,31 +421,34 @@ bool Math::eqParser() {
                     vtStack.erase(vtStack.begin(),vtStack.begin()+iErase);
                 }
 
-                cout << "  Output: ";
-                for(auto tTemp : vtOutput) {
-                    cout << tTemp.content << " ";
-                }
-                cout << "| Stack: ";
-                for(auto tTemp : vtStack) {
-                    cout << tTemp.content << " ";
-                }
-                cout << "| Current: " << tItem.content;
-                cout << endl;
+                vtOutput.push_back(tItem);
+                m_ParseTree = vtOutput;
+
+                // cout << "  Output: ";
+                // for(auto tTemp : vtOutput) {
+                //     cout << tTemp.content << " ";
+                // }
+                // cout << "| Stack: ";
+                // for(auto tTemp : vtStack) {
+                //     cout << tTemp.content << " ";
+                // }
+                // cout << "| Current: " << tItem.content;
+                // cout << endl;
 
                 return true;
                 break;
         }
 
-        cout << "  Output: ";
-        for(auto tTemp : vtOutput) {
-            cout << tTemp.content << " ";
-        }
-        cout << "| Stack: ";
-        for(auto tTemp : vtStack) {
-            cout << tTemp.content << " ";
-        }
-        cout << "| Current: " << tItem.content;
-        cout << endl;
+        // cout << "  Output: ";
+        // for(auto tTemp : vtOutput) {
+        //     cout << tTemp.content << " ";
+        // }
+        // cout << "| Stack: ";
+        // for(auto tTemp : vtStack) {
+        //     cout << tTemp.content << " ";
+        // }
+        // cout << "| Current: " << tItem.content;
+        // cout << endl;
     }
 
     return false;
@@ -519,6 +636,229 @@ void Math::precedenceMath(string_t sOperator, int* pPrecedence, int* pAssoc) {
     }
 
     return;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Function :: evalVariable
+ * ==========================
+ *  Evaluate input variable set by setVariables()
+ */
+
+bool Math::evalVariable(string_t sVariable, vdouble_t* pValues, double* pReturn) {
+
+    int iPos = 0;
+
+    for(auto sItem : m_WVariable) {
+        if(sItem == sVariable) {
+            *pReturn = pValues->at(iPos);
+            return true;
+        }
+        iPos++;
+    }
+
+    return false;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Function :: evalConstant
+ * ==========================
+ *  Evaluate constant
+ */
+
+bool Math::evalConstant(string_t sVariable, double* pReturn) {
+
+    if(sVariable == "pi") {
+        *pReturn = M_PI;
+        return true;
+    }
+
+    return false;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Function :: evalFunction
+ * ==========================
+ *  Evaluate math function
+ */
+
+bool Math::evalFunction(string_t sVariable, vdouble_t* pStack, double* pReturn) {
+
+    bool isValid = false;
+
+    if(sVariable == "sin") {
+        *pReturn = sin(pStack->back());
+        pStack->pop_back();
+        isValid = true;
+    } else
+    if(sVariable == "cos") {
+        *pReturn = cos(pStack->back());
+        pStack->pop_back();
+        isValid = true;
+    } else
+    if(sVariable == "tan") {
+        *pReturn = tan(pStack->back());
+        pStack->pop_back();
+        isValid = true;
+    } else
+    if(sVariable == "exp") {
+        *pReturn = exp(pStack->back());
+        pStack->pop_back();
+        isValid = true;
+    } else
+    if(sVariable == "log") {
+        *pReturn = log(pStack->back());
+        pStack->pop_back();
+        isValid = true;
+    } else
+    if(sVariable == "mod") {
+        double dValL = pStack->back(); pStack->pop_back();
+        double dValR = pStack->back(); pStack->pop_back();
+        if(dValL == floor(dValL) && dValR == floor(dValR)) {
+            *pReturn = (int)floor(dValL)%(int)floor(dValR);
+            isValid = true;
+        } else {
+            isValid = false;
+        }
+    } else
+    if(sVariable == "if") {
+        double dFalse = pStack->back(); pStack->pop_back();
+        double dTrue  = pStack->back(); pStack->pop_back();
+        double dBool  = pStack->back(); pStack->pop_back();
+        if(dBool == EVAL_TRUE) {
+            *pReturn = dTrue;
+        } else {
+            *pReturn = dFalse;
+        }
+        isValid = true;
+    }
+
+    return isValid;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Function :: evalLogical
+ * =========================
+ *  Evaluate logic operator
+ */
+
+bool Math::evalLogical(string_t sVariable, vdouble_t* pStack, double* pReturn) {
+
+    bool   isValid = false;
+    double dValR   = pStack->back(); pStack->pop_back();
+    double dValL   = pStack->back(); pStack->pop_back();
+
+    if(sVariable == "&&") {
+        if(dValL && dValR) {
+            *pReturn = EVAL_TRUE;
+        } else {
+            *pReturn = EVAL_FALSE;
+        }
+        isValid = true;
+    } else
+    if(sVariable == "||") {
+        if(dValL || dValR) {
+            *pReturn = EVAL_TRUE;
+        } else {
+            *pReturn = EVAL_FALSE;
+        }
+        isValid = true;
+    } else
+    if(sVariable == "==") {
+        if(dValL == dValR) {
+            *pReturn = EVAL_TRUE;
+        } else {
+            *pReturn = EVAL_FALSE;
+        }
+        isValid = true;
+    } else
+    if(sVariable == "<") {
+        if(dValL < dValR) {
+            *pReturn = EVAL_TRUE;
+        } else {
+            *pReturn = EVAL_FALSE;
+        }
+        isValid = true;
+    } else
+    if(sVariable == ">") {
+        if(dValL > dValR) {
+            *pReturn = EVAL_TRUE;
+        } else {
+            *pReturn = EVAL_FALSE;
+        }
+        isValid = true;
+    } else
+    if(sVariable == ">=") {
+        if(dValL >= dValR) {
+            *pReturn = EVAL_TRUE;
+        } else {
+            *pReturn = EVAL_FALSE;
+        }
+        isValid = true;
+    } else
+    if(sVariable == "<=") {
+        if(dValL <= dValR) {
+            *pReturn = EVAL_TRUE;
+        } else {
+            *pReturn = EVAL_FALSE;
+        }
+        isValid = true;
+    } else
+    if(sVariable == "!=" || sVariable == "<>") {
+        if(dValL != dValR) {
+            *pReturn = EVAL_TRUE;
+        } else {
+            *pReturn = EVAL_FALSE;
+        }
+        isValid = true;
+    }
+
+    return isValid;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Function :: evalMath
+ * ======================
+ *  Evaluate math operator
+ */
+
+bool Math::evalMath(string_t sVariable, vdouble_t* pStack, double* pReturn) {
+
+    bool   isValid = false;
+    double dValR   = pStack->back(); pStack->pop_back();
+    double dValL   = pStack->back(); pStack->pop_back();
+
+    if(sVariable == "+") {
+        *pReturn = dValL + dValR;
+        isValid = true;
+    } else
+    if(sVariable == "-") {
+        *pReturn = dValL - dValR;
+        isValid = true;
+    } else
+    if(sVariable == "*") {
+        *pReturn = dValL * dValR;
+        isValid = true;
+    } else
+    if(sVariable == "/") {
+        *pReturn = dValL / dValR;
+        isValid = true;
+    } else
+    if(sVariable == "^") {
+        *pReturn = pow(dValL,dValR);
+        isValid = true;
+    }
+
+    return isValid;
 }
 
 // ********************************************************************************************** //

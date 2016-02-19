@@ -28,6 +28,9 @@
 #define ASSOC_L      1
 #define ASSOC_R      2
 
+#define EVAL_TRUE    1.0
+#define EVAL_FALSE   0.0
+
 // Includes
 #include "config.hpp"
 #include <cctype>
@@ -49,13 +52,14 @@ public:
     * Setters/Getters
     */
 
+    void setVariables(vstring_t);
     bool setEquation(string_t);
 
    /**
     * Methods
     */
 
-    double Eval(vstring_t, vdouble_t);
+    bool Eval(vdouble_t, double*);
 
    /**
     * Properties
@@ -88,18 +92,25 @@ private:
     void precedenceLogical(string_t, int*, int*);
     void precedenceMath(string_t, int*, int*);
 
+    bool evalVariable(string_t, vdouble_t*, double*);
+    bool evalConstant(string_t, double*);
+    bool evalFunction(string_t, vdouble_t*, double*);
+    bool evalLogical(string_t, vdouble_t*, double*);
+    bool evalMath(string_t, vdouble_t*, double*);
+
    /**
     * Member Variables
     */
 
-    vstring_t          m_WVariable = {"x1","x2","x3"};
-    const vstring_t    m_WFunc     = {"sin","cos","tan","exp","abs","mod","if"};
+    const vstring_t    m_WFunc     = {"sin","cos","tan","exp","log","abs","mod","if"};
     const vstring_t    m_WConst    = {"pi"};
     const vstring_t    m_OLogical  = {"&&","||","==","<",">",">=","<=","!=","<>"};
     const vstring_t    m_OMath     = {"+","-","*","/","^"};
 
-    string_t           m_Equation  = "";
+    string_t           m_Equation;
+    vstring_t          m_WVariable;
     std::vector<token> m_Tokens;
+    std::vector<token> m_ParseTree;
 
 };
 
