@@ -54,8 +54,8 @@ private:
     vstring_t m_GridRes     = {"","",""};      // [resolution] Grid resolution type
     vdouble_t m_DeltaMin    = {1.0, 1.0, 1.0}; // [gridmin]    Smallest allowed cell size
     vdouble_t m_DeltaMax    = {1.0, 1.0, 1.0}; // [gridmax]    Largest allowed cell size
-    Math      m_GridFunc[3];                   // [gridfunc]   Function for grid cell size
-    
+    vstring_t m_GridFunc    = {"","",""};      // [gridfunc]   Function for grid cell size
+
 
 }; // End Class Grid
 

@@ -29,11 +29,18 @@ Math::Math() {
  * ==================
  */
 
-void Math::setVariables(vstring_t vsVariable) {
+bool Math::setVariables(vstring_t vsVariable) {
 
-    m_WVariable = vsVariable;
+    bool notUnique = false;
 
-    return;
+    for(auto sItem : vsVariable) {
+        if(validWord(&sItem) != MP_INVALID) {
+            notUnique = true;
+        }
+    }
+    if(!notUnique) m_WVariable = vsVariable;
+
+    return !notUnique;
 }
 
 // ********************************************************************************************** //
@@ -144,13 +151,13 @@ bool Math::Eval(vdouble_t vdValues, double* pReturn) {
                 break;
         }
 
-        cout << "  Stack: ";
-        for(auto dValue : vdStack) {
-            cout << dValue << " ";
-        }
-        cout << "| Current: " << tItem.content << endl;
+        // cout << "  Stack: ";
+        // for(auto dValue : vdStack) {
+        //     cout << dValue << " ";
+        // }
+        // cout << "| Current: " << tItem.content << endl;
     }
-    cout << endl;
+    // cout << endl;
 
     *pReturn = vdStack.front();
 
@@ -246,7 +253,7 @@ bool Math::eqLexer() {
 
         if( idType == MP_INVALID || (idType == idPrev && !(
             idType == MP_LBRACK || idType == MP_RBRACK ))) {
-            printf("  Math Error: Unknown entry '%s'\n", tItem.content.c_str());
+            printf("  Math Error: Unknown item '%s'\n", tItem.content.c_str());
             return false;
         } else {
             m_Tokens.push_back(token({.type=idType, .content=tItem.content, .value=dValue}));

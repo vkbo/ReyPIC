@@ -153,7 +153,8 @@ int Simulation::Setup() {
     m_Nodes = m_MPISize;
 
     // Grid Setup
-    simGrid.Setup(&simInput);
+    error_t errGrid = simGrid.Setup(&simInput);
+    if(errGrid != ERR_NONE) return errGrid;
 
     return ERR_NONE;
 }

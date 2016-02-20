@@ -52,7 +52,7 @@ public:
     * Setters/Getters
     */
 
-    void setVariables(vstring_t);
+    bool setVariables(vstring_t);
     bool setEquation(string_t);
 
    /**

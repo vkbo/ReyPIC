@@ -33,45 +33,45 @@ Grid::Grid() {
 
 int Grid::Setup(Input* simInput) {
 
-    error_t errVal;
+    error_t   errVal;
+    vstring_t vsGridVars = {"x1","x2","x3"};
 
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "grid",    &m_NGrid,    INVAR_VINT);
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "xmin",    &m_XMin,     INVAR_VDOUBLE);
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "xmax",    &m_XMax,     INVAR_VDOUBLE);
+    errVal += simInput->ReadVariable(INPUT_GRID, 0, "grid",     &m_NGrid,    INVAR_VINT);
+    errVal += simInput->ReadVariable(INPUT_GRID, 0, "xmin",     &m_XMin,     INVAR_VDOUBLE);
+    errVal += simInput->ReadVariable(INPUT_GRID, 0, "xmax",     &m_XMax,     INVAR_VDOUBLE);
 
     errVal += simInput->ReadVariable(INPUT_GRID, 0, "gridres",  &m_GridRes,  INVAR_VSTRING);
+    errVal += simInput->ReadVariable(INPUT_GRID, 0, "gridfunc", &m_GridFunc, INVAR_VSTRING);
 
-    vstring_t vsGridFunc = {"","",""};
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "gridfunc", &vsGridFunc, INVAR_VSTRING);
+    // Set up grid resolution vectors
+    int nErr = 0;
+    for(int iDim=0; iDim<3; iDim++) {
 
-    if(m_isMaster) {
-        for(auto dVal : m_NGrid) {
-            cout << "  NGrid: " << dVal << endl;
-        }
-        for(auto dVal : m_XMin) {
-            cout << "  XMin:  " << dVal << endl;
-        }
-        for(auto dVal : m_XMax) {
-            cout << "  XMax:  " << dVal << endl;
-        }
-        for(auto dVal : m_GridRes) {
-            cout << "  Res:   " << dVal << endl;
-        }
-        for(auto dVal : vsGridFunc) {
-            cout << "  Func:  " << dVal << endl;
+        if(m_GridRes[iDim] == "fixed") {
+
+        } else
+        if(m_GridRes[iDim] == "func") {
+
+            Math mFunc;
+
+            if(!mFunc.setVariables(vsGridVars)) nErr++;
+            if(!mFunc.setEquation(m_GridFunc[iDim])) nErr++;
+
+            double dDelta = (m_XMax[iDim]-m_XMin[iDim])/(m_NGrid[iDim]-1);
+            cout << "  Resolution: " << dDelta << endl;
+
+            vdouble_t vdEval = {0.0, 0.0, 0.0};
+            double    dValue;
+            for(int iStep=0; iStep<m_NGrid[iDim]; iStep++) {
+                vdEval[iDim] = (iStep*dDelta+m_XMin[iDim]);
+                mFunc.Eval(vdEval,&dValue);
+                cout << "  Eval: " << (iStep*dDelta+m_XMin[iDim]) << " Value: " << dValue << endl;
+            }
         }
     }
 
-    vstring_t vsVariables = {"x1","x2","x3"};
-    vdouble_t vdValues    = {0.1, 0.2, 0.3};
-    double    dEval;
-
-    for(int iDim=0; iDim<3; iDim++) {
-        dEval = 0.0;
-        m_GridFunc[iDim].setVariables(vsVariables);
-        m_GridFunc[iDim].setEquation(vsGridFunc[iDim]);
-        m_GridFunc[iDim].Eval(vdValues, &dEval);
-        cout << "  Eval: " << dEval << endl << endl;
+    if(nErr > 0) {
+        return ERR_SETUP;
     }
 
     return ERR_NONE;

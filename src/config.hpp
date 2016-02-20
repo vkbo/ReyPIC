@@ -34,9 +34,8 @@ typedef unsigned long int        index_t;
 #define ERR_MPI_INIT  81
 #define ERR_INPUTFILE 82
 #define ERR_INPUTVAR  83
-
-#define ERR_INIT      84
-#define ERR_SETUP     85
+#define ERR_SETUP     84
+#define ERR_INIT      85
 #define ERR_EXEC      86
 #define ERR_DIAG      87
 
