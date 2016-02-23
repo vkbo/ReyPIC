@@ -13,7 +13,7 @@ OUTPUT  = bin
 
 EXEC    = reypic.e
 MAIN    = $(SRC)/main.cpp
-VERSION = $(shell git describe)
+VERSION = $(shell git describe | tr -d gv)
 
 CLASSES = clsSimulation.o clsMath.o clsInput.o clsSpecies.o clsGrid.o
 OBJECTS = $(addprefix $(BUILD)/,$(CLASSES))
@@ -38,7 +38,7 @@ $(BUILD)/main.o : $(MAIN) $(SRC)/build.hpp
 
 # Classes
 
-$(BUILD)/clsSimulation.o : $(SRC)/clsSimulation.cpp $(SRC)/clsSimulation.hpp 
+$(BUILD)/clsSimulation.o : $(SRC)/clsSimulation.cpp $(SRC)/clsSimulation.hpp
 	$(CC) $(CFLAGS) $(SRC)/clsSimulation.cpp -o $@
 
 $(BUILD)/clsMath.o : $(SRC)/clsMath.cpp $(SRC)/clsMath.hpp
