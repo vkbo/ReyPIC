@@ -6,6 +6,7 @@
 #define CLASS_GRID
 
 #include "config.hpp"
+#include "functions.hpp"
 
 #include "clsInput.hpp"
 #include "clsMath.hpp"

@@ -5,9 +5,10 @@
 // Core Header Files
 #include "build.hpp"
 #include "config.hpp"
-#include "clsSimulation.hpp"
+#include "functions.hpp"
 
 // Classes
+#include "clsSimulation.hpp"
 #include "clsInput.hpp"
 #include "clsSpecies.hpp"
 #include "clsGrid.hpp"

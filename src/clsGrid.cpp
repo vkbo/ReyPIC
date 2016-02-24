@@ -87,15 +87,22 @@ int Grid::Setup(Input* simInput) {
                 return ERR_SETUP;
             }
 
-            vdouble_t vdEval = {0.0, 0.0, 0.0};
-            double    dValue;
-            double    aEval[nMin];
 
-            for(int i=0; i<=nMin; i++) {
-                vdEval[iDim] = i*adjMin+xMin;
-                mFunc.Eval(vdEval,&dValue);
-                cout << "  Eval: " << (i*adjMin+xMin) << " Value: " << dValue << endl;
+
+            vdouble_t vdEval = {0.0, 0.0, 0.0};
+            double    aEval[nMin+1] = {0.0};
+
+            linspace(xMin, xMax, nMin+1, aEval);
+
+            for(auto dVal : aEval) {
+                cout << "  Value: " << dVal << endl;
             }
+
+            // for(int i=0; i<=nMin; i++) {
+            //     vdEval[iDim] = i*adjMin+xMin;
+            //     mFunc.Eval(vdEval,&aEval[i]);
+            //     cout << "  Eval: " << (i*adjMin+xMin) << " Value: " << aEval[i] << endl;
+            // }
         }
     }
 
