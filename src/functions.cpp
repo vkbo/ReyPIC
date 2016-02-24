@@ -102,7 +102,13 @@ double m::sum(double* aData, int nData) {
 
 double m::avg(double* aData, int nData) {
 
-    return m::sum(aData, nData)/nData;
+    double valSum = 0.0;
+
+    for(int i=0; i<nData; i++) {
+        valSum += aData[i];
+    }
+
+    return valSum/nData;
 }
 
 // ********************************************************************************************** //
