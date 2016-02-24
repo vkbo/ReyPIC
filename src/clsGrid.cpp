@@ -105,10 +105,12 @@ int Grid::Setup(Input* simInput) {
                 mFunc.Eval(vdEval,&aEval[i]);
                 cout << "  Eval: " << (i*adjMin+xMin) << " Value: " << aEval[i] << endl;
             }
-            min(aEval, nMin+1, &dMin, &iMin);
+            m::min(aEval, nMin+1, &dMin, &iMin);
             cout << "  Min:  " << dMin << " at " << iMin << endl;
-            max(aEval, nMin+1, &dMax, &iMax);
+            m::max(aEval, nMin+1, &dMax, &iMax);
             cout << "  Max:  " << dMax << " at " << iMax << endl;
+            cout << "  Sum:  " << m::sum(aEval, nMin+1) << endl;
+            cout << "  Avg:  " << m::avg(aEval, nMin+1) << endl;
         }
     }
 

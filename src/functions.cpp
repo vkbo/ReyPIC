@@ -15,7 +15,7 @@ using namespace std;
  *  Generayes array aReturn of length nVal from valMin to valMax
  */
 
-void reypic::linspace(double valMin, double valMax, int nVal, double* aReturn) {
+void m::linspace(double valMin, double valMax, int nVal, double* aReturn) {
 
     double valSpan = valMax - valMin;
     double delVal  = valSpan/(nVal-1);
@@ -35,7 +35,7 @@ void reypic::linspace(double valMin, double valMax, int nVal, double* aReturn) {
  *  Gives minimum value valMin and index indMin from array aData with length nData
  */
 
-void reypic::min(double* aData, int nData, double* valMin, int* indMin) {
+void m::min(double* aData, int nData, double* valMin, int* indMin) {
 
     *valMin = aData[0];
     *indMin = 0;
@@ -58,7 +58,7 @@ void reypic::min(double* aData, int nData, double* valMin, int* indMin) {
  *  Gives maximum value valMax and index indMax from array aData with length nData
  */
 
-void reypic::max(double* aData, int nData, double* valMax, int* indMax) {
+void m::max(double* aData, int nData, double* valMax, int* indMax) {
 
     *valMax = aData[0];
     *indMax = 0;
@@ -68,6 +68,72 @@ void reypic::max(double* aData, int nData, double* valMax, int* indMax) {
             *valMax = aData[i];
             *indMax = i;
         }
+    }
+
+    return;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Sum
+ * ======
+ *  Returns sum of array aData with length nData
+ */
+
+double m::sum(double* aData, int nData) {
+
+    double valSum = 0.0;
+
+    for(int i=0; i<nData; i++) {
+        valSum += aData[i];
+    }
+
+    return valSum;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Average Value
+ * ===============
+ *  Returns average value valAvg from array aData with length nData
+ */
+
+double m::avg(double* aData, int nData) {
+
+    return m::sum(aData, nData)/nData;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Scale Array
+ * =============
+ *  Scales an array aData with length nData by a value valScale
+ */
+
+void m::scale(double* aData, int nData, double valScale) {
+
+    for(int i=0; i<nData; i++) {
+        aData[i] *= valScale;
+    }
+
+    return;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Offset Array
+ * ==============
+ *  Offsets an array aData with length nData by a value valScale
+ */
+
+void m::offset(double* aData, int nData, double valOffset) {
+
+    for(int i=0; i<nData; i++) {
+        aData[i] += valOffset;
     }
 
     return;
