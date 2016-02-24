@@ -10,6 +10,8 @@
 namespace reypic {
 
     void linspace(double, double, int, double*);
+    void min(double*, int, double*, int*);
+    void max(double*, int, double*, int*);
 
 } // End namespace
 
