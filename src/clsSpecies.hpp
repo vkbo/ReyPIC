@@ -52,11 +52,12 @@ private:
     int      m_MPIRank    = -1;              // Node number
     bool     m_isMaster   = false;           // True if this node is master
 
-    string_t m_Name;
-    int      m_Number     = -1;
+    string_t m_Name       = "";              // Species name
+    int      m_Number     = -1;              // Species number
 
     double   m_Charge     = 0;               // Species charge
     double   m_Mass       = 1;               // Species mass
+    vint_t   m_PerCell    = {1, 1, 1};       // Particles per cell
 
     double   m_Thermal[3] = {0.0, 0.0, 0.0}; // Thermal distribution
     double   m_Fluid[3]   = {0.0, 0.0, 0.0}; // Fluid momentum
