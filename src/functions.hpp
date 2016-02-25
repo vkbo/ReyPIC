@@ -10,8 +10,10 @@
 namespace m {
 
     void   linspace(double, double, int, double*);
-    void   min(double*, int, double*, int*);
-    void   max(double*, int, double*, int*);
+    double min(double*, int);
+    double max(double*, int);
+    double minind(double*, int, int*);
+    double maxind(double*, int, int*);
     double sum(double*, int);
     double avg(double*, int);
     void   scale(double*, int, double);

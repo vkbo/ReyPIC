@@ -32,22 +32,20 @@ void m::linspace(double valMin, double valMax, int nVal, double* aReturn) {
 /**
  *  Min Value
  * ===========
- *  Gives minimum value valMin and index indMin from array aData with length nData
+ *  Returns minimum value from array aData with length nData
  */
 
-void m::min(double* aData, int nData, double* valMin, int* indMin) {
+double m::min(double* aData, int nData) {
 
-    *valMin = aData[0];
-    *indMin = 0;
+    double valMin = aData[0];
 
     for(int i=1; i<nData; i++) {
-        if(aData[i] < *valMin) {
-            *valMin = aData[i];
-            *indMin = i;
+        if(aData[i] < valMin) {
+            valMin = aData[i];
         }
     }
 
-    return;
+    return valMin;
 }
 
 // ********************************************************************************************** //
@@ -55,22 +53,66 @@ void m::min(double* aData, int nData, double* valMin, int* indMin) {
 /**
  *  Max Value
  * ===========
- *  Gives maximum value valMax and index indMax from array aData with length nData
+ *  Return maximum value from array aData with length nData
  */
 
-void m::max(double* aData, int nData, double* valMax, int* indMax) {
+double m::max(double* aData, int nData) {
 
-    *valMax = aData[0];
-    *indMax = 0;
+    double valMax = aData[0];
 
     for(int i=1; i<nData; i++) {
-        if(aData[i] > *valMax) {
-            *valMax = aData[i];
+        if(aData[i] > valMax) {
+            valMax = aData[i];
+        }
+    }
+
+    return valMax;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Min Value with Index
+ * ======================
+ *  Returns minimum value and index indMin from array aData with length nData
+ */
+
+double m::minind(double* aData, int nData, int* indMin) {
+
+    double valMin = aData[0];
+          *indMin = 0;
+
+    for(int i=1; i<nData; i++) {
+        if(aData[i] < valMin) {
+             valMin = aData[i];
+            *indMin = i;
+        }
+    }
+
+    return valMin;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Max Value with Index
+ * ======================
+ *  Returns maximum value and index indMax from array aData with length nData
+ */
+
+double m::maxind(double* aData, int nData, int* indMax) {
+
+    double valMax = aData[0];
+          *indMax = 0;
+
+    for(int i=1; i<nData; i++) {
+        if(aData[i] > valMax) {
+             valMax = aData[i];
             *indMax = i;
         }
     }
 
-    return;
+    return valMax;
 }
 
 // ********************************************************************************************** //

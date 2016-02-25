@@ -16,11 +16,12 @@
 #include <mpi.h>
 
 // TypeDefs
-typedef std::vector<std::string> vstring_t;
-typedef std::vector<double>      vdouble_t;
-typedef std::vector<long int>    vint_t;
-typedef std::string              string_t;
-typedef unsigned long int        index_t;
+typedef std::vector<std::vector<double> > vvdouble_t;
+typedef std::vector<std::string>          vstring_t;
+typedef std::vector<double>               vdouble_t;
+typedef std::vector<long int>             vint_t;
+typedef std::string                       string_t;
+typedef unsigned long int                 index_t;
 
 // Run Modes
 #define RUN_MODE_FULL     1

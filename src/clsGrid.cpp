@@ -34,23 +34,30 @@ Grid::Grid() {
 int Grid::Setup(Input* simInput) {
 
     error_t   errVal;
-    vstring_t vsGridVars = {"x1","x2","x3"};
+    vstring_t vsGridVars = {"n"};
 
     errVal += simInput->ReadVariable(INPUT_GRID, 0, "ngrid",    &m_NGrid,    INVAR_VINT);
     errVal += simInput->ReadVariable(INPUT_GRID, 0, "xmin",     &m_XMin,     INVAR_VDOUBLE);
     errVal += simInput->ReadVariable(INPUT_GRID, 0, "xmax",     &m_XMax,     INVAR_VDOUBLE);
 
     errVal += simInput->ReadVariable(INPUT_GRID, 0, "gridres",  &m_GridRes,  INVAR_VSTRING);
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "gridmin",  &m_DeltaMin, INVAR_VDOUBLE);
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "gridmax",  &m_DeltaMax, INVAR_VDOUBLE);
+    errVal += simInput->ReadVariable(INPUT_GRID, 0, "gridmin",  &m_GridMin,  INVAR_VDOUBLE);
     errVal += simInput->ReadVariable(INPUT_GRID, 0, "gridfunc", &m_GridFunc, INVAR_VSTRING);
 
     // Set up grid resolution vectors
     int nErr = 0;
     for(int iDim=0; iDim<3; iDim++) {
 
-        if(m_GridRes[iDim] == "fixed") {
+        vdouble_t vEval;
 
+        double    delMin  = m_GridMin[iDim];
+        double    xMin    = m_XMin[iDim];
+        double    xMax    = m_XMax[iDim];
+        int       nGrid   = m_NGrid[iDim];
+        double    xSpan   = xMax - xMin;
+
+        if(m_GridRes[iDim] == "fixed") {
+            vEval.assign(nGrid, xSpan/nGrid);
         } else
         if(m_GridRes[iDim] == "func") {
 
@@ -59,59 +66,39 @@ int Grid::Setup(Input* simInput) {
             if(!mFunc.setVariables(vsGridVars)) nErr++;
             if(!mFunc.setEquation(m_GridFunc[iDim])) nErr++;
 
-            double delMin = m_DeltaMin[iDim];
-            double delMax = m_DeltaMax[iDim];
-            double xMin   = m_XMin[iDim];
-            double xMax   = m_XMax[iDim];
-            double xSpan  = xMax - xMin;
-            int    nGrid  = m_NGrid[iDim];
-            int    nMin   = ceil(xSpan/delMin);
-            int    nMax   = floor(xSpan/delMax);
-            double adjMin = xSpan/nMin;
-            double adjMax = xSpan/nMax;
-
-            cout << "  delMin = " << delMin << endl;
-            cout << "  delMax = " << delMax << endl;
-            cout << "  xMin   = " << xMin << endl;
-            cout << "  xMax   = " << xMax << endl;
-            cout << "  xSpan  = " << xSpan << endl;
-            cout << "  nGrid  = " << nGrid << endl;
-            cout << "  nMin   = " << nMin << endl;
-            cout << "  nMax   = " << nMax << endl;
-            cout << "  adjMin = " << adjMin << endl;
-            cout << "  adjMax = " << adjMax << endl;
-
-            if(nGrid < nMax || nGrid > nMin) {
-                printf("  Grid Error: Number of grid cells must correspond to maximum and\n");
-                printf("              minimum resolution for dimension %d.\n", iDim);
+            if(nErr > 0) {
                 return ERR_SETUP;
             }
 
+            // Evaluate function by normalisint it to the span of the grid (xMax - xMin)
+            // including an offset determined by delMin
 
+            vdouble_t vdEval = {0.0};
+            double    aEval[nGrid] = {0.0};
+            double    dScale, valMax, valSum;
 
-            vdouble_t vdEval = {0.0, 0.0, 0.0};
-            double    aEval[nMin+1] = {0.0};
-            double    dMin, dMax;
-            int       iMin, iMax;
-
-            // linspace(xMin, xMax, nMin+1, aEval);
-
-            // for(auto dVal : aEval) {
-            //     cout << "  Value: " << dVal << endl;
-            // }
-
-            for(int i=0; i<=nMin; i++) {
-                vdEval[iDim] = i*adjMin+xMin;
-                mFunc.Eval(vdEval,&aEval[i]);
-                cout << "  Eval: " << (i*adjMin+xMin) << " Value: " << aEval[i] << endl;
+            for(int i=0; i<nGrid; i++) {
+                vdEval[0] = i+0.5;
+                if(!mFunc.Eval(vdEval,&aEval[i])) {
+                    return ERR_SETUP;
+                }
             }
-            m::min(aEval, nMin+1, &dMin, &iMin);
-            cout << "  Min:  " << dMin << " at " << iMin << endl;
-            m::max(aEval, nMin+1, &dMax, &iMax);
-            cout << "  Max:  " << dMax << " at " << iMax << endl;
-            cout << "  Sum:  " << m::sum(aEval, nMin+1) << endl;
-            cout << "  Avg:  " << m::avg(aEval, nMin+1) << endl;
+
+            // Invert array so that highest value gives highest density, and offset to max value
+            valMax = m::max(aEval, nGrid);
+            m::scale(aEval, nGrid, -1);
+            m::offset(aEval, nGrid, valMax);
+
+            // Normalise to size of domain and offset by minimum grid size
+            valSum = m::sum(aEval, nGrid);
+            dScale = xSpan - nGrid*delMin;
+            m::scale(aEval, nGrid, dScale/valSum);
+            m::offset(aEval, nGrid, delMin);
+
+            vEval.assign(aEval, aEval+nGrid);
         }
+
+        m_DeltaX.push_back(vEval);
     }
 
     if(nErr > 0) {
