@@ -6,7 +6,12 @@
 #define CLASS_SPECIES
 
 #include "config.hpp"
+#include "functions.hpp"
+
+#include "clsInput.hpp"
 #include "clsMath.hpp"
+
+typedef reypic::Input Input_t;
 
 namespace reypic {
 
@@ -18,14 +23,14 @@ public:
     * Constructor/Destructor
     */
 
-    Species();
+    Species(int);
     ~Species() {};
 
    /**
     * Methods
     */
 
-    int Setup();
+    int Setup(Input_t*);
 
    /**
     * Properties
@@ -43,16 +48,18 @@ private:
     */
 
     // Parallelisation
-    int    m_MPISize    =  0;              // Number of nodes
-    int    m_MPIRank    = -1;              // Node number
-    bool   m_isMaster   = false;           // True if this node is master
+    int      m_MPISize    =  0;              // Number of nodes
+    int      m_MPIRank    = -1;              // Node number
+    bool     m_isMaster   = false;           // True if this node is master
 
-    char*  m_Name;
-    double m_Charge     = 0;               // Species charge
-    double m_Mass       = 1;               // Species mass
+    string_t m_Name;
+    int      m_Number     = -1;
 
-    double m_Thermal[3] = {0.0, 0.0, 0.0}; // Thermal distribution
-    double m_Fluid[3]   = {0.0, 0.0, 0.0}; // Fluid momentum
+    double   m_Charge     = 0;               // Species charge
+    double   m_Mass       = 1;               // Species mass
+
+    double   m_Thermal[3] = {0.0, 0.0, 0.0}; // Thermal distribution
+    double   m_Fluid[3]   = {0.0, 0.0, 0.0}; // Fluid momentum
 
 };
 

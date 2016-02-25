@@ -255,9 +255,9 @@ int Input::ReadVariable(int iSection, int iIndex, string_t sVar, void *pReturn, 
     if(nLen < 1) return ERR_ANY;
     sValue = sValue.substr(0,nLen-1);
 
-    if(m_isMaster) {
-        cout << "  Value: " << sValue << " (" << nLen << ")" << endl;
-    }
+    // if(m_isMaster) {
+    //     cout << "  Value: " << sValue << " (" << nLen << ")" << endl;
+    // }
 
     error_t errParse = ERR_NONE;
     switch(iType) {
@@ -348,16 +348,16 @@ int Input::ReadVariable(int iSection, int iIndex, string_t sVar, void *pReturn, 
  */
 
 vstring_t Input::strExplode(const string_t& sString) {
-    
+
     vstring_t vsReturn;
     regex     rxCSV(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
-    
+
     sregex_token_iterator rxIt(sString.begin(), sString.end(), rxCSV, -1);
     sregex_token_iterator reg_end;
     for(; rxIt != reg_end; ++rxIt) {
         vsReturn.push_back(stripQuotes(rxIt->str()));
     }
-    
+
     return vsReturn;
 }
 
@@ -370,7 +370,7 @@ vstring_t Input::strExplode(const string_t& sString) {
  */
 
 string_t Input::stripQuotes(const string_t& sString) {
-    
+
     regex    rxQuote("\"");
     string_t sReturn = regex_replace(sString,rxQuote,"");
 

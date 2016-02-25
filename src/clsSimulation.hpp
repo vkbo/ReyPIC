@@ -11,6 +11,10 @@
 #include "clsGrid.hpp"
 #include "clsSpecies.hpp"
 
+typedef reypic::Input                Input_t;
+typedef reypic::Grid                 Grid_t;
+typedef std::vector<reypic::Species> Species_t;
+
 namespace reypic {
 
 class Simulation {
@@ -48,9 +52,9 @@ public:
     * Properties
     */
 
-    Input   simInput;
-    Grid    simGrid;
-    Species simSpecies[];
+    Input_t   simInput;
+    Grid_t    simGrid;
+    Species_t simSpecies;
 
 private:
 

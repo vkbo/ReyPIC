@@ -11,6 +11,8 @@
 #include "clsInput.hpp"
 #include "clsMath.hpp"
 
+typedef reypic::Input Input_t;
+
 namespace reypic {
 
 class Grid {
@@ -28,7 +30,7 @@ public:
     * Methods
     */
 
-    int Setup(Input*);
+    int Setup(Input_t*);
 
    /**
     * Properties

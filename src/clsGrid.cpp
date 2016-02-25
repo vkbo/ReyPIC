@@ -24,6 +24,8 @@ Grid::Grid() {
 }
 
 // ********************************************************************************************** //
+//                                       Main Class Methods                                       //
+// ********************************************************************************************** //
 
 /**
  *  Setup
@@ -31,18 +33,30 @@ Grid::Grid() {
  *  Sets up the grid
  */
 
-int Grid::Setup(Input* simInput) {
+int Grid::Setup(Input_t* simInput) {
 
-    error_t errVal;
+    error_t errVal = ERR_NONE;
 
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "ngrid",    &m_NGrid,    INVAR_VINT);
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "xmin",     &m_XMin,     INVAR_VDOUBLE);
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "xmax",     &m_XMax,     INVAR_VDOUBLE);
+    errVal = simInput->ReadVariable(INPUT_GRID, 0, "ngrid", &m_NGrid, INVAR_VINT);
+    if(errVal != ERR_NONE) return errVal;
 
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "gridres",  &m_GridRes,  INVAR_VSTRING);
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "gridmin",  &m_GridMin,  INVAR_VDOUBLE);
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "linpoint", &m_LinPoint, INVAR_VDOUBLE);
-    errVal += simInput->ReadVariable(INPUT_GRID, 0, "gridfunc", &m_GridFunc, INVAR_VSTRING);
+    errVal = simInput->ReadVariable(INPUT_GRID, 0, "xmin", &m_XMin, INVAR_VDOUBLE);
+    if(errVal != ERR_NONE) return errVal;
+
+    errVal = simInput->ReadVariable(INPUT_GRID, 0, "xmax", &m_XMax, INVAR_VDOUBLE);
+    if(errVal != ERR_NONE) return errVal;
+
+    errVal = simInput->ReadVariable(INPUT_GRID, 0, "gridres", &m_GridRes, INVAR_VSTRING);
+    if(errVal != ERR_NONE) return errVal;
+
+    errVal = simInput->ReadVariable(INPUT_GRID, 0, "gridmin", &m_GridMin, INVAR_VDOUBLE);
+    if(errVal != ERR_NONE) return errVal;
+
+    errVal = simInput->ReadVariable(INPUT_GRID, 0, "linpoint", &m_LinPoint, INVAR_VDOUBLE);
+    if(errVal != ERR_NONE) return errVal;
+
+    errVal = simInput->ReadVariable(INPUT_GRID, 0, "gridfunc", &m_GridFunc, INVAR_VSTRING);
+    if(errVal != ERR_NONE) return errVal;
 
     // Set up grid resolution vectors
     if(!setupGridDelta()) return ERR_SETUP;
@@ -77,11 +91,15 @@ bool Grid::setupGridDelta() {
 
         // Check validity
         if(nGrid < 1) {
-            printf("  Grid Error: Invalid ngrid entry %d (ngrid >= 1)\n", nGrid);
+            if(m_isMaster) {
+                printf("  Grid Error: Invalid ngrid entry %d (ngrid >= 1)\n", nGrid);
+            }
             return false;
         }
         if(xSpan <= 0.0) {
-            printf("  Grid Error: Invalid xmin/xmax entry %.4f – %.4f (xmax-xmin > 0)\n", xMin, xMax);
+            if(m_isMaster) {
+                printf("  Grid Error: Invalid xmin/xmax entry %.4f – %.4f (xmax-xmin > 0)\n", xMin, xMax);
+            }
             return false;
         }
 
@@ -90,18 +108,25 @@ bool Grid::setupGridDelta() {
             // All cells are the same size
             vEval.assign(nGrid, delAvg);
 
-            printf("  Grid resolution in x%d: %.4f\n", iDim+1, delAvg);
+            if(m_isMaster) {
+                printf("  Grid resolution in x%d: %.4f\n", iDim+1, delAvg);
+            }
+
         } else
         if(m_GridRes[iDim] == "linear") {
 
             // Cell size decreases towards the specified grid index from enpoint(s)
 
             if(delMin <= 0.0) {
-                printf("  Grid Error: Invalid gridmin entry %.4f (gridmin > 0)\n", delMin);
+                if(m_isMaster) {
+                    printf("  Grid Error: Invalid gridmin entry %.4f (gridmin > 0)\n", delMin);
+                }
                 return false;
             }
             if(linPoint < 0.0 || linPoint > 1.0*nGrid) {
-                printf("  Grid Error: Invalid linpoint entry %.2f (0 <= linpoint <= ngrid)\n", linPoint);
+                if(m_isMaster) {
+                    printf("  Grid Error: Invalid linpoint entry %.1f (0 <= linpoint <= ngrid)\n", linPoint);
+                }
                 return false;
             }
 
@@ -123,13 +148,17 @@ bool Grid::setupGridDelta() {
             valMin = m::min(aEval, nGrid);
             valMax = m::max(aEval, nGrid);
 
-            printf("  Grid resolution in x%d: %.4f – %.4f\n", iDim+1, valMin, valMax);
+            if(m_isMaster) {
+                printf("  Grid resolution in x%d: %.4f – %.4f\n", iDim+1, valMin, valMax);
+            }
 
         } else
         if(m_GridRes[iDim] == "func") {
 
             if(delMin <= 0.0) {
-                printf("  Grid Error: Invalid gridmin entry %.4f (gridmin > 0)\n", delMin);
+                if(m_isMaster) {
+                    printf("  Grid Error: Invalid gridmin entry %.4f (gridmin > 0)\n", delMin);
+                }
                 return false;
             }
 
@@ -166,7 +195,9 @@ bool Grid::setupGridDelta() {
             valMin = m::min(aEval, nGrid);
             valMax = m::max(aEval, nGrid);
 
-            printf("  Grid resolution in x%d: %.4f – %.4f\n", iDim+1, valMin, valMax);
+            if(m_isMaster) {
+                printf("  Grid resolution in x%d: %.4f – %.4f\n", iDim+1, valMin, valMax);
+            }
         }
 
         gridDelta.push_back(vEval);

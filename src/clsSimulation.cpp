@@ -133,28 +133,77 @@ int Simulation::ReadInput() {
 
 int Simulation::Setup() {
 
-    int nErr = 0;
+    error_t errVal = ERR_NONE;
 
-    // Configuration
-    nErr += simInput.ReadVariable(INPUT_CONF, 0, "nodes",   &m_Nodes,    INVAR_INT);
-    nErr += simInput.ReadVariable(INPUT_CONF, 0, "threads", &m_Threads,  INVAR_INT);
+    if(m_isMaster) {
+        printf("  Configuration\n");
+        printf(" ===============\n");
+    }
 
-    // Physics
-    nErr += simInput.ReadVariable(INPUT_SIM, 0, "n0",      &m_N0,       INVAR_DOUBLE);
+    errVal = simInput.ReadVariable(INPUT_CONF, 0, "nodes", &m_Nodes, INVAR_INT);
+    if(errVal != ERR_NONE) return errVal;
 
-    // Time
-    nErr += simInput.ReadVariable(INPUT_SIM, 0, "dt",      &m_TimeStep, INVAR_DOUBLE);
-    nErr += simInput.ReadVariable(INPUT_SIM, 0, "tmin",    &m_TMin,     INVAR_DOUBLE);
-    nErr += simInput.ReadVariable(INPUT_SIM, 0, "tmax",    &m_TMax,     INVAR_DOUBLE);
+    errVal = simInput.ReadVariable(INPUT_CONF, 0, "threads", &m_Threads, INVAR_INT);
+    if(errVal != ERR_NONE) return errVal;
 
     // Force m_Nodes to be equal to m_MPISize.
     // This makes m_Nodes redundant as an input variable, but the intention is to have m_Nodes be
     // able to split the domain in other dimensions than x1.
     m_Nodes = m_MPISize;
 
-    // Grid Setup
+    if(m_Nodes < 1)   m_Nodes = 1;
+    if(m_Threads < 1) m_Threads = 1;
+
+    if(m_isMaster) {
+        printf("  Nodes: %d\n", m_Nodes);
+        printf("  Threads/node: %d\n", m_Threads);
+        printf("\n");
+        printf("  Simulation Setup\n");
+        printf(" ==================\n");
+    }
+
+    errVal = simInput.ReadVariable(INPUT_SIM, 0, "n0", &m_N0, INVAR_DOUBLE);
+    if(errVal != ERR_NONE) return errVal;
+
+    errVal = simInput.ReadVariable(INPUT_SIM, 0, "dt", &m_TimeStep, INVAR_DOUBLE);
+    if(errVal != ERR_NONE) return errVal;
+
+    errVal = simInput.ReadVariable(INPUT_SIM, 0, "tmin", &m_TMin, INVAR_DOUBLE);
+    if(errVal != ERR_NONE) return errVal;
+
+    errVal = simInput.ReadVariable(INPUT_SIM, 0, "tmax", &m_TMax, INVAR_DOUBLE);
+    if(errVal != ERR_NONE) return errVal;
+
+    // if(m_isMaster) {
+    //     printf("\n");
+    //     printf("  EMF Setup\n");
+    //     printf(" ===========\n");
+    // }
+
+    if(m_isMaster) {
+        printf("\n");
+        printf("  Grid Setup\n");
+        printf(" ============\n");
+    }
+
     error_t errGrid = simGrid.Setup(&simInput);
     if(errGrid != ERR_NONE) return errGrid;
+
+    if(m_isMaster) {
+        printf("\n");
+        printf("  Species Setup\n");
+        printf(" ===============\n");
+    }
+
+    for(int indSpecies=0; indSpecies<m_NumSpecies; indSpecies++) {
+        simSpecies.push_back(indSpecies);
+        error_t errSpecies = simSpecies[indSpecies].Setup(&simInput);
+        if(errSpecies != ERR_NONE) return errSpecies;
+    }
+
+    if(m_isMaster) {
+        printf("\n");
+    }
 
     return ERR_NONE;
 }
