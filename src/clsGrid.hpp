@@ -34,15 +34,22 @@ public:
     * Properties
     */
 
+    vvdouble_t gridDelta;
+
 private:
 
-   /**
-    * Member Variables
-    */
+    /**
+     * Member Functions
+     */
+
+    bool setupGridDelta();
+
+    /**
+     * Member Variables
+     */
 
     // General
     double     m_Grid[];                     // The grid
-    vvdouble_t m_DeltaX;
 
     // Parallelisation
     int        m_MPISize  =  0;              // Number of nodes
@@ -55,6 +62,7 @@ private:
 
     vstring_t  m_GridRes  = {"","",""};      // [resolution] Grid resolution type
     vdouble_t  m_GridMin  = {1.0, 1.0, 1.0}; // [gridmin]    Smallest allowed cell size
+    vdouble_t  m_LinPoint = {0.0, 0.0, 0.0}; // [linpoint]   Defines the minimum point for linear
     vstring_t  m_GridFunc = {"","",""};      // [gridfunc]   Function for grid cell size
 
 }; // End Class Grid
