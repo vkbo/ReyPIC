@@ -162,7 +162,7 @@ bool Grid::setupGridDelta() {
                 return false;
             }
 
-            Math mFunc;
+            Math_t mFunc;
 
             if(!mFunc.setVariables(vsGridVars))      return false;
             if(!mFunc.setEquation(m_GridFunc[iDim])) return false;

@@ -12,6 +12,7 @@
 #include "clsMath.hpp"
 
 typedef reypic::Input Input_t;
+typedef reypic::Math  Math_t;
 
 namespace reypic {
 
@@ -25,6 +26,13 @@ public:
 
     Grid();
     ~Grid() {};
+
+   /**
+    * Setters/Getters/Checks
+    */
+
+    vdouble_t getBoxMin() {return m_XMin;};
+    vdouble_t getBoxMax() {return m_XMax;};
 
    /**
     * Methods

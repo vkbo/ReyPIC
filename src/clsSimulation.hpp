@@ -29,7 +29,7 @@ public:
     ~Simulation() {};
 
    /**
-    * Setters/Getters
+    * Setters/Getters/Checks
     */
 
     bool setInputFile(char*);

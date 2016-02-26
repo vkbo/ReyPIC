@@ -36,7 +36,7 @@ Species::Species(int indNumber) {
  *  Sets up the species
  */
 
-int Species::Setup(Input_t* simInput) {
+int Species::Setup(Input_t* simInput, Grid_t* simGrid) {
 
     error_t errVal;
 
@@ -46,6 +46,16 @@ int Species::Setup(Input_t* simInput) {
     if(m_Name == "") {
         if(m_isMaster) {
             printf("  Species Error: Invalid species name for species %d\n", m_Number);
+        }
+        return ERR_SETUP;
+    }
+
+    // Species Profile Type
+    errVal = simInput->ReadVariable(INPUT_SPECIES, m_Number, "profile", &m_ProfileType, INVAR_STRING);
+    if(errVal != ERR_NONE) return errVal;
+    if(!validProfile(m_ProfileType)) {
+        if(m_isMaster) {
+            printf("  Species Error: Invalid species profile type '%s'\n", m_ProfileType.c_str());
         }
         return ERR_SETUP;
     }
@@ -84,8 +94,66 @@ int Species::Setup(Input_t* simInput) {
         printf("  Species by name '%s' created\n", m_Name.c_str());
     }
 
+    // Extract grid info
+    m_GridXMin = simGrid->getBoxMin();
+    m_GridXMax = simGrid->getBoxMax();
+
+    // Create particles
+    if(!setupSpeciesProfile()) {
+        if(m_isMaster) {
+            printf("  Species Error: Failed to evaulate species profile\n");
+        }
+        return ERR_SETUP;
+    }
 
     return ERR_NONE;
+}
+
+// ********************************************************************************************** //
+//                                        Member Functions                                        //
+// ********************************************************************************************** //
+
+/**
+ *  Setup of Species Profile
+ * ==========================
+ */
+
+bool Species::setupSpeciesProfile() {
+
+    vstring_t vsGridVars = {"x1","x2","x3","b1min","b2min","b3min","b1max","b2max","b3max"};
+    // vdouble_t vdGridVals = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    //
+    // for(int i=0; i<3; i++) {
+    //     vdGridVals[3+i] = m_GridXMin[i];
+    //     vdGridVals[6+i] = m_GridXMax[i];
+    // }
+
+    if(m_ProfileType == "uniform") {
+
+    } else
+    if(m_ProfileType == "func") {
+
+    }
+
+    return true;
+}
+
+// ********************************************************************************************** //
+
+/**
+ *  Check if profile is valid
+ * ===========================
+ */
+
+bool Species::validProfile(string_t sProfile) {
+
+    for(string_t sItem : m_okProfiles) {
+        if(sItem == sProfile) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 // ********************************************************************************************** //

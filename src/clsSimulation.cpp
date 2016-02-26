@@ -197,7 +197,7 @@ int Simulation::Setup() {
 
     for(int indSpecies=0; indSpecies<m_NumSpecies; indSpecies++) {
         simSpecies.push_back(indSpecies);
-        error_t errSpecies = simSpecies[indSpecies].Setup(&simInput);
+        error_t errSpecies = simSpecies[indSpecies].Setup(&simInput, &simGrid);
         if(errSpecies != ERR_NONE) return errSpecies;
     }
 
