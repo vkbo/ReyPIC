@@ -252,7 +252,7 @@ int Input::ReadVariable(int iSection, int iIndex, string_t sVar, void *pReturn, 
 
     // Check value
     size_t nLen = sValue.length();
-    if(nLen < 1) return ERR_ANY;
+    if(nLen < 1) return ERR_NONE;
     sValue = sValue.substr(0,nLen-1);
 
     // if(m_isMaster) {

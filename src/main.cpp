@@ -104,9 +104,22 @@ int abortExec(int errVal) {
     MPI_Comm_rank(MPI_COMM_WORLD, &iRank);
 
     if(iRank == 0) {
+
         printf("\n");
-        printf("  OMG WTF HAPPENED!\n");
-        printf("  Code %d\n", errVal);
+        printf("  ReyPIC exectuion aborted with error code %d:\n", errVal);
+
+        switch(errVal) {
+            case ERR_ANY:       printf("    General error\n"); break;
+            case ERR_USAGE:     printf("    Usage error\n"); break;
+            case ERR_MPI_INIT:  printf("    MPI initialization error\n"); break;
+            case ERR_INPUTFILE: printf("    Input file error\n"); break;
+            case ERR_INPUTVAR:  printf("    Input variable error\n"); break;
+            case ERR_SETUP:     printf("    Setup error\n"); break;
+            case ERR_INIT:      printf("    Initialization error\n"); break;
+            case ERR_EXEC:      printf("    Execution error\n"); break;
+            case ERR_DIAG:      printf("    Diagnostics error\n"); break;
+        }
+
         printf("\n");
     }
 

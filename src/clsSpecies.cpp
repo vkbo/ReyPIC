@@ -120,7 +120,7 @@ int Species::Setup(Input_t* simInput, Grid_t* simGrid) {
 
 bool Species::setupSpeciesProfile() {
 
-    vstring_t vsGridVars = {"x1","x2","x3","b1min","b2min","b3min","b1max","b2max","b3max"};
+    vstring_t vsGridVars = {"x1","x2","x3","l1","l2","l3","u1","u2","u3"};
     // vdouble_t vdGridVals = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     //
     // for(int i=0; i<3; i++) {
