@@ -1,5 +1,7 @@
 /**
- * ReyPIC – Main Config
+ *  ReyPIC – Main Config
+ * ======================
+ *  Version 0.0.1 – Pre-release with working input file reader
  */
 
 #ifndef RP_CONFIG
