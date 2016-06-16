@@ -33,9 +33,9 @@ Input::Input() {
  *  Returns number of species defined in input file
  */
 
-int Input::getNumSpecies() {
+int32_t Input::getNumSpecies() {
 
-    return (int)m_Species.size();
+    return (int32_t)m_Species.size();
 }
 
 // ********************************************************************************************** //
@@ -48,7 +48,7 @@ int Input::getNumSpecies() {
  *  Reads the input file into buffer and strips comments and line endings.
  */
 
-int Input::ReadFile(char* cFile) {
+error_t Input::ReadFile(char* cFile) {
 
     // Read File into buffer
     ifstream tmpFile(cFile);
@@ -102,18 +102,18 @@ int Input::ReadFile(char* cFile) {
  *  Splits the input file buffer into root sections
  */
 
-int Input::SplitSections() {
+error_t Input::SplitSections() {
 
-    int      iLev = 0;
+    index_t  iLev = 0;
     size_t   nLen;
     string_t sTemp;
 
-    int    iSection   = INPUT_NONE;
-    bool   hasConf    = false;
-    bool   hasSim     = false;
-    bool   hasGrid    = false;
-    bool   hasEMF     = false;
-    bool   hasSpecies = false;
+    value_t iSection   = INPUT_NONE;
+    bool    hasConf    = false;
+    bool    hasSim     = false;
+    bool    hasGrid    = false;
+    bool    hasEMF     = false;
+    bool    hasSpecies = false;
 
     for(char& cChar : m_Buffer) {
 
@@ -197,7 +197,7 @@ int Input::SplitSections() {
  *  Reads the input file into buffer and strips comments and line endings.
  */
 
-int Input::ReadVariable(int iSection, int iIndex, string_t sVar, void *pReturn, int iType) {
+error_t Input::ReadVariable(value_t iSection, index_t iIndex, string_t sVar, void *pReturn, value_t iType) {
 
     string_t sBuffer, sSection, sTemp, sValue;
     bool     getVal = false;

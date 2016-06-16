@@ -77,10 +77,10 @@ bool Math::setEquation(string_t sEquation) {
  *  https://en.wikipedia.org/wiki/Reverse_Polish_notation
  */
 
-bool Math::Eval(vdouble_t vdValues, double* pReturn) {
+bool Math::Eval(vdouble_t vdValues, double_t* pReturn) {
 
     vdouble_t vdStack;
-    double    dValue;
+    double_t  dValue;
 
     if(!m_Parsed) {
         printf("  Math Eval Error: No valid equation to evaluate\n");
@@ -175,8 +175,8 @@ bool Math::Eval(vdouble_t vdValues, double* pReturn) {
 
 bool Math::eqLexer() {
 
-    int           idCurr;
-    int           idPrev  = MT_NONE;
+    value_t       idCurr;
+    value_t       idPrev  = MT_NONE;
     char          cPrev   = '#';
     string_t      sBuffer = "";
     vector<token> vTokens;
@@ -229,8 +229,8 @@ bool Math::eqLexer() {
     idPrev = MP_NONE;
     for(auto tItem : vTokens) {
 
-        int    idType = MP_NONE;
-        double dValue = 0.0;
+        value_t  idType = MP_NONE;
+        double_t dValue = 0.0;
 
         switch(tItem.type) {
             case MT_OPERATOR:
@@ -478,7 +478,7 @@ bool Math::eqParser() {
  *  Checks if string is a valid operator, and returns its type
  */
 
-int Math::validOperator(string_t* pVar) {
+value_t Math::validOperator(string_t* pVar) {
 
     for(string_t sItem : m_OMath) {
         if(sItem == *pVar) {
@@ -503,7 +503,7 @@ int Math::validOperator(string_t* pVar) {
  *  Checks if string is a valid word, and returns its type
  */
 
-int Math::validWord(string_t* pVar) {
+value_t Math::validWord(string_t* pVar) {
 
     for(string_t sItem : m_WVariable) {
         if(sItem == *pVar) {
@@ -534,7 +534,7 @@ int Math::validWord(string_t* pVar) {
  *  Checks if string is a valid number, and returns its type
  */
 
-int Math::validNumber(string_t* pVar, double* pValue) {
+value_t Math::validNumber(string_t* pVar, double* pValue) {
 
     try {
         *pValue = stof(*pVar);
@@ -553,7 +553,7 @@ int Math::validNumber(string_t* pVar, double* pValue) {
  *  Checks if string is a valid separataor, and returns its type
  */
 
-int Math::validSeparator(string_t* pVar) {
+value_t Math::validSeparator(string_t* pVar) {
 
     if(*pVar == "(") {
         return MP_LBRACK;
@@ -578,7 +578,7 @@ int Math::validSeparator(string_t* pVar) {
  *  Returns precedence and associativity of operator
  */
 
-void Math::precedenceLogical(string_t sOperator, int* pPrecedence, int* pAssoc) {
+void Math::precedenceLogical(string_t sOperator, int32_t* pPrecedence, int32_t* pAssoc) {
 
     if(sOperator == "&&") {
         *pPrecedence = 3;
@@ -628,7 +628,7 @@ void Math::precedenceLogical(string_t sOperator, int* pPrecedence, int* pAssoc) 
  *  Returns precedence and associativity of operator
  */
 
-void Math::precedenceMath(string_t sOperator, int* pPrecedence, int* pAssoc) {
+void Math::precedenceMath(string_t sOperator, int32_t* pPrecedence, int32_t* pAssoc) {
 
     if(sOperator == "^") {
         *pPrecedence = 5;
@@ -666,9 +666,9 @@ void Math::precedenceMath(string_t sOperator, int* pPrecedence, int* pAssoc) {
  *  Evaluate input variable set by setVariables()
  */
 
-bool Math::evalVariable(string_t sVariable, vdouble_t* pValues, double* pReturn) {
+bool Math::evalVariable(string_t sVariable, vdouble_t* pValues, double_t* pReturn) {
 
-    int iPos = 0;
+    size_t iPos = 0;
 
     for(auto sItem : m_WVariable) {
         if(sItem == sVariable) {
@@ -689,7 +689,7 @@ bool Math::evalVariable(string_t sVariable, vdouble_t* pValues, double* pReturn)
  *  Evaluate constant
  */
 
-bool Math::evalConstant(string_t sVariable, double* pReturn) {
+bool Math::evalConstant(string_t sVariable, double_t* pReturn) {
 
     if(sVariable == "pi") {
         *pReturn = M_PI;
@@ -707,7 +707,7 @@ bool Math::evalConstant(string_t sVariable, double* pReturn) {
  *  Evaluate math function
  */
 
-bool Math::evalFunction(string_t sVariable, vdouble_t* pStack, double* pReturn) {
+bool Math::evalFunction(string_t sVariable, vdouble_t* pStack, double_t* pReturn) {
 
     if(pStack->size() < 1) return false;
 
@@ -742,8 +742,8 @@ bool Math::evalFunction(string_t sVariable, vdouble_t* pStack, double* pReturn) 
 
         if(pStack->size() < 2) return false;
 
-        double dValL = pStack->back(); pStack->pop_back();
-        double dValR = pStack->back(); pStack->pop_back();
+        double_t dValL = pStack->back(); pStack->pop_back();
+        double_t dValR = pStack->back(); pStack->pop_back();
 
         if(dValL == floor(dValL) && dValR == floor(dValR)) {
             *pReturn = (int)floor(dValL)%(int)floor(dValR);
@@ -756,9 +756,9 @@ bool Math::evalFunction(string_t sVariable, vdouble_t* pStack, double* pReturn) 
 
         if(pStack->size() < 3) return false;
 
-        double dFalse = pStack->back(); pStack->pop_back();
-        double dTrue  = pStack->back(); pStack->pop_back();
-        double dBool  = pStack->back(); pStack->pop_back();
+        double_t dFalse = pStack->back(); pStack->pop_back();
+        double_t dTrue  = pStack->back(); pStack->pop_back();
+        double_t dBool  = pStack->back(); pStack->pop_back();
 
         if(dBool == EVAL_TRUE) {
             *pReturn = dTrue;
@@ -780,15 +780,15 @@ bool Math::evalFunction(string_t sVariable, vdouble_t* pStack, double* pReturn) 
  *  Evaluate logic operator
  */
 
-bool Math::evalLogical(string_t sVariable, vdouble_t* pStack, double* pReturn) {
+bool Math::evalLogical(string_t sVariable, vdouble_t* pStack, double_t* pReturn) {
 
     if(pStack->size() < 2) {
         return false;
     }
 
-    bool   isValid = false;
-    double dValR   = pStack->back(); pStack->pop_back();
-    double dValL   = pStack->back(); pStack->pop_back();
+    bool     isValid = false;
+    double_t dValR   = pStack->back(); pStack->pop_back();
+    double_t dValL   = pStack->back(); pStack->pop_back();
 
     if(sVariable == "&&") {
         if(dValL && dValR) {
@@ -866,50 +866,50 @@ bool Math::evalLogical(string_t sVariable, vdouble_t* pStack, double* pReturn) {
  *  Evaluate math operator
  */
 
-bool Math::evalMath(string_t sVariable, vdouble_t* pStack, double* pReturn) {
+bool Math::evalMath(string_t sVariable, vdouble_t* pStack, double_t* pReturn) {
 
     bool isValid = false;
 
     if(sVariable == "_") {
         if(pStack->size() < 1) return false;
-        double dVal  = pStack->back(); pStack->pop_back();
-        *pReturn     = -dVal;
-        isValid      = true;
+        double_t dVal  = pStack->back(); pStack->pop_back();
+        *pReturn       = -dVal;
+        isValid        = true;
     } else
     if(sVariable == "+") {
         if(pStack->size() < 2) return false;
-        double dValR = pStack->back(); pStack->pop_back();
-        double dValL = pStack->back(); pStack->pop_back();
-        *pReturn     = dValL + dValR;
-        isValid      = true;
+        double_t dValR = pStack->back(); pStack->pop_back();
+        double_t dValL = pStack->back(); pStack->pop_back();
+        *pReturn       = dValL + dValR;
+        isValid        = true;
     } else
     if(sVariable == "-") {
         if(pStack->size() < 2) return false;
-        double dValR = pStack->back(); pStack->pop_back();
-        double dValL = pStack->back(); pStack->pop_back();
-        *pReturn     = dValL - dValR;
-        isValid      = true;
+        double_t dValR = pStack->back(); pStack->pop_back();
+        double_t dValL = pStack->back(); pStack->pop_back();
+        *pReturn       = dValL - dValR;
+        isValid        = true;
     } else
     if(sVariable == "*") {
         if(pStack->size() < 2) return false;
-        double dValR = pStack->back(); pStack->pop_back();
-        double dValL = pStack->back(); pStack->pop_back();
-        *pReturn     = dValL * dValR;
-        isValid      = true;
+        double_t dValR = pStack->back(); pStack->pop_back();
+        double_t dValL = pStack->back(); pStack->pop_back();
+        *pReturn       = dValL * dValR;
+        isValid        = true;
     } else
     if(sVariable == "/") {
         if(pStack->size() < 2) return false;
-        double dValR = pStack->back(); pStack->pop_back();
-        double dValL = pStack->back(); pStack->pop_back();
-        *pReturn     = dValL / dValR;
-        isValid      = true;
+        double_t dValR = pStack->back(); pStack->pop_back();
+        double_t dValL = pStack->back(); pStack->pop_back();
+        *pReturn       = dValL / dValR;
+        isValid        = true;
     } else
     if(sVariable == "^") {
         if(pStack->size() < 2) return false;
-        double dValR = pStack->back(); pStack->pop_back();
-        double dValL = pStack->back(); pStack->pop_back();
-        *pReturn     = pow(dValL,dValR);
-        isValid      = true;
+        double_t dValR = pStack->back(); pStack->pop_back();
+        double_t dValL = pStack->back(); pStack->pop_back();
+        *pReturn       = pow(dValL,dValR);
+        isValid        = true;
     }
 
     return isValid;

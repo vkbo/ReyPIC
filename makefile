@@ -12,7 +12,7 @@ BUILD   = build
 OUTPUT  = bin
 
 EXEC    = reypic.e
-VERSION = $(shell git describe | tr -d v)
+VERSION = $(shell git describe | tr -d gv)
 
 HEADERS = config.hpp functions.hpp
 GLOBAL  = $(addprefix $(SRC)/,$(HEADERS))

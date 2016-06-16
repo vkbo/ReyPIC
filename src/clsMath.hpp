@@ -59,7 +59,7 @@ public:
     * Methods
     */
 
-    bool Eval(vdouble_t, double*);
+    bool Eval(vdouble_t, double_t*);
 
    /**
     * Properties
@@ -72,31 +72,31 @@ private:
     */
 
     struct token {
-        int      type;
+        value_t  type;
         string_t content;
-        double   value;
+        double_t value;
     };
 
    /**
     * Member Functions
     */
 
-    bool eqLexer();
-    bool eqParser();
+    bool    eqLexer();
+    bool    eqParser();
 
-    int  validOperator(string_t*);
-    int  validWord(string_t*);
-    int  validNumber(string_t*, double*);
-    int  validSeparator(string_t*);
+    value_t validOperator(string_t*);
+    value_t validWord(string_t*);
+    value_t validNumber(string_t*, double_t*);
+    value_t validSeparator(string_t*);
 
-    void precedenceLogical(string_t, int*, int*);
-    void precedenceMath(string_t, int*, int*);
+    void    precedenceLogical(string_t, int32_t*, int32_t*);
+    void    precedenceMath(string_t, int32_t*, int32_t*);
 
-    bool evalVariable(string_t, vdouble_t*, double*);
-    bool evalConstant(string_t, double*);
-    bool evalFunction(string_t, vdouble_t*, double*);
-    bool evalLogical(string_t, vdouble_t*, double*);
-    bool evalMath(string_t, vdouble_t*, double*);
+    bool    evalVariable(string_t, vdouble_t*, double_t*);
+    bool    evalConstant(string_t, double_t*);
+    bool    evalFunction(string_t, vdouble_t*, double_t*);
+    bool    evalLogical(string_t, vdouble_t*, double_t*);
+    bool    evalMath(string_t, vdouble_t*, double_t*);
 
    /**
     * Member Variables

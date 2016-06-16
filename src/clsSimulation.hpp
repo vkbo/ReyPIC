@@ -33,7 +33,7 @@ public:
     */
 
     bool setInputFile(char*);
-    bool setRunMode(int);
+    bool setRunMode(value_t);
 
     bool isMaster();
 
@@ -41,12 +41,12 @@ public:
     * Methods
     */
 
-    int  ReadInput();    // Read input file
-    int  Setup();        //
-    void ReadRestart();
-    void MainLoop();
-    int  AbortExec(int);
-    int  Finalize(int);
+    error_t ReadInput();    // Read input file
+    error_t Setup();
+    void    ReadRestart();
+    void    MainLoop();
+    error_t AbortExec(error_t);
+    error_t Finalize(error_t);
 
    /**
     * Properties
@@ -63,25 +63,25 @@ private:
     */
 
     // General
-    char*  m_InputFile;
-    int    m_RunMode    = RUN_MODE_FULL;
-    int    m_NumSpecies = 0;
+    char*    m_InputFile;
+    value_t  m_RunMode    = RUN_MODE_FULL;
+    int32_t  m_NumSpecies = 0;
 
     // Parallelisation
-    int    m_MPISize     =  0;              // Number of nodes
-    int    m_MPIRank     = -1;              // Node number
-    bool   m_isMaster    = false;           // True if this node is master
+    int32_t  m_MPISize     =  0;              // Number of nodes
+    int32_t  m_MPIRank     = -1;              // Node number
+    bool     m_isMaster    = false;           // True if this node is master
 
-    int    m_Nodes      =  1;
-    int    m_Threads    =  1;
+    int32_t  m_Nodes      =  1;
+    int32_t  m_Threads    =  1;
 
     // Physics
-    double m_N0         = 1.0;
+    double_t m_N0         = 1.0;
 
     // Time
-    double m_TimeStep   = 1.0;
-    double m_TMin       = 0.0;
-    double m_TMax       = 1.0;
+    double_t m_TimeStep   = 1.0;
+    double_t m_TMin       = 0.0;
+    double_t m_TMax       = 1.0;
 
 };
 

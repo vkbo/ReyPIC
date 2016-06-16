@@ -14,7 +14,7 @@ using namespace reypic;
  * ===================
  */
 
-Species::Species(int indNumber) {
+Species::Species(int32_t indNumber) {
 
     // Read MPI setup
     MPI_Comm_size(MPI_COMM_WORLD, &m_MPISize);

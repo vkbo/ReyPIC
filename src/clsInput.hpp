@@ -25,15 +25,15 @@ public:
     * Setters/Getters
     */
 
-    int  getNumSpecies();
+    int32_t getNumSpecies();
 
    /**
     * Methods
     */
 
-    int  ReadFile(char*);
-    int  SplitSections();
-    int  ReadVariable(int,int,std::string,void*,int);
+    error_t ReadFile(char*);
+    error_t SplitSections();
+    error_t ReadVariable(value_t, index_t, string_t, void*, value_t);
 
 private:
 
@@ -42,8 +42,8 @@ private:
     */
 
     // Parallelisation
-    int       m_MPISize     =  0;    // Number of nodes
-    int       m_MPIRank     = -1;    // Node number
+    int32_t   m_MPISize     =  0;    // Number of nodes
+    int32_t   m_MPIRank     = -1;    // Node number
     bool      m_isMaster    = false; // True if this node is master
 
     // Buffers
@@ -53,7 +53,7 @@ private:
     string_t  m_Grid;                // Grid section
     string_t  m_EMF;                 // EMF section
     vstring_t m_Species;             // Vector of species sections
-    
+
    /**
     * Member Functions
     */

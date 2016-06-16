@@ -38,7 +38,7 @@ public:
     * Methods
     */
 
-    int Setup(Input_t*);
+    error_t Setup(Input_t*);
 
    /**
     * Properties
@@ -59,11 +59,11 @@ private:
      */
 
     // General
-    double     m_Grid[];                     // The grid
+    double_t   m_Grid[];                     // The grid
 
     // Parallelisation
-    int        m_MPISize  =  0;              // Number of nodes
-    int        m_MPIRank  = -1;              // Node number
+    int32_t    m_MPISize  =  0;              // Number of nodes
+    int32_t    m_MPIRank  = -1;              // Node number
     bool       m_isMaster = false;           // True if this node is master
 
     vint_t     m_NGrid    = {1,   1,   1};   // [grid]       Number of grid cells

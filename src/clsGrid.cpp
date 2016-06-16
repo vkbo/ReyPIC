@@ -33,7 +33,7 @@ Grid::Grid() {
  *  Sets up the grid
  */
 
-int Grid::Setup(Input_t* simInput) {
+error_t Grid::Setup(Input_t* simInput) {
 
     error_t errVal = ERR_NONE;
 
@@ -77,22 +77,22 @@ bool Grid::setupGridDelta() {
 
     vstring_t vsGridVars = {"n","N"};
 
-    for(int iDim=0; iDim<3; iDim++) {
+    for(index_t iDim=0; iDim<3; iDim++) {
 
         vdouble_t vEval;
 
-        double    linPoint = m_LinPoint[iDim];
-        double    delMin   = m_GridMin[iDim];
-        double    xMin     = m_XMin[iDim];
-        double    xMax     = m_XMax[iDim];
-        int       nGrid    = m_NGrid[iDim];
-        double    xSpan    = xMax - xMin;
-        double    delAvg   = xSpan/nGrid;
+        double_t  linPoint = m_LinPoint[iDim];
+        double_t  delMin   = m_GridMin[iDim];
+        double_t  xMin     = m_XMin[iDim];
+        double_t  xMax     = m_XMax[iDim];
+        index_t   nGrid    = m_NGrid[iDim];
+        double_t  xSpan    = xMax - xMin;
+        double_t  delAvg   = xSpan/nGrid;
 
         // Check validity
         if(nGrid < 1) {
             if(m_isMaster) {
-                printf("  Grid Error: Invalid ngrid entry %d (ngrid >= 1)\n", nGrid);
+                printf("  Grid Error: Invalid ngrid entry %d (ngrid >= 1)\n", (int)nGrid);
             }
             return false;
         }
@@ -109,7 +109,7 @@ bool Grid::setupGridDelta() {
             vEval.assign(nGrid, delAvg);
 
             if(m_isMaster) {
-                printf("  Grid resolution in x%d: %.4f\n", iDim+1, delAvg);
+                printf("  Grid resolution in x%d: %.4f\n", (int)iDim+1, delAvg);
             }
 
         } else
@@ -130,10 +130,10 @@ bool Grid::setupGridDelta() {
                 return false;
             }
 
-            double aEval[nGrid] = {0.0};
-            double valMin, valMax;
-            int    linLower  = (int)floor(linPoint);
-            int    linHigher = (int)ceil(linPoint);
+            double_t aEval[nGrid] = {0.0};
+            double_t valMin, valMax;
+            index_t  linLower  = (index_t)floor(linPoint);
+            index_t  linHigher = (index_t)ceil(linPoint);
 
             if(linLower == 0) {
                 m::linspace(delMin, 2*delAvg-delMin, nGrid, aEval);
@@ -149,7 +149,7 @@ bool Grid::setupGridDelta() {
             valMax = m::max(aEval, nGrid);
 
             if(m_isMaster) {
-                printf("  Grid resolution in x%d: %.4f – %.4f\n", iDim+1, valMin, valMax);
+                printf("  Grid resolution in x%d: %.4f – %.4f\n", (int)iDim+1, valMin, valMax);
             }
 
         } else
@@ -171,10 +171,10 @@ bool Grid::setupGridDelta() {
             // including an offset determined by delMin
 
             vdouble_t vdEval = {0.0,1.0*nGrid};
-            double    aEval[nGrid] = {0.0};
-            double    dScale, valMin, valMax, valSum;
+            double_t  aEval[nGrid] = {0.0};
+            double_t  dScale, valMin, valMax, valSum;
 
-            for(int i=0; i<nGrid; i++) {
+            for(index_t i=0; i<nGrid; i++) {
                 vdEval[0] = i+0.5;
                 if(!mFunc.Eval(vdEval,&aEval[i])) return false;
             }
@@ -196,7 +196,7 @@ bool Grid::setupGridDelta() {
             valMax = m::max(aEval, nGrid);
 
             if(m_isMaster) {
-                printf("  Grid resolution in x%d: %.4f – %.4f\n", iDim+1, valMin, valMax);
+                printf("  Grid resolution in x%d: %.4f – %.4f\n", (int)iDim+1, valMin, valMax);
             }
         }
 

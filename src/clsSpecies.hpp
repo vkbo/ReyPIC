@@ -26,7 +26,7 @@ public:
     * Constructor/Destructor
     */
 
-    Species(int);
+    Species(int32_t);
     ~Species() {};
 
    /**
@@ -39,10 +39,10 @@ public:
     * Properties
     */
 
-    double X[];   // Particle position
-    double V[];   // Particle velocity
-    double W[];   // Particle weight
-    int    Tag[]; // Particle tag
+    double_t X[];   // Particle position
+    double_t V[];   // Particle velocity
+    double_t W[];   // Particle weight
+    index_t  Tag[]; // Particle tag
 
 private:
 
@@ -59,24 +59,31 @@ private:
     */
 
     // Parallelisation
-    int       m_MPISize     =  0;              // Number of nodes
-    int       m_MPIRank     = -1;              // Node number
+    int32_t   m_MPISize     =  0;              // Number of nodes
+    int32_t   m_MPIRank     = -1;              // Node number
     bool      m_isMaster    = false;           // True if this node is master
 
     vdouble_t m_GridXMin    = {0.0, 0.0, 0.0}; // Grid lower boundaries
     vdouble_t m_GridXMax    = {0.0, 0.0, 0.0}; // Grid upper boundaries
 
     string_t  m_Name        = "";              // Species name
-    int       m_Number      = -1;              // Species number
+    int32_t   m_Number      = -1;              // Species number
     string_t  m_ProfileType = "uniform";       // Species profile
     Math_t    m_ProfileFunc;                   // Species profile function
 
-    double    m_Charge      = 0;               // Species charge
-    double    m_Mass        = 1;               // Species mass
+    double_t  m_Charge      = 0;               // Species charge
+    double_t  m_Mass        = 1;               // Species mass
     vint_t    m_PerCell     = {1, 1, 1};       // Particles per cell
 
-    double    m_Thermal[3]  = {0.0, 0.0, 0.0}; // Thermal distribution
-    double    m_Fluid[3]    = {0.0, 0.0, 0.0}; // Fluid momentum
+    value_t   m_DistMode    = MOM_THERMAL;     // Initiate particles using thermal or twiss
+
+    double_t  m_Thermal[3]  = {0.0, 0.0, 0.0}; // Thermal distribution
+    double_t  m_Fluid[3]    = {0.0, 0.0, 0.0}; // Fluid momentum
+
+    double_t  m_Emittance   = 0.0;             // Initial rms emittance, normalised
+    double_t  m_Alpha0      = 0.0;             // Initial alpha function value
+    double_t  m_Beta0       = 0.0;             // Initial beta function value
+    double_t  m_Gamma0      = 0.0;             // Initial gamma function value
 
     // Options
     vstring_t m_okProfiles = {"uniform","func"};

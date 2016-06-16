@@ -59,7 +59,7 @@ bool Simulation::setInputFile(char* cFile) {
  *  In test mode the simulation is set up, but exits before the solver starts.
  */
 
-bool Simulation::setRunMode(int iRunMode) {
+bool Simulation::setRunMode(value_t iRunMode) {
 
     switch(iRunMode) {
         case RUN_MODE_FULL:
@@ -101,9 +101,9 @@ bool Simulation::isMaster() {
  *  Loads the input file
  */
 
-int Simulation::ReadInput() {
+error_t Simulation::ReadInput() {
 
-    int errFile = ERR_NONE;
+    error_t errFile = ERR_NONE;
 
     // Read input file
     errFile = simInput.ReadFile(m_InputFile);
@@ -131,7 +131,7 @@ int Simulation::ReadInput() {
  *  Sets up simulation
  */
 
-int Simulation::Setup() {
+error_t Simulation::Setup() {
 
     error_t errVal = ERR_NONE;
 
@@ -195,7 +195,7 @@ int Simulation::Setup() {
         printf(" ===============\n");
     }
 
-    for(int indSpecies=0; indSpecies<m_NumSpecies; indSpecies++) {
+    for(int32_t indSpecies=0; indSpecies<m_NumSpecies; indSpecies++) {
         simSpecies.push_back(indSpecies);
         error_t errSpecies = simSpecies[indSpecies].Setup(&simInput, &simGrid);
         if(errSpecies != ERR_NONE) return errSpecies;
