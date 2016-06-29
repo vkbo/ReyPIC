@@ -8,6 +8,7 @@
 #define RP_CONFIG
 
 // Includes
+#include <exception>
 #include <cstdlib>
 #include <cstdint>
 #include <iostream>
@@ -59,6 +60,10 @@ typedef int16_t                             value_t;
 #define INVAR_VINT         4
 #define INVAR_VDOUBLE      5
 #define INVAR_VSTRING      6
+
+// Porfile Types
+#define PROF_UNIFORM       0
+#define PROF_FUNC          1
 
 // Momentum Variables
 #define MOM_NONE           0
