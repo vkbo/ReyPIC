@@ -8,9 +8,9 @@
 #define RP_CONFIG
 
 // Includes
-#include <exception>
 #include <cstdlib>
 #include <cstdint>
+#include <exception>
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -27,6 +27,9 @@ typedef std::vector<int32_t>                vint_t;
 typedef std::string                         string_t;
 typedef uint64_t                            index_t;
 typedef int16_t                             value_t;
+
+// Geometry
+#define RP_X_DIM           3
 
 // Run Modes
 #define RUN_MODE_FULL      1

@@ -15,12 +15,12 @@ using namespace std;
  *  Generayes array aReturn of length nVal from valMin to valMax
  */
 
-void m::linspace(double valMin, double valMax, int nVal, double* aReturn) {
+void m::linspace(double_t valMin, double_t valMax, int32_t nVal, double_t* aReturn) {
 
-    double valSpan = valMax - valMin;
-    double delVal  = valSpan/(nVal-1);
+    double_t valSpan = valMax - valMin;
+    double_t delVal  = valSpan/(nVal-1);
 
-    for(int i=0; i<nVal; i++) {
+    for(int32_t i=0; i<nVal; i++) {
         aReturn[i] = i*delVal + valMin;
     }
 
@@ -35,11 +35,11 @@ void m::linspace(double valMin, double valMax, int nVal, double* aReturn) {
  *  Returns minimum value from array aData with length nData
  */
 
-double m::min(double* aData, int nData) {
+double_t m::min(double_t* aData, int32_t nData) {
 
-    double valMin = aData[0];
+    double_t valMin = aData[0];
 
-    for(int i=1; i<nData; i++) {
+    for(int32_t i=1; i<nData; i++) {
         if(aData[i] < valMin) {
             valMin = aData[i];
         }
@@ -56,11 +56,11 @@ double m::min(double* aData, int nData) {
  *  Return maximum value from array aData with length nData
  */
 
-double m::max(double* aData, int nData) {
+double_t m::max(double_t* aData, int32_t nData) {
 
-    double valMax = aData[0];
+    double_t valMax = aData[0];
 
-    for(int i=1; i<nData; i++) {
+    for(int32_t i=1; i<nData; i++) {
         if(aData[i] > valMax) {
             valMax = aData[i];
         }
@@ -77,12 +77,12 @@ double m::max(double* aData, int nData) {
  *  Returns minimum value and index indMin from array aData with length nData
  */
 
-double m::minind(double* aData, int nData, int* indMin) {
+double_t m::minind(double_t* aData, int32_t nData, int32_t* indMin) {
 
-    double valMin = aData[0];
-          *indMin = 0;
+    double_t valMin = aData[0];
+            *indMin = 0;
 
-    for(int i=1; i<nData; i++) {
+    for(int32_t i=1; i<nData; i++) {
         if(aData[i] < valMin) {
              valMin = aData[i];
             *indMin = i;
@@ -100,12 +100,12 @@ double m::minind(double* aData, int nData, int* indMin) {
  *  Returns maximum value and index indMax from array aData with length nData
  */
 
-double m::maxind(double* aData, int nData, int* indMax) {
+double_t m::maxind(double_t* aData, int32_t nData, int32_t* indMax) {
 
-    double valMax = aData[0];
-          *indMax = 0;
+    double_t valMax = aData[0];
+            *indMax = 0;
 
-    for(int i=1; i<nData; i++) {
+    for(int32_t i=1; i<nData; i++) {
         if(aData[i] > valMax) {
              valMax = aData[i];
             *indMax = i;
@@ -123,11 +123,11 @@ double m::maxind(double* aData, int nData, int* indMax) {
  *  Returns sum of array aData with length nData
  */
 
-double m::sum(double* aData, int nData) {
+double_t m::sum(double_t* aData, int32_t nData) {
 
-    double valSum = 0.0;
+    double_t valSum = 0.0;
 
-    for(int i=0; i<nData; i++) {
+    for(int32_t i=0; i<nData; i++) {
         valSum += aData[i];
     }
 
@@ -142,11 +142,11 @@ double m::sum(double* aData, int nData) {
  *  Returns average value valAvg from array aData with length nData
  */
 
-double m::avg(double* aData, int nData) {
+double_t m::avg(double_t* aData, int32_t nData) {
 
-    double valSum = 0.0;
+    double_t valSum = 0.0;
 
-    for(int i=0; i<nData; i++) {
+    for(int32_t i=0; i<nData; i++) {
         valSum += aData[i];
     }
 
@@ -161,9 +161,9 @@ double m::avg(double* aData, int nData) {
  *  Scales an array aData with length nData by a value valScale
  */
 
-void m::scale(double* aData, int nData, double valScale) {
+void m::scale(double_t* aData, int32_t nData, double_t valScale) {
 
-    for(int i=0; i<nData; i++) {
+    for(int32_t i=0; i<nData; i++) {
         aData[i] *= valScale;
     }
 
@@ -178,9 +178,9 @@ void m::scale(double* aData, int nData, double valScale) {
  *  Offsets an array aData with length nData by a value valScale
  */
 
-void m::offset(double* aData, int nData, double valOffset) {
+void m::offset(double_t* aData, int32_t nData, double_t valOffset) {
 
-    for(int i=0; i<nData; i++) {
+    for(int32_t i=0; i<nData; i++) {
         aData[i] += valOffset;
     }
 

@@ -9,15 +9,15 @@
 
 namespace m {
 
-    void   linspace(double, double, int, double*);
-    double min(double*, int);
-    double max(double*, int);
-    double minind(double*, int, int*);
-    double maxind(double*, int, int*);
-    double sum(double*, int);
-    double avg(double*, int);
-    void   scale(double*, int, double);
-    void   offset(double*, int, double);
+    void     linspace(double_t, double_t, int32_t, double_t*);
+    double_t min(double_t*, int32_t);
+    double_t max(double_t*, int32_t);
+    double_t minind(double_t*, int32_t, int32_t*);
+    double_t maxind(double_t*, int32_t, int32_t*);
+    double_t sum(double_t*, int32_t);
+    double_t avg(double_t*, int32_t);
+    void     scale(double_t*, int32_t, double_t);
+    void     offset(double_t*, int32_t, double_t);
 
 } // End namespace
 
