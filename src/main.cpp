@@ -67,38 +67,38 @@ int main(int argc, char* argv[]) {
     */
 
     // Parse input options and set input file
-    for(int i=1; i<argc; i++) {
-        if(strcmp(argv[i], "-t")  == 0) picSim->setRunMode(RUN_MODE_TEST);
-        if(strcmp(argv[i], "-tt") == 0) picSim->setRunMode(RUN_MODE_EXT_TEST);
-    }
-    picSim->setInputFile(argv[argc-1]);
+    //for(int i=1; i<argc; i++) {
+    //    if(strcmp(argv[i], "-t")  == 0) picSim->setRunMode(RUN_MODE_TEST);
+    //    if(strcmp(argv[i], "-tt") == 0) picSim->setRunMode(RUN_MODE_EXT_TEST);
+    //}
+    //picSim->setInputFile(argv[argc-1]);
 
     // Read input file
-    errSim = picSim->ReadInput();
-    if(errSim != ERR_NONE) {
-        return abortExec(errSim);
-    }
+    //errSim = picSim->ReadInput();
+    //if(errSim != ERR_NONE) {
+    //    return abortExec(errSim);
+    //}
 
     // Set up simulation
-    errSim = picSim->Setup();
-    if(errSim != ERR_NONE) {
-        return abortExec(errSim);
-    }
+    //errSim = picSim->Setup();
+    //if(errSim != ERR_NONE) {
+    //    return abortExec(errSim);
+    //}
 
    /**
     * Main Loop
     */
 
-    errLoop = picLoop(picSim);
-    if(errLoop != ERR_NONE) {
-        return abortExec(errLoop);
-    }
+    //errLoop = picLoop(picSim);
+    //if(errLoop != ERR_NONE) {
+    //    return abortExec(errLoop);
+    //}
 
    /**
     * THE END!
     */
 
-    delete[] picSim;
+    //delete[] picSim;
     MPI_Finalize();
 
     return ERR_NONE;
@@ -110,16 +110,16 @@ int main(int argc, char* argv[]) {
  * Main Loop
  */
 
- int picLoop(Simulation* picSim) {
+int picLoop(Simulation* picSim) {
 
-     return ERR_NONE;
- }
+    return ERR_NONE;
+}
 
- // ********************************************************************************************** //
+// ********************************************************************************************** //
 
- /**
-  * Abort Execution
-  */
+/**
+ * Abort Execution
+ */
 
 int abortExec(int errVal) {
 

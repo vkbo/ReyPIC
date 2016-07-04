@@ -148,7 +148,7 @@ error_t Simulation::Setup() {
 
     // Force m_Nodes to be equal to m_MPISize.
     // This makes m_Nodes redundant as an input variable, but the intention is to have m_Nodes be
-    // able to split the domain in other dimensions than x1.
+    // able to split the grid in other dimensions than x1.
     m_Nodes = m_MPISize;
 
     if(m_Nodes < 1)   m_Nodes = 1;
@@ -165,20 +165,20 @@ error_t Simulation::Setup() {
     errVal = simInput.ReadVariable(INPUT_SIM, 0, "n0", &m_N0, INVAR_DOUBLE);
     if(errVal != ERR_NONE) return errVal;
 
-    errVal = simInput.ReadVariable(INPUT_SIM, 0, "dt", &m_TimeStep, INVAR_DOUBLE);
-    if(errVal != ERR_NONE) return errVal;
-
-    errVal = simInput.ReadVariable(INPUT_SIM, 0, "tmin", &m_TMin, INVAR_DOUBLE);
-    if(errVal != ERR_NONE) return errVal;
-
-    errVal = simInput.ReadVariable(INPUT_SIM, 0, "tmax", &m_TMax, INVAR_DOUBLE);
-    if(errVal != ERR_NONE) return errVal;
-
     // if(m_isMaster) {
     //     printf("\n");
     //     printf("  EMF Setup\n");
     //     printf(" ===========\n");
     // }
+
+    if(m_isMaster) {
+        printf("\n");
+        printf("  Time Setup\n");
+        printf(" ============\n");
+    }
+
+    //error_t errTime = simTime.Setup(&simInput);
+    //if(errTime != ERR_NONE) return errTime;
 
     if(m_isMaster) {
         printf("\n");

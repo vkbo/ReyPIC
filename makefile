@@ -17,7 +17,7 @@ VERSION = $(shell git describe | tr -d gv)
 HEADERS = config.hpp functions.hpp
 GLOBAL  = $(addprefix $(SRC)/,$(HEADERS))
 
-CLASSES = clsSimulation.o clsTime.o clsMath.o clsInput.o clsSpecies.o clsGrid.o
+CLASSES = clsSimulation.o clsMath.o clsInput.o clsSpecies.o clsGrid.o
 OBJECTS = $(addprefix $(BUILD)/,$(CLASSES))
 
 ##
