@@ -32,7 +32,6 @@ public:
     */
 
     error_t ReadFile(char*);
-    error_t SplitSections();
     error_t ReadVariable(value_t, index_t, string_t, void*, value_t);
 
 private:
@@ -47,7 +46,6 @@ private:
     bool      m_isMaster    = false; // True if this node is master
 
     // Buffers
-    string_t  m_Buffer;              // Full input file buffer
     string_t  m_Config;              // Config section
     string_t  m_Simulation;          // Simulation section
     string_t  m_Grid;                // Grid section

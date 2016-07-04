@@ -88,21 +88,9 @@ error_t Input::ReadFile(char* cFile) {
     tmpBuffer = regex_replace(tmpBuffer,rxSpaces,"");
     tmpBuffer = regex_replace(tmpBuffer,rxOther,"");
 
-    // Set class buffer and return
-    m_Buffer = tmpBuffer;
-
-    return ERR_NONE;
-}
-
-// ********************************************************************************************** //
-
-/**
- *  Method :: SplitSections
- * =========================
- *  Splits the input file buffer into root sections
- */
-
-error_t Input::SplitSections() {
+   /**
+    * Split Buffer Sections
+    */
 
     index_t  iLev = 0;
     size_t   nLen;
@@ -115,7 +103,7 @@ error_t Input::SplitSections() {
     bool    hasEMF     = false;
     bool    hasSpecies = false;
 
-    for(char& cChar : m_Buffer) {
+    for(char& cChar : tmpBuffer) {
 
         sTemp += cChar;
 

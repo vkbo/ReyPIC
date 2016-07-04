@@ -111,12 +111,6 @@ error_t Simulation::ReadInput() {
         return errFile;
     }
 
-    // Split input file sections
-    errFile = simInput.SplitSections();
-    if(errFile != ERR_NONE) {
-        return errFile;
-    }
-
     // Get number of species
     m_NumSpecies = simInput.getNumSpecies();
 
