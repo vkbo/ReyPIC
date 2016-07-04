@@ -50,6 +50,11 @@ int32_t Input::getNumSpecies() {
 
 error_t Input::ReadFile(char* cFile) {
 
+    if(m_isMaster) {
+        printf("  Reading Input File\n");
+        printf(" ====================\n");
+    }
+
     // Read File into buffer
     ifstream tmpFile(cFile);
     tmpFile.seekg(0, ios::end);

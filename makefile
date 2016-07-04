@@ -17,7 +17,7 @@ VERSION = $(shell git describe | tr -d gv)
 HEADERS = config.hpp functions.hpp
 GLOBAL  = $(addprefix $(SRC)/,$(HEADERS))
 
-CLASSES = clsSimulation.o clsTime.o clsMath.o clsInput.o clsSpecies.o clsGrid.o
+CLASSES = clsInput.o clsSimulation.o clsPhysics.o clsTime.o clsMath.o clsSpecies.o clsGrid.o
 OBJECTS = $(addprefix $(BUILD)/,$(CLASSES))
 
 ##
@@ -43,17 +43,20 @@ $(BUILD)/functions.o : $(SRC)/functions.cpp $(GLOBAL)
 
 # Classes
 
+$(BUILD)/clsInput.o : $(SRC)/clsInput.cpp $(SRC)/clsInput.hpp $(GLOBAL)
+	$(CC) $(CFLAGS) $(SRC)/clsInput.cpp -o $@
+
 $(BUILD)/clsSimulation.o : $(SRC)/clsSimulation.cpp $(SRC)/clsSimulation.hpp $(SRC)/clsInput.hpp $(SRC)/clsTime.hpp $(SRC)/clsGrid.hpp $(SRC)/clsSpecies.hpp $(GLOBAL)
 	$(CC) $(CFLAGS) $(SRC)/clsSimulation.cpp -o $@
+
+$(BUILD)/clsPhysics.o : $(SRC)/clsPhysics.cpp $(SRC)/clsPhysics.hpp $(SRC)/clsInput.hpp $(GLOBAL)
+	$(CC) $(CFLAGS) $(SRC)/clsPhysics.cpp -o $@
 
 $(BUILD)/clsTime.o : $(SRC)/clsTime.cpp $(SRC)/clsTime.hpp $(SRC)/clsInput.hpp $(GLOBAL)
 	$(CC) $(CFLAGS) $(SRC)/clsTime.cpp -o $@
 
 $(BUILD)/clsMath.o : $(SRC)/clsMath.cpp $(SRC)/clsMath.hpp $(GLOBAL)
 	$(CC) $(CFLAGS) $(SRC)/clsMath.cpp -o $@
-
-$(BUILD)/clsInput.o : $(SRC)/clsInput.cpp $(SRC)/clsInput.hpp $(GLOBAL)
-	$(CC) $(CFLAGS) $(SRC)/clsInput.cpp -o $@
 
 $(BUILD)/clsSpecies.o : $(SRC)/clsSpecies.cpp $(SRC)/clsSpecies.hpp $(SRC)/clsInput.hpp $(SRC)/clsGrid.hpp $(SRC)/clsMath.hpp $(GLOBAL)
 	$(CC) $(CFLAGS) $(SRC)/clsSpecies.cpp -o $@

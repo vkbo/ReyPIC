@@ -1,19 +1,22 @@
 /**
- * ReyPIC – Simulation Header
+ * ReyPIC – Physics Header
  */
 
-#ifndef CLASS_SIMULATION
-#define CLASS_SIMULATION
+#ifndef CLASS_PHYSICS
+#define CLASS_PHYSICS
 
 #include "config.hpp"
 
 #include "clsInput.hpp"
+#include "clsGrid.hpp"
+#include "clsSpecies.hpp"
 
-typedef reypic::Input Input_t;
+typedef reypic::Grid                 Grid_t;
+typedef std::vector<reypic::Species> Species_t;
 
 namespace reypic {
 
-class Simulation {
+class Physics {
 
 public:
 
@@ -21,14 +24,12 @@ public:
     * Constructor/Destructor
     */
 
-    Simulation();
-    ~Simulation() {};
+    Physics();
+    ~Physics() {};
 
    /**
     * Setters/Getters/Checks
     */
-
-    bool setRunMode(value_t);
 
    /**
     * Methods
@@ -40,6 +41,9 @@ public:
     * Properties
     */
 
+    Grid_t    simGrid;
+    Species_t simSpecies;
+
 private:
 
    /**
@@ -47,20 +51,11 @@ private:
     */
 
     // General
-    char*    m_InputFile;
-    value_t  m_RunMode    = RUN_MODE_FULL;
-    int32_t  m_NumSpecies = 0;
 
     // Parallelisation
     int32_t  m_MPISize     =  0;              // Number of nodes
     int32_t  m_MPIRank     = -1;              // Node number
     bool     m_isMaster    = false;           // True if this node is master
-
-    int32_t  m_Nodes      =  1;
-    int32_t  m_Threads    =  1;
-
-    // Physics
-    double_t m_N0         = 1.0;
 
 };
 

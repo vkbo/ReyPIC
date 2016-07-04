@@ -37,22 +37,6 @@ Simulation::Simulation() {
 // ********************************************************************************************** //
 
 /**
- *  Set Input File
- * ================
- *  Related to the switch -i.
- *  Sets the InputFile variable.
- */
-
-bool Simulation::setInputFile(char* cFile) {
-
-    m_InputFile = cFile;
-
-    return true;
-}
-
-// ********************************************************************************************** //
-
-/**
  *  Set Run Mode
  * ==============
  *  Related to switch -t.
@@ -80,43 +64,7 @@ bool Simulation::setRunMode(value_t iRunMode) {
 }
 
 // ********************************************************************************************** //
-
-/**
- *  isMaster
- * ==========
- *  Returns true if node is rank 0.
- */
-
-bool Simulation::isMaster() {
-    return m_isMaster;
-}
-
-// ********************************************************************************************** //
 //                                       Main Class Methods                                       //
-// ********************************************************************************************** //
-
-/**
- *  Read Input File
- * =================
- *  Loads the input file
- */
-
-error_t Simulation::ReadInput() {
-
-    error_t errFile = ERR_NONE;
-
-    // Read input file
-    errFile = simInput.ReadFile(m_InputFile);
-    if(errFile != ERR_NONE) {
-        return errFile;
-    }
-
-    // Get number of species
-    m_NumSpecies = simInput.getNumSpecies();
-
-    return ERR_NONE;
-}
-
 // ********************************************************************************************** //
 
 /**
@@ -125,7 +73,7 @@ error_t Simulation::ReadInput() {
  *  Sets up simulation
  */
 
-error_t Simulation::Setup() {
+error_t Simulation::Setup(Input_t* simInput) {
 
     error_t errVal = ERR_NONE;
 
@@ -134,10 +82,10 @@ error_t Simulation::Setup() {
         printf(" ===============\n");
     }
 
-    errVal = simInput.ReadVariable(INPUT_CONF, 0, "nodes", &m_Nodes, INVAR_INT);
+    errVal = simInput->ReadVariable(INPUT_CONF, 0, "nodes", &m_Nodes, INVAR_INT);
     if(errVal != ERR_NONE) return errVal;
 
-    errVal = simInput.ReadVariable(INPUT_CONF, 0, "threads", &m_Threads, INVAR_INT);
+    errVal = simInput->ReadVariable(INPUT_CONF, 0, "threads", &m_Threads, INVAR_INT);
     if(errVal != ERR_NONE) return errVal;
 
     // Force m_Nodes to be equal to m_MPISize.
@@ -148,54 +96,12 @@ error_t Simulation::Setup() {
     if(m_Nodes < 1)   m_Nodes = 1;
     if(m_Threads < 1) m_Threads = 1;
 
-    if(m_isMaster) {
-        printf("  Nodes: %d\n", m_Nodes);
-        printf("  Threads/node: %d\n", m_Threads);
-        printf("\n");
-        printf("  Simulation Setup\n");
-        printf(" ==================\n");
-    }
-
-    errVal = simInput.ReadVariable(INPUT_SIM, 0, "n0", &m_N0, INVAR_DOUBLE);
+    errVal = simInput->ReadVariable(INPUT_SIM, 0, "n0", &m_N0, INVAR_DOUBLE);
     if(errVal != ERR_NONE) return errVal;
 
-    // if(m_isMaster) {
-    //     printf("\n");
-    //     printf("  EMF Setup\n");
-    //     printf(" ===========\n");
-    // }
-
     if(m_isMaster) {
-        printf("\n");
-        printf("  Time Setup\n");
-        printf(" ============\n");
-    }
-
-    error_t errTime = simTime.Setup(&simInput);
-    if(errTime != ERR_NONE) return errTime;
-
-    if(m_isMaster) {
-        printf("\n");
-        printf("  Grid Setup\n");
-        printf(" ============\n");
-    }
-
-    error_t errGrid = simGrid.Setup(&simInput);
-    if(errGrid != ERR_NONE) return errGrid;
-
-    if(m_isMaster) {
-        printf("\n");
-        printf("  Species Setup\n");
-        printf(" ===============\n");
-    }
-
-    for(int32_t indSpecies=0; indSpecies<m_NumSpecies; indSpecies++) {
-        simSpecies.push_back(indSpecies);
-        error_t errSpecies = simSpecies[indSpecies].Setup(&simInput, &simGrid);
-        if(errSpecies != ERR_NONE) return errSpecies;
-    }
-
-    if(m_isMaster) {
+        printf("  Nodes:        %d\n", m_Nodes);
+        printf("  Threads/node: %d\n", m_Threads);
         printf("\n");
     }
 

@@ -8,15 +8,16 @@
 #include "functions.hpp"
 
 // Classes
-#include "clsSimulation.hpp"
 #include "clsInput.hpp"
-#include "clsSpecies.hpp"
+#include "clsSimulation.hpp"
+#include "clsTime.hpp"
 #include "clsGrid.hpp"
+#include "clsPhysics.hpp"
 
 using namespace std;
 using namespace reypic;
 
-int abortExec(int);
+error_t abortExec(error_t);
 
 /**
  * Main Program Loop
@@ -24,17 +25,22 @@ int abortExec(int);
 
 int main(int argc, char* argv[]) {
 
-    // Variables
-    error_t errMPI;
-    int     iRank;
-    bool    isMaster = false;
+    error_t    errVal;
+    int        iRank;
+    bool       isMaster = false;
+
+    Input      simInput;
+    Simulation simSim;
+    Time       simTime;
+    Grid       simGrid;
+    Physics    simPhys;
 
    /**
-    *  Initialise
+    *  Initialise MPI
     */
 
-    errMPI = MPI_Init(&argc, &argv);
-    if(errMPI != MPI_SUCCESS) {
+    errVal = MPI_Init(&argc, &argv);
+    if(errVal != MPI_SUCCESS) {
         return abortExec(ERR_MPI_INIT);
     }
     MPI_Comm_rank(MPI_COMM_WORLD, &iRank);
@@ -57,35 +63,54 @@ int main(int argc, char* argv[]) {
         return abortExec(ERR_USAGE);
     }
 
-   /**
-    *  Simulation Setup
-    */
-
-    Simulation Sim;
-    error_t errSim = ERR_NONE;
-
-    // Parse input options and set input file
-    for(int i=1; i<argc; i++) {
-        if(strcmp(argv[i], "-t")  == 0) Sim.setRunMode(RUN_MODE_TEST);
-        if(strcmp(argv[i], "-tt") == 0) Sim.setRunMode(RUN_MODE_EXT_TEST);
-    }
-    Sim.setInputFile(argv[argc-1]);
-
     // Read input file
-    errSim = Sim.ReadInput();
-    if(errSim != ERR_NONE) {
-        return abortExec(errSim);
-    }
-
-    // Set up simulation
-    errSim = Sim.Setup();
-    if(errSim != ERR_NONE) {
-        return abortExec(errSim);
+    simInput.ReadFile(argv[argc-1]);
+    if(errVal != ERR_NONE) {
+        return abortExec(errVal);
     }
 
    /**
-    * THE END!
+    *  Run Setups
     */
+
+    for(int i=1; i<argc; i++) {
+        if(strcmp(argv[i], "-t")  == 0) simSim.setRunMode(RUN_MODE_TEST);
+        if(strcmp(argv[i], "-tt") == 0) simSim.setRunMode(RUN_MODE_EXT_TEST);
+    }
+
+    // Simulation
+    errVal = simSim.Setup(&simInput);
+    if(errVal != ERR_NONE) {
+        return abortExec(errVal);
+    }
+
+    // Time
+    errVal = simTime.Setup(&simInput);
+    if(errVal != ERR_NONE) {
+        return abortExec(errVal);
+    }
+
+    // Grid
+    errVal = simTime.Setup(&simInput);
+    if(errVal != ERR_NONE) {
+        return abortExec(errVal);
+    }
+
+    // Physics
+    errVal = simPhys.Setup(&simInput);
+    if(errVal != ERR_NONE) {
+        return abortExec(errVal);
+    }
+
+   /**
+    *  THE END!
+    */
+
+    //delete[] simInput;
+    //delete[] simSim;
+    //delete[] simTime;
+    //delete[] simGrid;
+    //delete[] simPhys;
 
     MPI_Finalize();
 
@@ -95,10 +120,10 @@ int main(int argc, char* argv[]) {
 // ********************************************************************************************** //
 
 /**
- * Abort Execution
+ *  Abort Execution
  */
 
-int abortExec(int errVal) {
+error_t abortExec(int errVal) {
 
     int iRank;
     MPI_Comm_rank(MPI_COMM_WORLD, &iRank);
