@@ -17,7 +17,7 @@ VERSION = $(shell git describe | tr -d gv)
 HEADERS = config.hpp functions.hpp
 GLOBAL  = $(addprefix $(SRC)/,$(HEADERS))
 
-CLASSES = clsSimulation.o clsMath.o clsInput.o clsSpecies.o clsGrid.o
+CLASSES = clsSimulation.o clsTime.o clsMath.o clsInput.o clsSpecies.o clsGrid.o
 OBJECTS = $(addprefix $(BUILD)/,$(CLASSES))
 
 ##
@@ -43,8 +43,11 @@ $(BUILD)/functions.o : $(SRC)/functions.cpp $(GLOBAL)
 
 # Classes
 
-$(BUILD)/clsSimulation.o : $(SRC)/clsSimulation.cpp $(SRC)/clsSimulation.hpp $(GLOBAL)
+$(BUILD)/clsSimulation.o : $(SRC)/clsSimulation.cpp $(SRC)/clsSimulation.hpp $(SRC)/clsInput.hpp $(SRC)/clsTime.hpp $(SRC)/clsGrid.hpp $(SRC)/clsSpecies.hpp $(GLOBAL)
 	$(CC) $(CFLAGS) $(SRC)/clsSimulation.cpp -o $@
+
+$(BUILD)/clsTime.o : $(SRC)/clsTime.cpp $(SRC)/clsTime.hpp $(SRC)/clsInput.hpp $(GLOBAL)
+	$(CC) $(CFLAGS) $(SRC)/clsTime.cpp -o $@
 
 $(BUILD)/clsMath.o : $(SRC)/clsMath.cpp $(SRC)/clsMath.hpp $(GLOBAL)
 	$(CC) $(CFLAGS) $(SRC)/clsMath.cpp -o $@
@@ -52,10 +55,10 @@ $(BUILD)/clsMath.o : $(SRC)/clsMath.cpp $(SRC)/clsMath.hpp $(GLOBAL)
 $(BUILD)/clsInput.o : $(SRC)/clsInput.cpp $(SRC)/clsInput.hpp $(GLOBAL)
 	$(CC) $(CFLAGS) $(SRC)/clsInput.cpp -o $@
 
-$(BUILD)/clsSpecies.o : $(SRC)/clsSpecies.cpp $(SRC)/clsSpecies.hpp $(GLOBAL)
+$(BUILD)/clsSpecies.o : $(SRC)/clsSpecies.cpp $(SRC)/clsSpecies.hpp $(SRC)/clsInput.hpp $(SRC)/clsGrid.hpp $(SRC)/clsMath.hpp $(GLOBAL)
 	$(CC) $(CFLAGS) $(SRC)/clsSpecies.cpp -o $@
 
-$(BUILD)/clsGrid.o : $(SRC)/clsGrid.cpp $(SRC)/clsGrid.hpp $(GLOBAL)
+$(BUILD)/clsGrid.o : $(SRC)/clsGrid.cpp $(SRC)/clsGrid.hpp $(SRC)/clsInput.hpp $(SRC)/clsMath.hpp $(GLOBAL)
 	$(CC) $(CFLAGS) $(SRC)/clsGrid.cpp -o $@
 
 # Make Clean
