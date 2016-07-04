@@ -25,15 +25,9 @@ error_t abortExec(error_t);
 
 int main(int argc, char* argv[]) {
 
-    error_t    errVal;
-    int        iRank;
-    bool       isMaster = false;
-
-    Input      simInput;
-    Simulation simSim;
-    Time       simTime;
-    Grid       simGrid;
-    Physics    simPhys;
+    error_t errVal;
+    int     iRank;
+    bool    isMaster = false;
 
    /**
     *  Initialise MPI
@@ -45,6 +39,17 @@ int main(int argc, char* argv[]) {
     }
     MPI_Comm_rank(MPI_COMM_WORLD, &iRank);
     isMaster = (iRank == 0);
+
+
+   /**
+    *  Initialise Simulation
+    */
+
+    Input      simInput;
+    Simulation simSim;
+    Time       simTime;
+    Grid       simGrid;
+    Physics    simPhys;
 
     // Write output header
     if(isMaster) {
@@ -69,6 +74,7 @@ int main(int argc, char* argv[]) {
         return abortExec(errVal);
     }
 
+
    /**
     *  Run Setups
     */
@@ -91,26 +97,26 @@ int main(int argc, char* argv[]) {
     }
 
     // Grid
-    errVal = simTime.Setup(&simInput);
+    errVal = simGrid.Setup(&simInput);
     if(errVal != ERR_NONE) {
         return abortExec(errVal);
     }
 
     // Physics
-    errVal = simPhys.Setup(&simInput);
+    errVal = simPhys.Setup(&simInput, &simGrid);
     if(errVal != ERR_NONE) {
         return abortExec(errVal);
     }
 
+
+   /**
+    *  Run Main Loop
+    */
+
+
    /**
     *  THE END!
     */
-
-    //delete[] simInput;
-    //delete[] simSim;
-    //delete[] simTime;
-    //delete[] simGrid;
-    //delete[] simPhys;
 
     MPI_Finalize();
 

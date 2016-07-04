@@ -11,6 +11,7 @@
 #include "clsGrid.hpp"
 #include "clsSpecies.hpp"
 
+typedef reypic::Input                Input_t;
 typedef reypic::Grid                 Grid_t;
 typedef std::vector<reypic::Species> Species_t;
 
@@ -35,13 +36,12 @@ public:
     * Methods
     */
 
-    error_t Setup(Input_t*);
+    error_t Setup(Input_t*, Grid_t*);
 
    /**
     * Properties
     */
 
-    Grid_t    simGrid;
     Species_t simSpecies;
 
 private:
@@ -56,6 +56,8 @@ private:
     int32_t  m_MPISize     =  0;              // Number of nodes
     int32_t  m_MPIRank     = -1;              // Node number
     bool     m_isMaster    = false;           // True if this node is master
+
+    int32_t  m_NumSpecies = 0;
 
 };
 

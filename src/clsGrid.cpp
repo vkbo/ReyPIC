@@ -59,7 +59,16 @@ error_t Grid::Setup(Input_t* simInput) {
     if(errVal != ERR_NONE) return errVal;
 
     // Set up grid resolution vectors
+    if(m_isMaster) {
+        printf("  Grid Setup\n");
+        printf(" ============\n");
+    }
+
     if(!setupGridDelta()) return ERR_SETUP;
+
+    if(m_isMaster) {
+        printf("\n");
+    }
 
     return ERR_NONE;
 }

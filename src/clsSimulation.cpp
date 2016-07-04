@@ -77,11 +77,6 @@ error_t Simulation::Setup(Input_t* simInput) {
 
     error_t errVal = ERR_NONE;
 
-    if(m_isMaster) {
-        printf("  Configuration\n");
-        printf(" ===============\n");
-    }
-
     errVal = simInput->ReadVariable(INPUT_CONF, 0, "nodes", &m_Nodes, INVAR_INT);
     if(errVal != ERR_NONE) return errVal;
 
@@ -100,6 +95,8 @@ error_t Simulation::Setup(Input_t* simInput) {
     if(errVal != ERR_NONE) return errVal;
 
     if(m_isMaster) {
+        printf("  Configuration\n");
+        printf(" ===============\n");
         printf("  Nodes:        %d\n", m_Nodes);
         printf("  Threads/node: %d\n", m_Threads);
         printf("\n");

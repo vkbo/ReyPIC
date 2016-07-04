@@ -89,10 +89,13 @@ error_t Time::Setup(Input_t* simInput) {
     m_TMax = sumSteps*m_TimeStep;
 
     if(m_isMaster) {
+        printf("  Time Setup\n");
+        printf(" ============\n");
         printf("  Start time:        %.1f\n", m_TMin);
         printf("  End time:          %.1f\n", m_TMax);
         printf("  Time step:         %.4f\n", m_TimeStep);
         printf("  Simulation steps:  %d\n",   (int)m_NMax);
+        printf("\n");
     }
 
     return ERR_NONE;
