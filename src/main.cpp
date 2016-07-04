@@ -9,7 +9,6 @@
 
 // Classes
 #include "clsSimulation.hpp"
-#include "clsTime.hpp"
 #include "clsInput.hpp"
 #include "clsSpecies.hpp"
 #include "clsGrid.hpp"
@@ -17,7 +16,6 @@
 using namespace std;
 using namespace reypic;
 
-int picLoop(Simulation*);
 int abortExec(int);
 
 /**
@@ -27,15 +25,12 @@ int abortExec(int);
 int main(int argc, char* argv[]) {
 
     // Variables
-    Simulation *picSim = new Simulation();
-    int         iRank;
-    bool        isMaster = false;
-    error_t     errMPI   = ERR_NONE;
-    error_t     errSim   = ERR_NONE;
-    error_t     errLoop  = ERR_NONE;
+    error_t errMPI;
+    int     iRank;
+    bool    isMaster = false;
 
    /**
-    * Initialise
+    *  Initialise
     */
 
     errMPI = MPI_Init(&argc, &argv);
@@ -63,54 +58,36 @@ int main(int argc, char* argv[]) {
     }
 
    /**
-    * Simulation Setup
+    *  Simulation Setup
     */
+
+    Simulation Sim;
+    error_t errSim = ERR_NONE;
 
     // Parse input options and set input file
-    //for(int i=1; i<argc; i++) {
-    //    if(strcmp(argv[i], "-t")  == 0) picSim->setRunMode(RUN_MODE_TEST);
-    //    if(strcmp(argv[i], "-tt") == 0) picSim->setRunMode(RUN_MODE_EXT_TEST);
-    //}
-    //picSim->setInputFile(argv[argc-1]);
+    for(int i=1; i<argc; i++) {
+        if(strcmp(argv[i], "-t")  == 0) Sim.setRunMode(RUN_MODE_TEST);
+        if(strcmp(argv[i], "-tt") == 0) Sim.setRunMode(RUN_MODE_EXT_TEST);
+    }
+    Sim.setInputFile(argv[argc-1]);
 
     // Read input file
-    //errSim = picSim->ReadInput();
-    //if(errSim != ERR_NONE) {
-    //    return abortExec(errSim);
-    //}
+    errSim = Sim.ReadInput();
+    if(errSim != ERR_NONE) {
+        return abortExec(errSim);
+    }
 
     // Set up simulation
-    //errSim = picSim->Setup();
-    //if(errSim != ERR_NONE) {
-    //    return abortExec(errSim);
-    //}
-
-   /**
-    * Main Loop
-    */
-
-    //errLoop = picLoop(picSim);
-    //if(errLoop != ERR_NONE) {
-    //    return abortExec(errLoop);
-    //}
+    errSim = Sim.Setup();
+    if(errSim != ERR_NONE) {
+        return abortExec(errSim);
+    }
 
    /**
     * THE END!
     */
 
-    //delete[] picSim;
     MPI_Finalize();
-
-    return ERR_NONE;
-}
-
-// ********************************************************************************************** //
-
-/**
- * Main Loop
- */
-
-int picLoop(Simulation* picSim) {
 
     return ERR_NONE;
 }

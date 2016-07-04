@@ -8,12 +8,12 @@
 #include "config.hpp"
 
 #include "clsInput.hpp"
-//#include "clsTime.hpp"
+#include "clsTime.hpp"
 #include "clsGrid.hpp"
 #include "clsSpecies.hpp"
 
 typedef reypic::Input                Input_t;
-//typedef reypic::Time                 Time_t;
+typedef reypic::Time                 Time_t;
 typedef reypic::Grid                 Grid_t;
 typedef std::vector<reypic::Species> Species_t;
 
@@ -55,7 +55,7 @@ public:
     */
 
     Input_t   simInput;
-    //Time_t    simTime;
+    Time_t    simTime;
     Grid_t    simGrid;
     Species_t simSpecies;
 
@@ -80,11 +80,6 @@ private:
 
     // Physics
     double_t m_N0         = 1.0;
-
-    // Time
-    double_t m_TimeStep   = 1.0;
-    double_t m_TMin       = 0.0;
-    double_t m_TMax       = 1.0;
 
 };
 

@@ -177,8 +177,8 @@ error_t Simulation::Setup() {
         printf(" ============\n");
     }
 
-    //error_t errTime = simTime.Setup(&simInput);
-    //if(errTime != ERR_NONE) return errTime;
+    error_t errTime = simTime.Setup(&simInput);
+    if(errTime != ERR_NONE) return errTime;
 
     if(m_isMaster) {
         printf("\n");

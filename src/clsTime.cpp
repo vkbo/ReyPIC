@@ -80,7 +80,7 @@ error_t Time::Setup(Input_t* simInput) {
 
     // Calculate other values
     double_t sumTime = m_TMax - m_TMin;
-    index_t  sumSteps = ceil(sumTime/m_TimeStep);
+    index_t  sumSteps = round(sumTime/m_TimeStep);
 
     m_Step = 0;
     m_Time = 0.0;
@@ -89,8 +89,8 @@ error_t Time::Setup(Input_t* simInput) {
     m_TMax = sumSteps*m_TimeStep;
 
     if(m_isMaster) {
-        printf("  Start time:        %.2f\n", m_TMin);
-        printf("  End time:          %.2f\n", m_TMax);
+        printf("  Start time:        %.1f\n", m_TMin);
+        printf("  End time:          %.1f\n", m_TMax);
         printf("  Time step:         %.4f\n", m_TimeStep);
         printf("  Simulation steps:  %d\n",   (int)m_NMax);
     }
