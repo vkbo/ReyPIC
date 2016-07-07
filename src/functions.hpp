@@ -19,6 +19,6 @@ namespace m {
     void     scale(double_t*, int32_t, double_t);
     void     offset(double_t*, int32_t, double_t);
 
-} // End namespace
+} // End of namespace m
 
 #endif
