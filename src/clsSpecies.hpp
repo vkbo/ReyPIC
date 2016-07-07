@@ -36,6 +36,8 @@ public:
     */
 
     error_t Setup(Input_t*, Grid_t*);
+    error_t Create();
+    error_t Push();
 
    /**
     * Properties
