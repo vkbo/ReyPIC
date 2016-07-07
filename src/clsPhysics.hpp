@@ -1,5 +1,7 @@
 /**
- * ReyPIC – Physics Header
+ *  ReyPIC – Physics Class Header
+ * ===============================
+ *  Hold the phsyical system of the simulation
  */
 
 #ifndef CLASS_PHYSICS

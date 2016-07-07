@@ -1,5 +1,7 @@
 /**
- * ReyPIC – Species Header
+ *  ReyPIC – Species Class Header
+ * ===============================
+ *  Holds the macroparticles of a specific species
  */
 
 #ifndef CLASS_SPECIES
@@ -33,7 +35,7 @@ public:
     * Methods
     */
 
-    int Setup(Input_t*, Grid_t*);
+    error_t Setup(Input_t*, Grid_t*);
 
    /**
     * Properties

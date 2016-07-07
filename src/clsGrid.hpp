@@ -1,5 +1,7 @@
 /**
- * ReyPIC – Grid Header
+ *  ReyPIC – Grid Class Header
+ * ============================
+ *  Defines the simulation grid
  */
 
 #ifndef CLASS_GRID

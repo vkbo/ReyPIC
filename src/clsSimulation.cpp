@@ -1,14 +1,6 @@
 /**
  *  ReyPIC – Simulation Class Source
  * ==================================
- *  This class wraps the entire simulation.
- *
- *  Sequence:
- *  1. Read input file.
- *  2. Setup simulation. This creates the grid and the particle arrays.
- *  3. Read restart information. Only if restart is specified. Exits if restart files do not match
- *     the setup from previous stage.
- *  4. Main simulation loop.
  */
 
 #include "clsSimulation.hpp"
@@ -16,7 +8,7 @@
 using namespace std;
 using namespace reypic;
 
-// ********************************************************************************************** //
+// ****************************************************************************************************************** //
 
 /**
  *  Class Constructor
@@ -32,13 +24,13 @@ Simulation::Simulation() {
 
 }
 
-// ********************************************************************************************** //
-//                                      Setters and Getters                                       //
-// ********************************************************************************************** //
+// ****************************************************************************************************************** //
+//                                                Setters and Getters                                                 //
+// ****************************************************************************************************************** //
 
 /**
- *  Set Run Mode
- * ==============
+ *  Method :: SetRunMode
+ * ======================
  *  Related to switch -t.
  *  In test mode the simulation is set up, but exits before the solver starts.
  */
@@ -63,14 +55,13 @@ bool Simulation::setRunMode(value_t iRunMode) {
     return false;
 }
 
-// ********************************************************************************************** //
-//                                       Main Class Methods                                       //
-// ********************************************************************************************** //
+// ****************************************************************************************************************** //
+//                                                 Main Class Methods                                                 //
+// ****************************************************************************************************************** //
 
 /**
- *  Setup
- * =======
- *  Sets up simulation
+ *  Method :: Setup
+ * =================
  */
 
 error_t Simulation::Setup(Input_t* simInput) {
@@ -105,6 +96,6 @@ error_t Simulation::Setup(Input_t* simInput) {
     return ERR_NONE;
 }
 
-// ********************************************************************************************** //
+// ****************************************************************************************************************** //
 
-// End Class Input
+// End Class Simulation

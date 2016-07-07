@@ -1,5 +1,7 @@
 /**
- * ReyPIC – Time Header
+ *  ReyPIC – Time Class Header
+ * ============================
+ *  Holds timing information for the simulation
  */
 
 #ifndef CLASS_TIME

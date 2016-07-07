@@ -1,5 +1,7 @@
 /**
- * ReyPIC – Input Header
+ *  ReyPIC – Input Class Header
+ * =============================
+ *  Holds and parses the input file
  */
 
 #ifndef CLASS_INPUT

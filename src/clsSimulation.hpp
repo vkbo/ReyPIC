@@ -1,5 +1,7 @@
 /**
- * ReyPIC – Simulation Header
+ *  ReyPIC – Simulation Class Header
+ * ==================================
+ *  Holds simulation specific information and handles parallelisation and load distribution
  */
 
 #ifndef CLASS_SIMULATION
