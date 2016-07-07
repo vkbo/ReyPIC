@@ -37,25 +37,8 @@ error_t Physics::Setup(Input_t* simInput, Grid_t* simGrid) {
 
     error_t errVal = ERR_NONE;
 
-    if(m_isMaster) {
-        printf("  Species Setup\n");
-        printf(" ===============\n");
-    }
-
-    // Get number of species
-    m_NumSpecies = simInput->getNumSpecies();
-
-    for(int32_t indSpecies=0; indSpecies<m_NumSpecies; indSpecies++) {
-        simSpecies.push_back(indSpecies);
-        errVal = simSpecies[indSpecies].Setup(simInput, simGrid);
-        if(errVal != ERR_NONE) {
-            return errVal;
-        }
-    }
-
-    if(m_isMaster) {
-        printf("\n");
-    }
+    errVal = simParticles.Setup(simInput, simGrid);
+    if(errVal != ERR_NONE) return errVal;
 
     return ERR_NONE;
 }
