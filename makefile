@@ -1,5 +1,5 @@
 ###
-###  Makfeile for ReyPIC
+###  Makefile for ReyPIC
 ###
 
 CC      = mpic++
