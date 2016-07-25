@@ -28,12 +28,31 @@ long_line_behaviour=1
 long_line_column=120
 
 [files]
-current_page=1
+current_page=3
 FILE_NAME_0=0;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2Fconfig.hpp;0;4
-FILE_NAME_1=0;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2Fmain.cpp;0;4
+FILE_NAME_1=232;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2Fmain.cpp;0;4
+FILE_NAME_2=556;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2FclsParticles.hpp;0;4
+FILE_NAME_3=1757;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2FclsParticles.cpp;0;4
+FILE_NAME_4=585;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2FclsSpecies.hpp;0;4
+FILE_NAME_5=5515;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2FclsSpecies.cpp;0;4
+FILE_NAME_6=1755;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2FclsGrid.hpp;0;4
+FILE_NAME_7=7106;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2FclsGrid.cpp;0;4
+FILE_NAME_8=1215;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2FclsInput.hpp;0;4
+FILE_NAME_9=38;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2FclsInput.cpp;0;4
+FILE_NAME_10=271;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2FclsMath.hpp;0;4
+FILE_NAME_11=25703;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2FclsMath.cpp;0;4
+FILE_NAME_12=792;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2FclsPhysics.hpp;0;4
+FILE_NAME_13=1018;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2FclsPhysics.cpp;0;4
+FILE_NAME_14=172;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2FclsSimulation.hpp;0;4
+FILE_NAME_15=2663;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2FclsSimulation.cpp;0;4
+FILE_NAME_16=121;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2FclsTime.hpp;0;4
+FILE_NAME_17=3213;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2FclsTime.cpp;0;4
+FILE_NAME_18=1638;Make;0;EUTF-8;1;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fmakefile;0;4
+FILE_NAME_19=0;C++;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2Fsrc%2Ffunctions.hpp;0;4
+FILE_NAME_20=0;None;0;EUTF-8;0;1;0;%2Fhome%2Fvkbo%2FCode%2FReyPIC%2FReyPic.geany;0;4
 
 [VTE]
-last_dir=/home/vkbo
+last_dir=/home/vkbo/Dropbox/Code/ReyPIC
 
 [prjorg]
 source_patterns=*.c;*.C;*.cpp;*.cxx;*.c++;*.cc;*.m;

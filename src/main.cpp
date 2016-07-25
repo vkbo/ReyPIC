@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
         printf("\n");
         printf("  ReyPIC – 3D Particle in Cell\n");
         printf(" ******************************\n");
-        printf("  Version: %s\n", BUILD);
+        printf("  Version: %s R%s\n", BUILD, REV);
         printf("\n");
     }
 

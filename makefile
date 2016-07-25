@@ -13,6 +13,7 @@ OUTPUT  = bin
 
 EXEC    = reypic.e
 VERSION = $(shell git describe | tr -d gv)
+REV     = $(shell git rev-list --count --first-parent HEAD)
 
 HEADERS = config.hpp functions.hpp
 GLOBAL  = $(addprefix $(SRC)/,$(HEADERS))
@@ -27,7 +28,8 @@ OBJECTS = $(addprefix $(BUILD)/,$(CLASSES))
 # Check if build and bin directories exists
 $(shell [ -d "$(BUILD)" ] || mkdir -p $(BUILD))
 $(shell [ -d "$(OUTPUT)" ] || mkdir -p $(OUTPUT))
-$(shell echo "#define BUILD \"$(VERSION)\"" > $(SRC)/build.hpp)
+$(shell echo "#define BUILD \"$(VERSION)\"" >  $(SRC)/build.hpp)
+$(shell echo "#define REV   \"$(REV)\""     >> $(SRC)/build.hpp)
 
 # Executable
 $(EXEC) : $(BUILD)/main.o $(BUILD)/functions.o $(OBJECTS)
