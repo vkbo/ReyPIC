@@ -3,3 +3,4 @@
 *.in
 *.out
 src/build.hpp
+*.geany

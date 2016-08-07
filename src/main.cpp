@@ -137,7 +137,7 @@ error_t abortExec(int errVal) {
     if(iRank == 0) {
 
         printf("\n");
-        printf("  ReyPIC exectuion aborted with error code %d:\n", errVal);
+        printf("  Exectuion aborted with error code %d:\n", errVal);
 
         switch(errVal) {
             case ERR_ANY:       printf("    General error\n"); break;

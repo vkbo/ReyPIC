@@ -12,7 +12,7 @@ using namespace std;
 /**
  *  Linspace
  * ==========
- *  Generayes array aReturn of length nVal from valMin to valMax
+ *  Generates array aReturn of length nVal from valMin to valMax
  */
 
 void m::linspace(double_t valMin, double_t valMax, int32_t nVal, double_t* aReturn) {
