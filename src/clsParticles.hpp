@@ -16,7 +16,7 @@
 
 typedef reypic::Input                Input_t;
 typedef reypic::Grid                 Grid_t;
-typedef std::vector<reypic::Species> Species_t;
+typedef std::vector<reypic::Species> VSpecies_t;
 
 namespace reypic {
 
@@ -38,12 +38,13 @@ public:
     error_t Setup(Input_t*, Grid_t*);
     error_t Create();
     error_t Push();
+    error_t Boundary();
 
    /**
     * Properties
     */
 
-    Species_t simSpecies; // Vector of species objects
+    VSpecies_t simSpecies; // Vector of species objects
 
 private:
 
